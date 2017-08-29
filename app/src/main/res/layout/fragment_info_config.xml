@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal|center_horizontal"
+    android:gravity="center_horizontal"
+    tools:background="@drawable/xml_background"
+    tools:context="esolutions.com.barcodehungyenpc.view.InfoUserFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:id="@+id/et_dien_luc"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:background="@drawable/xml_input"
+        android:drawableLeft="@drawable/ic_dien_luc"
+        android:drawablePadding="@dimen/_5sdp"
+        android:hint="Nhập mã điện lực"
+        android:lines="1"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:id="@+id/et_url_server"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_below="@+id/et_dien_luc"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@drawable/xml_input"
+        android:drawableLeft="@drawable/ic_url"
+        android:drawablePadding="@dimen/_5sdp"
+        android:hint="Nhập địa chỉ máy chủ"
+        android:lines="1"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/ll_ip1"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_below="@+id/et_url_server"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:drawableLeft="@drawable/ic_pass"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_url_server"
+            android:background="@drawable/ic_info_config" />
+    </LinearLayout>
+
+    <!-- <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_centerInParent="true"
+         android:layout_marginLeft="@dimen/_5sdp"
+         android:layout_marginRight="@dimen/_5sdp">
+
+
+     </LinearLayout>-->
+
+</RelativeLayout>

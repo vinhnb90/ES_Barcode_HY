@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white_more_trans">#50ffff</color>
+    <color name="black">#000000</color>
+
+    <color name="violet">#222e70</color>
+    <color name="button_dark_orange">#ff6e13</color>
+    <color name="button_more_dark_orange">#407B47</color>
+
+    <color name="row_rv_ds_cto_text_1">#01579b</color>
+    <color name="row_rv_ds_cto_text_2">#00695C</color>
+
+    <color name="row_rv_ds_cto">#01579b</color>
+
+</resources>

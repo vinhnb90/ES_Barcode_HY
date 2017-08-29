@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        barColorWhenSelected="@color/white"
+        icon="@drawable/ic_list1"
+        id="@+id/nav_bottom_cto_phanbo"
+        title="Công tơ phân bổ" />
+    <tab
+        barColorWhenSelected="@color/white"
+        icon="@drawable/ic_pin"
+        id="@+id/nav_bottom_cto_kiemdinh"
+        title="Công tơ kiểm định" />
+</tabs>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="1dp"
+        android:background="@drawable/xml_border_left"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ibtn_clear_search_type1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_clear" />
+
+        <EditText
+            android:drawableLeft="@mipmap/ic_search"
+            android:id="@+id/et_search_type1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/ibtn_clear_search_type1"
+            android:background="@android:color/transparent"
+            android:hint="Tìm kiếm công tơ"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/_5sdp"
+            android:scrollHorizontally="true"
+            android:scrollbars="horizontal"
+            android:singleLine="true"
+            android:textColor="@color/row_rv_ds_cto"
+            android:textColorHint="@color/bb_inActiveBottomBarItemColor"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+</LinearLayout>
