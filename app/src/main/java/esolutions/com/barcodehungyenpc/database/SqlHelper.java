@@ -16,11 +16,11 @@ import esolutions.com.barcodehungyenpc.utils.Common;
 public class SqlHelper extends SQLiteOpenHelper {
 
     public static final String PATH_FOLDER_DB = Environment.getExternalStorageDirectory() + File.separator + "BARCODE_HY" + File.separator;
-    public static final String DB_NAME = "BARCODE_HUNGYEN_PC";
-    private static final int DB_VER = 12;
+    public static final String DB_NAME = "BARCODE_HUNGYEN_PC.s3db";
+    private static final int DB_VER = 16;
 
     public SqlHelper(Context context) {
-        super(context, DB_NAME, null, DB_VER);
+        super(context, PATH_FOLDER_DB + DB_NAME, null, DB_VER);
             Common.isExistDB();
             SQLiteDatabase.openOrCreateDatabase(PATH_FOLDER_DB + DB_NAME, null);
     }

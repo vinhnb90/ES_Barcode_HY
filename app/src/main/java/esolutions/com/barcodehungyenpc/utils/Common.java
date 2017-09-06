@@ -1,18 +1,19 @@
 package esolutions.com.barcodehungyenpc.utils;
 
+import android.Manifest;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +22,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +36,8 @@ import java.util.TimeZone;
 import esolutions.com.barcodehungyenpc.R;
 import esolutions.com.barcodehungyenpc.view.MainActivity;
 
+import static android.support.v4.app.ActivityCompat.requestPermissions;
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static esolutions.com.barcodehungyenpc.database.SqlHelper.DB_NAME;
 import static esolutions.com.barcodehungyenpc.database.SqlHelper.PATH_FOLDER_DB;
 
@@ -184,13 +183,14 @@ public class Common {
         ex02("ex02", "Gặp vấn đề khi lấy dữ liệu trong máy tính bảng."),
         ex03("ex03", "Không để trống"),
         ex04("ex04", "Tham số truyền vào request soap không tương ứng với số lượng tham số yêu cầu!"),
-        ex05("ex05", "Xảy ra lỗi trong quá trình kết nối tới máy chủ!"),
+        ex05("ex05", "Xảy ra lỗi trong quá trình kết nối tới máy chủ! Xin kiểm tra lại kết nối wifi!"),
         ex06("ex06", "Không nhận được dữ liệu trả về từ máy chủ!"),
         ex07("ex07", "Chưa có kết nối internet, vui lòng kiểm tra lại!"),
         ex08("ex08", "Vui lòng cấu hình địa chỉ máy chủ!"),
         ex09("ex09", "Vui lòng cấu hình mã đơn vị điện lực!"),
         ex10("ex10", "Gặp ván đề khi xóa dữ liệu!."),
         ex11("ex11", "Đã có sẵn thông tin thiết bị trong dữ liệu!."),
+        ex12("ex12", "Thành công"),
         ex("ex", "Gặp vấn đề không xác định.");
 
         private String code, content;
@@ -381,6 +381,26 @@ public class Common {
             dialogConfig.show();
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    public static final int REQUEST_CODE_PERMISSION = 100;
+
+    public static boolean checkPermission(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(activity, new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE
+                }, REQUEST_CODE_PERMISSION);
+                return true;
+            }
+            return false;
+        } else {
+            return false;
         }
     }
 }

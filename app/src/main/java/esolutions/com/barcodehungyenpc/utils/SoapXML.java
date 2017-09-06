@@ -167,7 +167,7 @@ public class SoapXML {
                     }
 
                 } catch (Exception e) {
-                    throw new Exception(Common.MESSAGE.ex05.getContent());
+                    throw new Exception(e.getMessage());
                 }
 
             } catch (Exception e) {

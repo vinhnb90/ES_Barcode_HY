@@ -5,12 +5,15 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -69,6 +72,7 @@ import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
 import esolutions.com.barcodehungyenpc.utils.SoapXML;
 
+import static esolutions.com.barcodehungyenpc.utils.Common.checkPermission;
 import static esolutions.com.barcodehungyenpc.utils.Common.convertDateSQLToDateUI;
 import static esolutions.com.barcodehungyenpc.utils.Common.getDateTimeNow;
 
@@ -122,7 +126,9 @@ public class MainActivity
     public static final int REQUEST_BARCODE = 999;
     public static final int RESPONSE_BARCODE = 1000;
     private String mDate;
-    private String mTextSearchOnlineOldSession;
+    Bundle savedInstanceState;
+
+    SoapXML.AsyncSoap<CToPBResponse> soapSearchCto = null;
 
 //    private int mCountCto;
 
@@ -135,12 +141,42 @@ public class MainActivity
         s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, "Tìm kiếm công tơ".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
         getSupportActionBar().setElevation(0);
+        if (Common.checkPermission(this)) {
+            return;
+        }
+
         try {
             initView();
             handleListener();
             setAction(savedInstanceState);
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Common.REQUEST_CODE_PERMISSION: {
+                if (grantResults.length == 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED
+                        || grantResults[1] != PackageManager.PERMISSION_GRANTED
+                        || grantResults[2] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, "Unable to show permission required", Toast.LENGTH_LONG).show();
+                    Log.e(getClass().getName(), "Unable to show permission required");
+                } else {
+                    try {
+                        initView();
+                        handleListener();
+                        setAction(savedInstanceState);
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return;
+            }
         }
     }
 
@@ -207,7 +243,7 @@ public class MainActivity
         dialogConfig.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogConfig.setContentView(R.layout.dialog_config);
         dialogConfig.setCanceledOnTouchOutside(true);
-        dialogConfig.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+        dialogConfig.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
         dialogConfig.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         dialogConfig.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         Window window = dialogConfig.getWindow();
@@ -293,7 +329,10 @@ public class MainActivity
 //                                .putString(KEY_PREF_MA_DIEN_LUC, dvi)
 //                                .commit();
                     }
+                    Snackbar snackbar = Snackbar
+                            .make(mCoordinatorLayout, Common.MESSAGE.ex12.getContent(), Snackbar.LENGTH_LONG);
 
+                    snackbar.show();
                 } catch (Exception e) {
                     Snackbar snackbar = Snackbar
                             .make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
@@ -685,6 +724,16 @@ public class MainActivity
     }
 
     private void searchOnline(String searchText) throws Exception {
+
+        //check thread hiện tại
+        if (soapSearchCto != null) {
+            if (soapSearchCto.getStatus() == AsyncTask.Status.RUNNING || soapSearchCto.getStatus() == AsyncTask.Status.PENDING) {
+//                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex11.getContent(), Snackbar.LENGTH_LONG);
+//                snackbar.show();
+                return;
+            }
+        }
+
         boolean isHasExitCto = false;
         //check data local với text search
         if (mKieuCongTo == Common.KIEU_CONG_TO.PHAN_BO) {
@@ -807,8 +856,6 @@ public class MainActivity
             public void onUpdate(String message) {
                 //ẩn progress bar
                 showProgresbar(false);
-
-                showProgresbar(false);
                 Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
@@ -865,8 +912,14 @@ public class MainActivity
                 return result;
             }
         };
-
-        SoapXML.AsyncSoap<CToPBResponse> soapSearchCto = null;
+//
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
+//        thread.start();
 
         if (mKieuCongTo == Common.KIEU_CONG_TO.PHAN_BO)
             soapSearchCto = new SoapXML.AsyncSoap(
