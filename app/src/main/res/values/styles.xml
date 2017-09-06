@@ -1,7 +1,14 @@
 <resources>
-
+<!--<item name="actionBarStyle">@style/myActionBarrStyle</item>-->
     <!-- Base application theme. -->
-    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionButtonStyle">@style/myActionButtonStyle</item>
+        <item name="actionButtonStyle">@style/myActionButtonStyle</item>
+
+        <item name="actionBarSize">100dp</item>
+        <item name="windowActionBarOverlay">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -30,4 +37,17 @@
         <item name="fab_colorPressed">#F2AB00</item>
         <item name="fab_colorRipple">#D99200</item>
     </style>
+
+    <!--setting size action barrd -->
+    <style name="myActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
+        <item name="android:minHeight">@dimen/_48sdp </item>
+        <item name="android:maxHeight">@dimen/_48sdp</item>
+        <item name="android:width">@dimen/_48sdp</item>
+        <item name="android:height">@dimen/_48sdp</item>
+    </style>
+<!--
+    <style name="myActionBarrStyle" parent="android:Theme.Holo.Light">
+        <item name="android:minHeight">@dimen/_100sdp </item>
+        <item name="android:actionBarSize">100dp</item>
+    </style>-->
 </resources>

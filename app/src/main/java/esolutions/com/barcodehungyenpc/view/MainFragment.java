@@ -48,7 +48,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     void initView(final View rootView) {
-        etTimKiem = (EditText) rootView.findViewById(R.id.et_search_type1);
+        etTimKiem = (EditText) rootView.findViewById(R.id.et_search_type);
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar_frag_ds_cto);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -162,11 +162,11 @@ public class MainFragment extends BaseFragment {
 //        final TextView tvDienLuc = (TextView) dialog.findViewById(R.id.tv_dialog_dienluc);
 //        final TextView tvChiSoThao = (TextView) dialog.findViewById(R.id.tv_dialog_chi_so_thao);
 //
-//        tvSoCto.setText(congToProxy.getmSoCto());
-//        tvMaCto.setText(congToProxy.getmMaCto());
-//        tvMaCLoai.setText(congToProxy.getmMaChungLoai());
-//        tvNamSx.setText(congToProxy.getmNamSX());
-//        tvChiSoThao.setText(congToProxy.getmChiSoThao());
+//        tvSoCto.setText(congToProxy.getSO_CTO());
+//        tvMaCto.setText(congToProxy.getMA_CTO());
+//        tvMaCLoai.setText(congToProxy.getCLOAI());
+//        tvNamSx.setText(congToProxy.getNAMSX());
+//        tvChiSoThao.setText(congToProxy.getCHISO_THAO());
 //        String maDienLuc = congToProxy.getMaDLuc();
 //        String tenDienLuc = mListener.interactionDataDienLuc(maDienLuc);
 //        tvDienLuc.setText(maDienLuc + " " + tenDienLuc);

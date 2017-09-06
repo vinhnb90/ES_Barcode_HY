@@ -1,13 +1,46 @@
 package esolutions.com.barcodehungyenpc.utils;
 
+import android.app.ActionBar;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaScannerConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
+
+import esolutions.com.barcodehungyenpc.R;
+import esolutions.com.barcodehungyenpc.view.MainActivity;
+
+import static esolutions.com.barcodehungyenpc.database.SqlHelper.DB_NAME;
+import static esolutions.com.barcodehungyenpc.database.SqlHelper.PATH_FOLDER_DB;
 
 /**
  * Created by VinhNB on 8/9/2017.
@@ -40,7 +73,7 @@ public class Common {
             'ế', 'Ề', 'ề', 'Ể', 'ể', 'Ễ', 'ễ', 'Ệ', 'ệ', 'Ỉ', 'ỉ', 'Ị', 'ị',
             'Ọ', 'ọ', 'Ỏ', 'ỏ', 'Ố', 'ố', 'Ồ', 'ồ', 'Ổ', 'ổ', 'Ỗ', 'ỗ', 'Ộ',
             'ộ', 'Ớ', 'ớ', 'Ờ', 'ờ', 'Ở', 'ở', 'Ỡ', 'ỡ', 'Ợ', 'ợ', 'Ụ', 'ụ',
-            'Ủ', 'ủ', 'Ứ', 'ứ', 'Ừ', 'ừ', 'Ử', 'ử', 'Ữ', 'ữ', 'Ự', 'ự', };
+            'Ủ', 'ủ', 'Ứ', 'ứ', 'Ừ', 'ừ', 'Ử', 'ử', 'Ữ', 'ữ', 'Ự', 'ự',};
 
     private static char[] REPLACEMENTS = {'A', 'A', 'A', 'A', 'E', 'E', 'E',
             'I', 'I', 'O', 'O', 'O', 'O', 'U', 'U', 'Y', 'a', 'a', 'a', 'a',
@@ -52,7 +85,7 @@ public class Common {
             'i', 'I', 'i', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o',
             'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O',
             'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u',
-            'U', 'u', };
+            'U', 'u',};
 
     public static String removeAccent(String s) {
         StringBuilder sb = new StringBuilder(s);
@@ -69,6 +102,19 @@ public class Common {
             ch = REPLACEMENTS[index];
         }
         return ch;
+    }
+
+    public static boolean isExistDB() {
+        File programDbDirectory = new File(PATH_FOLDER_DB);
+        if (!programDbDirectory.exists()) {
+            programDbDirectory.mkdirs();
+        }
+
+        File db = new File(PATH_FOLDER_DB + File.separator + DB_NAME);
+        if (!db.exists()) {
+            return false;
+        }
+        return true;
     }
     //endregion
 
@@ -87,7 +133,7 @@ public class Common {
             if (this == HHmmss)
                 return "HHmmss";
             if (this == yyyyMMdd)
-                return "yyyy-MM-dd";
+                return "yyyyMMdd";
             if (this == yyyyMMddHHmmssSSS)
                 return "yyyyMMddHHmmssSSS";
             if (this == MMyyyy)
@@ -133,9 +179,208 @@ public class Common {
         }
     }
 
+    public enum MESSAGE {
+        ex01("ex01", "File dữ liệu không tồn tại trong bộ nhớ sdcard."),
+        ex02("ex02", "Gặp vấn đề khi lấy dữ liệu trong máy tính bảng."),
+        ex03("ex03", "Không để trống"),
+        ex04("ex04", "Tham số truyền vào request soap không tương ứng với số lượng tham số yêu cầu!"),
+        ex05("ex05", "Xảy ra lỗi trong quá trình kết nối tới máy chủ!"),
+        ex06("ex06", "Không nhận được dữ liệu trả về từ máy chủ!"),
+        ex07("ex07", "Chưa có kết nối internet, vui lòng kiểm tra lại!"),
+        ex08("ex08", "Vui lòng cấu hình địa chỉ máy chủ!"),
+        ex09("ex09", "Vui lòng cấu hình mã đơn vị điện lực!"),
+        ex10("ex10", "Gặp ván đề khi xóa dữ liệu!."),
+        ex11("ex11", "Đã có sẵn thông tin thiết bị trong dữ liệu!."),
+        ex("ex", "Gặp vấn đề không xác định.");
+
+        private String code, content;
+
+        MESSAGE(String code, String content) {
+            this.code = code;
+            this.content = content;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+    }
+
     public static String getDateTimeNow(Common.DATE_TIME_TYPE formatDate) {
         SimpleDateFormat df = new SimpleDateFormat(formatDate.toString());
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return df.format(Calendar.getInstance().getTime());
+    }
+
+    public static String convertDateToDate(String time, DATE_TIME_TYPE typeDefault, DATE_TIME_TYPE typeConvert) {
+        if (time == null || time.trim().isEmpty())
+            return "";
+
+        if (typeDefault != DATE_TIME_TYPE.FULL) {
+            time = time.replaceAll("-", "");
+            for (int i = time.length(); i <= 17; i++) {
+                time += "0";
+            }
+        }
+
+        long longDate = Common.convertDateToLong(time, typeDefault);
+
+        String dateByDefaultType = Common.convertLongToDate(longDate, typeConvert);
+        return dateByDefaultType;
+    }
+
+    public static long convertDateToLong(String date, DATE_TIME_TYPE typeDefault) {
+        SimpleDateFormat formatter = new SimpleDateFormat(typeDefault.toString());
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date dateParse;
+        try {
+            dateParse = (Date) formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+        return dateParse.getTime();
+    }
+
+    public static String convertLongToDate(long time, Common.DATE_TIME_TYPE format) {
+        if (time < 0)
+            return null;
+        if (format == null)
+            return null;
+
+        SimpleDateFormat df2 = new SimpleDateFormat(format.toString());
+        df2.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = new Date(time);
+        return df2.format(date);
+    }
+
+    public static String convertDateSQLToDateUI(String time) {
+        if (TextUtils.isEmpty(time))
+            return "";
+
+        //convert dang yyyymmdd sang dạng dd/mm/yyyy
+        String d = time.substring(6, 8);
+        String m = time.substring(4, 6);
+        String y = time.substring(0, 4);
+
+        return d + "/" + m + "/" + y;
+    }
+
+
+    public static String convertDateUIToDateSQL(String time) {
+        if (TextUtils.isEmpty(time))
+            return "";
+
+        //convert dang dd/mm/yyyy sang dạng yyyymmdd
+        String y = time.substring(6, 10);
+        String m = time.substring(3, 5);
+        String d = time.substring(0, 2);
+
+        return y + m + d;
+    }
+
+
+    public static void showFolder(ContextWrapper ctx) throws Exception {
+        if (ctx == null)
+            return;
+
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(MESSAGE.ex01.getContent());
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+
+            // Load root folder
+            File rootFolder = new File(PATH_FOLDER_DB);
+            String[] allFilesRoot = rootFolder.list();
+            for (int i = 0; i < allFilesRoot.length; i++) {
+                allFilesRoot[i] = PATH_FOLDER_DB + allFilesRoot[i];
+            }
+            if (allFilesRoot != null)
+                MediaScannerConnection.scanFile(ctx, allFilesRoot, null,
+                        new MediaScannerConnection.OnScanCompletedListener() {
+                            public void onScanCompleted(String path, Uri uri) {
+                                Log.d("ExternalStorage", "Scanned " + path + ":");
+                                Log.d("ExternalStorage", "uri=" + uri);
+                            }
+                        });
+        } else {
+            ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri
+                    .parse("file://" + PATH_FOLDER_DB)));
+        }
+    }
+
+    public static boolean isNetworkConnected(Context context) throws Exception {
+        if (context == null)
+            return false;
+        int[] networkTypes = {ConnectivityManager.TYPE_MOBILE,
+                ConnectivityManager.TYPE_WIFI};
+        try {
+            ConnectivityManager connectivityManager =
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            for (int networkType : networkTypes) {
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo != null &&
+                        activeNetworkInfo.getType() == networkType)
+                    return true;
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return false;
+    }
+
+    public static void showAlertDialog(Context context, final MainActivity.OnClickButtonAlertDialog onClickButtonAlertDialog, String title, String message) throws Exception {
+        try {
+            final Dialog dialogConfig = new Dialog(context);
+            dialogConfig.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogConfig.setContentView(R.layout.dialog_alert);
+            dialogConfig.setCanceledOnTouchOutside(true);
+            dialogConfig.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+            dialogConfig.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            dialogConfig.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            Window window = dialogConfig.getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+
+            final TextView etTitle = (TextView) dialogConfig.findViewById(R.id.tv_title_dialog);
+            final TextView etMessage = (TextView) dialogConfig.findViewById(R.id.tv_message_dialog);
+            final Button btCancel = (Button) dialogConfig.findViewById(R.id.btn_dialog_cancel);
+            final Button btOk = (Button) dialogConfig.findViewById(R.id.btn_dialog_ok);
+
+            etTitle.setText(title);
+            etMessage.setText(message);
+
+            //catch click
+            btOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        onClickButtonAlertDialog.doClickYes();
+                    } catch (Exception e) {
+                        throw e;
+                    } finally {
+                        dialogConfig.cancel();
+                    }
+                }
+            });
+
+
+            btCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickButtonAlertDialog.doClickNo();
+                    dialogConfig.cancel();
+                }
+            });
+
+            dialogConfig.show();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

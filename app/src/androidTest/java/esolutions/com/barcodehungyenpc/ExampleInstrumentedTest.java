@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * Instrumentation test, which will execute on an Android device.
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @see <dialog_datetime_picker href="http://d.android.com/tools/testing">Testing documentation</dialog_datetime_picker>
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {

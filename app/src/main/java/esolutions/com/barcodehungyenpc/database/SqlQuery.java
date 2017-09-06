@@ -1,36 +1,31 @@
 package esolutions.com.barcodehungyenpc.database;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-
-import esolutions.com.barcodehungyenpc.utils.Common;
-
 /**
  * Created by VinhNB on 8/8/2017.
  */
 
 public class SqlQuery {
 
-    //region TBL_CONG_TO query
-    public enum TBL_CONG_TO {
-        IdCongTo("IdCongTo"),
-        MaDienLuc("MaDienLuc"),
-        MaChungLoai("MaChungLoai"),
-        NamSX("NamSX"),
-        SoCto("SoCto"),
-        MaCto("MaCto"),
-        ChiSoThao("ChiSoThao"),
+    //region TBL_CTO_PB query
+    public enum TBL_CTO_GUI_KD {
+        STT("STT"),
+        MA_DVIQLY("MA_DVIQLY"),
+        CLOAI("CLOAI"),
+        NAMSX("NAMSX"),
+        SO_CTO("SO_CTO"),
+        MA_CTO("MA_CTO"),
+        CHISO_THAO("CHISO_THAO"),
 
-        GhimCto("GhimCongTo"),
-        TaiKhoan("TaiKhoan"),
-        NgayGhiDuLieu("NgayGhiDuLieu"),
+        //        GhimCto("GhimCongTo"),
+//        TaiKhoan("TaiKhoan"),
+        NGAY_NHAP("NGAY_NHAP");
         //Kiểu công tơ phân bổ = 0, Kiểu công tơ kiểm định = 1
-        KieuCongToPhanBo("KieuCongToPhanBo");
+//        KieuCongToPhanBo("KieuCongToPhanBo");
 
 
         private String mNameCollumn;
 
-        TBL_CONG_TO(String mNameCollumn) {
+        TBL_CTO_GUI_KD(String mNameCollumn) {
             this.mNameCollumn = mNameCollumn;
         }
 
@@ -39,147 +34,394 @@ public class SqlQuery {
         }
 
         public static String getNameTable() {
-            return "TBL_CONG_TO";
+            return "TBL_CTO_GUI_KD";
         }
     }
 
-    public static String getCreateTblCongTo() {
-        return "CREATE TABLE IF NOT EXISTS " + TBL_CONG_TO.getNameTable() + " (" +
-                TBL_CONG_TO.IdCongTo.getNameCollumn() + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                TBL_CONG_TO.MaDienLuc.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.MaChungLoai.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.NamSX.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.SoCto.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.MaCto.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.ChiSoThao.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() + " INTEGER DEFAULT 0, " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.NgayGhiDuLieu.getNameCollumn() + " TEXT, " +
-                TBL_CONG_TO.KieuCongToPhanBo.getNameCollumn() + " INTEGER DEFAULT 0 " +
+    public enum TBL_CTO_PB {
+        STT("STT"),
+        MA_DVIQLY("MA_DVIQLY"),
+        CLOAI("CLOAI"),
+        NAMSX("NAMSX"),
+        SO_CTO("SO_CTO"),
+        MA_CTO("MA_CTO"),
+        CHISO_THAO("CHISO_THAO"),
+
+        //        GhimCto("GhimCongTo"),
+//        TaiKhoan("TaiKhoan"),
+        NGAY_NHAP("NGAY_NHAP");
+        //Kiểu công tơ phân bổ = 0, Kiểu công tơ kiểm định = 1
+//        KieuCongToPhanBo("KieuCongToPhanBo");
+
+
+        private String mNameCollumn;
+
+        TBL_CTO_PB(String mNameCollumn) {
+            this.mNameCollumn = mNameCollumn;
+        }
+
+        public String getNameCollumn() {
+            return mNameCollumn;
+        }
+
+        public static String getNameTable() {
+            return "TBL_CTO_PB";
+        }
+    }
+
+    public enum TBL_DIENLUC {
+        ID("ID"),
+        MA_DVIQLY("MA_DVIQLY"),;
+
+
+        private String mNameCollumn;
+
+        TBL_DIENLUC(String mNameCollumn) {
+            this.mNameCollumn = mNameCollumn;
+        }
+
+        public String getNameCollumn() {
+            return mNameCollumn;
+        }
+
+        public static String getNameTable() {
+            return "TBL_DIENLUC";
+        }
+    }
+
+    public static String getCreateTBL_CTO_GUI_KD() {
+        return "CREATE TABLE IF NOT EXISTS " + TBL_CTO_GUI_KD.getNameTable() + " (" +
+                TBL_CTO_GUI_KD.STT.getNameCollumn() + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.CLOAI.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.NAMSX.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.SO_CTO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + " TEXT, " +
+//                TBL_CTO_GUI_KD.GhimCto.getNameCollumn() + " INTEGER DEFAULT 0, " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() + " TEXT" +
+//                ", " +
+//                TBL_CTO_GUI_KD.KieuCongToPhanBo.getNameCollumn() + " INTEGER DEFAULT 0 " +
                 ");";
     }
 
-    public static String getDropTblCongTo() {
-        return "DROP TABLE IF EXISTS " + TBL_CONG_TO.getNameTable() + " ;";
+    public static String getCreateTBL_CTO_PB() {
+        return "CREATE TABLE IF NOT EXISTS " + TBL_CTO_PB.getNameTable() + " (" +
+                TBL_CTO_PB.STT.getNameCollumn() + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.CLOAI.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.NAMSX.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.SO_CTO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.MA_CTO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + " TEXT, " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() + " INTEGER DEFAULT 0, " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() + " TEXT" +
+//                ", " +
+//                TBL_CTO_PB.KieuCongToPhanBo.getNameCollumn() + " INTEGER DEFAULT 0 " +
+                ");";
     }
 
-    public static String getInsertCongTo() {
-        return "INSERT INTO " + TBL_CONG_TO.getNameTable() + " (" +
-                TBL_CONG_TO.MaDienLuc.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaChungLoai.getNameCollumn() + ", " +
-                TBL_CONG_TO.NamSX.getNameCollumn() + ", " +
-                TBL_CONG_TO.SoCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.ChiSoThao.getNameCollumn() + ", " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() + ", " +
-                TBL_CONG_TO.NgayGhiDuLieu.getNameCollumn() + ", " +
-                TBL_CONG_TO.KieuCongToPhanBo.getNameCollumn() +
-                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+
+    public static String getCreateTBL_DIENLUC() {
+        return "CREATE TABLE IF NOT EXISTS " + TBL_DIENLUC.getNameTable() + " (" +
+                TBL_DIENLUC.ID.getNameCollumn() + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TBL_DIENLUC.MA_DVIQLY.getNameCollumn() + " TEXT" +
+                ");";
+    }
+
+    public static String getDropTBL_CTO_PB() {
+        return "DROP TABLE IF EXISTS " + TBL_CTO_PB.getNameTable() + " ;";
+    }
+
+    public static String getDropTBL_CTO_GUI_KD() {
+        return "DROP TABLE IF EXISTS " + TBL_CTO_GUI_KD.getNameTable() + " ;";
+    }
+
+    public static String getDropTBL_DIENLUC() {
+        return "DROP TABLE IF EXISTS " + TBL_DIENLUC.getNameTable() + " ;";
+    }
+
+    public static String getInsertTBL_CTO_PB() {
+        return "INSERT INTO " + TBL_CTO_PB.getNameTable() + " (" +
+                TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_PB.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_PB.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() +
+//                ", " +
+//                TBL_CTO_PB.KieuCongToPhanBo.getNameCollumn() +
+                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?" +
+//                ", ?, ?" +
+                ")" +
                 ";"
                 ;
     }
 
-  /*  public static String getSelectCongTo() {
+    public static String getInsertTBL_CTO_GUI_KD() {
+        return "INSERT INTO " + TBL_CTO_GUI_KD.getNameTable() + " (" +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() +
+//                ", " +
+//                TBL_CTO_GUI_KD.KieuCongToPhanBo.getNameCollumn() +
+                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?" +
+//                ", ?, ?, ?" +
+                ")" +
+                ";"
+                ;
+    }
+
+  /*  public static String getSelectTBL_CTO_PB() {
         return "SELECT " +
-                TBL_CONG_TO.IdCongTo.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaDienLuc.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaChungLoai.getNameCollumn() + ", " +
-                TBL_CONG_TO.NamSX.getNameCollumn() + ", " +
-                TBL_CONG_TO.SoCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.ChiSoThao.getNameCollumn() + ", " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() + ", " +
-                TBL_CONG_TO.NgayGhiDuLieu.getNameCollumn() +
+                TBL_CTO_PB.STT.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_PB.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_PB.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + ", " +
+                TBL_CTO_PB.GhimCto.getNameCollumn() + ", " +
+                TBL_CTO_PB.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() +
                 " FROM " +
-                TBL_CONG_TO.getNameTable() +
+                TBL_CTO_PB.getNameTable() +
                 " WHERE " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() +
+                TBL_CTO_PB.TaiKhoan.getNameCollumn() +
                 " = ? "
                 ;
     }*/
 
-    public static String getSelectCongTo() {
+    public static String getSelectTBL_CTO_PB() {
         return "SELECT " +
-                TBL_CONG_TO.IdCongTo.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaDienLuc.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaChungLoai.getNameCollumn() + ", " +
-                TBL_CONG_TO.NamSX.getNameCollumn() + ", " +
-                TBL_CONG_TO.SoCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.ChiSoThao.getNameCollumn() + ", " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() + ", " +
-                TBL_CONG_TO.NgayGhiDuLieu.getNameCollumn() +
+                TBL_CTO_PB.STT.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_PB.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_PB.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() +
                 " FROM " +
-                TBL_CONG_TO.getNameTable() +
+                TBL_CTO_PB.getNameTable()
+                ;
+    }
+
+    public static String getSelectByDateTBL_CTO_PB() {
+        return "SELECT " +
+                TBL_CTO_PB.STT.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_PB.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_PB.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() +
+                " FROM " +
+                TBL_CTO_PB.getNameTable()
+                +
                 " WHERE " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() +
-                " = ? " +
-                " AND " +
-                TBL_CONG_TO.KieuCongToPhanBo.getNameCollumn() +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() +
                 " = ? "
+//                +
+//                " AND " +
+//                TBL_CTO_PB.KieuCongToPhanBo.getNameCollumn() +
+//                " = ? "
+                ;
+    }
+
+    public static String getSelectTBL_CTO_GUI_KD() {
+        return "SELECT " +
+                TBL_CTO_GUI_KD.STT.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() +
+                " FROM " +
+                TBL_CTO_GUI_KD.getNameTable()
+                ;
+    }
+
+    public static String getSelectByDateTBL_CTO_GUI_KD() {
+        return "SELECT " +
+                TBL_CTO_GUI_KD.STT.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() +
+                " FROM " +
+                TBL_CTO_GUI_KD.getNameTable()
+                +
+                " WHERE " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() +
+                " = ? "
+//                +
+//                " AND " +
+//                TBL_CTO_GUI_KD.KieuCongToPhanBo.getNameCollumn() +
+//                " = ? "
                 ;
     }
 
     public static String getUpdateGhimCto() {
-        return "UPDATE " +
-                TBL_CONG_TO.getNameTable() +
-                " SET " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() +
-                " = ? " +
-                " WHERE " +
-                TBL_CONG_TO.IdCongTo.getNameCollumn() +
-                " = ? AND " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() +
-                " = ? AND " +
-                TBL_CONG_TO.KieuCongToPhanBo.getNameCollumn() +
-                " = ?"
+        return "";
+//        return "UPDATE " +
+//                TBL_CTO_PB.getNameTable() +
+//                " SET " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() +
+//                " = ? " +
+//                " WHERE " +
+//                TBL_CTO_PB.STT.getNameCollumn() +
+//                " = ? "
+//                +
+//                "AND " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() +
+//                " = ? AND " +
+//                TBL_CTO_PB.KieuCongToPhanBo.getNameCollumn() +
+//                " = ?"
+//                ;
+    }
+
+    public static String getDeleteAllTBL_CTO_PB() {
+        return "DELETE FROM " +
+                TBL_CTO_PB.getNameTable()
+//                +
+//                " WHERE " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() +
+//                " = ?"
                 ;
     }
 
-    public static String getDeleteAllCongTo() {
+    public static String getDeleteAllTBL_CTO_GUI_KD() {
         return "DELETE FROM " +
-                TBL_CONG_TO.getNameTable() +
-                " WHERE " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() +
-                " = ?"
+                TBL_CTO_GUI_KD.getNameTable()
+//                +
+//                " WHERE " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() +
+//                " = ?"
                 ;
     }
 
     public static String getSelectCongToGhim() {
         return "SELECT " +
-                TBL_CONG_TO.IdCongTo.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaDienLuc.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaChungLoai.getNameCollumn() + ", " +
-                TBL_CONG_TO.NamSX.getNameCollumn() + ", " +
-                TBL_CONG_TO.SoCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.MaCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.ChiSoThao.getNameCollumn() + ", " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() + ", " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() + ", " +
-                TBL_CONG_TO.NgayGhiDuLieu.getNameCollumn() +
+                TBL_CTO_PB.STT.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_PB.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_PB.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() + ", " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_NHAP.getNameCollumn() +
                 " FROM " +
-                TBL_CONG_TO.getNameTable() +
-                " WHERE " +
-                TBL_CONG_TO.GhimCto.getNameCollumn() +
-                " = 1 AND " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() +
-                " = ? AND " +
-                TBL_CONG_TO.KieuCongToPhanBo.getNameCollumn() +
-                " = ? "
+                TBL_CTO_PB.getNameTable()
+//                +
+//                " WHERE " +
+//                TBL_CTO_PB.GhimCto.getNameCollumn() +
+//                " = 1 AND " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() +
+//                " = ? AND " +
+//                TBL_CTO_PB.KieuCongToPhanBo.getNameCollumn() +
+//                " = ? "
                 ;
     }
 
-    public static String getDeleteCongTo() {
+    public static String getDeleteTBL_CTO_PB() {
         return "DELETE FROM " +
-                TBL_CONG_TO.getNameTable() +
+                TBL_CTO_PB.getNameTable() +
                 " WHERE " +
-                TBL_CONG_TO.IdCongTo.getNameCollumn()
-                + " = ?  AND " +
-                TBL_CONG_TO.TaiKhoan.getNameCollumn() +
-                " = ?"
+                TBL_CTO_PB.STT.getNameCollumn()
+                + " = ? "
+//                + " AND " +
+//                TBL_CTO_PB.TaiKhoan.getNameCollumn() +
+//                " = ?"
+                ;
+    }
+
+    public static String getDeleteTBL_CTO_GUI_KD() {
+        return "DELETE FROM " +
+                TBL_CTO_GUI_KD.getNameTable()
+//                +
+//                " WHERE " +
+//                TBL_CTO_GUI_KD.STT.getNameCollumn()
+//                + " = ?  AND " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() +
+//                " = ?"
+                ;
+    }
+
+
+    public static String getCheckExistTBL_CTO_GUI_KD() {
+        return "SELECT COUNT(*) FROM " +
+                TBL_CTO_GUI_KD.getNameTable()
+                +
+                " WHERE " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn()
+                + " = ?"
+                ;
+    }
+
+    public static String getCheckExistTBL_CTO_PB() {
+        return "SELECT COUNT(*) FROM " +
+                TBL_CTO_PB.getNameTable()
+                +
+                " WHERE " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn()
+                + " = ?"
+                ;
+    }
+    //endregion
+
+    //region TBL_DIENLUC query
+    public static String getSelectDienLuc() {
+        return "SELECT " +
+                TBL_DIENLUC.ID.getNameCollumn() + ", " +
+                TBL_DIENLUC.MA_DVIQLY.getNameCollumn() +
+                " FROM " +
+                TBL_DIENLUC.getNameTable()
+                ;
+    }
+
+    public static String getCheckExistTBL_DIENLUC() {
+        return "SELECT COUNT(*) FROM " +
+                TBL_DIENLUC.getNameTable()
+                +
+                " WHERE " +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn()
+                + " = ?"
+                ;
+    }
+
+    public static String getInsertTBL_DIENLUC() {
+        return "INSERT INTO " + TBL_DIENLUC.getNameTable() + " (" +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn() +
+                ") " + "VALUES (?)" +
+                ";"
                 ;
     }
     //endregion

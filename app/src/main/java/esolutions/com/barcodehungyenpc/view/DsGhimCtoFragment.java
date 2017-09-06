@@ -76,26 +76,26 @@ public class DsGhimCtoFragment extends BaseFragment {
 
     private void setRecycler() {
 //        this.isDsCtoGhim = isDsCtoGhim;
-        try {
-            mListCto.clear();
-            mListCto.addAll(mListener.interactionDataGhimCongTo());
-
-            if (mAdapter == null) {
-                mAdapter = new DsCongToAdapter(getContext(), mListCto, true);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                mRvDsCto.setLayoutManager(linearLayoutManager);
-                mRvDsCto.setHasFixedSize(true);
-                mRvDsCto.setAdapter(mAdapter);
-                mRvDsCto.invalidate();
-            } else {
-                mAdapter.refresh(mListCto, true);
-                mRvDsCto.invalidate();
-            }
-
-            Toast.makeText(this.getActivity(), "mListCto = " + mListCto.size(), Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e(TAG, "setRecycler: error" + e.getMessage());
-        }
+//        try {
+//            mListCto.clear();
+//            mListCto.addAll(mListener.interactionDataGhimCongTo());
+//
+//            if (mAdapter == null) {
+//                mAdapter = new DsCongToAdapter(getContext(), mListCto, true);
+//                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//                mRvDsCto.setLayoutManager(linearLayoutManager);
+//                mRvDsCto.setHasFixedSize(true);
+//                mRvDsCto.setAdapter(mAdapter);
+//                mRvDsCto.invalidate();
+//            } else {
+//                mAdapter.refresh(mListCto, true);
+//                mRvDsCto.invalidate();
+//            }
+//
+//            Toast.makeText(this.getActivity(), "mListCto = " + mListCto.size(), Toast.LENGTH_SHORT).show();
+//        } catch (Exception e) {
+//            Log.e(TAG, "setRecycler: error" + e.getMessage());
+//        }
     }
 
     public void clickBtnGhimRowCto(int pos) {

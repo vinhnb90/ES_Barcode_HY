@@ -41,7 +41,7 @@ public class SharePrefManager {
         return null;
     }
 
-    private boolean checkExistSharePref(String keySharePref) {
+    public boolean checkExistSharePref(String keySharePref) {
         File f = new File(
                 "/data/data/" + mContext.getApplicationContext().getPackageName() + "/shared_prefs/" + keySharePref + ".xml");
         if (f.exists())

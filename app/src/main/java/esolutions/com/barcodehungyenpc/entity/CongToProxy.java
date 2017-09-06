@@ -20,108 +20,119 @@ public class CongToProxy extends CursorItemProxy {
         mCongTo = new CongTo();
     }
 
-    public int getmIdCto() {
-        if(mCongTo.getmIdCto()==-1) {
+    public int getSTT() {
+        if(mCongTo.getSTT()==-1) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
-            mCongTo.setmIdCto(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.IdCongTo.getNameCollumn())));
+            mCongTo.setSTT(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.STT.getNameCollumn())));
         }
-        return mCongTo.getmIdCto();
+        return mCongTo.getSTT();
     }
 
     public String getMaDLuc() {
-        if (TextUtils.isEmpty(mCongTo.getmMaDLuc())) {
+        if (TextUtils.isEmpty(mCongTo.getMA_DVIQLY())) {
 
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmMaDLuc(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.MaDienLuc.getNameCollumn())));
+            mCongTo.setMA_DVIQLY(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.MA_DVIQLY.getNameCollumn())));
         }
-        return mCongTo.getmMaDLuc();
+        return mCongTo.getMA_DVIQLY();
     }
 
     public String getmChiSoThao() {
-        if (TextUtils.isEmpty(mCongTo.getmChiSoThao())) {
+        if (TextUtils.isEmpty(mCongTo.getCHISO_THAO())) {
 
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmChiSoThao(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.ChiSoThao.getNameCollumn())));
+            mCongTo.setCHISO_THAO(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.CHISO_THAO.getNameCollumn())));
         }
-        return mCongTo.getmChiSoThao();
+        return mCongTo.getCHISO_THAO();
     }
 
     public String getmMaChungLoai() {
-        if (TextUtils.isEmpty(mCongTo.getmMaChungLoai())) {
+        if (TextUtils.isEmpty(mCongTo.getCLOAI())) {
 
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmMaChungLoai(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.MaChungLoai.getNameCollumn())));
+            mCongTo.setCLOAI(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.CLOAI.getNameCollumn())));
         }
-        return mCongTo.getmMaChungLoai();
+        return mCongTo.getCLOAI();
     }
 
     public String getmMaCto() {
-        if (TextUtils.isEmpty(mCongTo.getmMaCto())) {
+        if (TextUtils.isEmpty(mCongTo.getMA_CTO())) {
 
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmMaCto(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.MaCto.getNameCollumn())));
+            mCongTo.setMA_CTO(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.MA_CTO.getNameCollumn())));
         }
-        return mCongTo.getmMaCto();
+        return mCongTo.getMA_CTO();
     }
 
     public String getmNamSX() {
-        if (TextUtils.isEmpty(mCongTo.getmNamSX())) {
+        if (TextUtils.isEmpty(mCongTo.getNAMSX())) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmNamSX(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.NamSX.getNameCollumn())));
+            mCongTo.setNAMSX(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.NAMSX.getNameCollumn())));
         }
-        return mCongTo.getmNamSX();
+        return mCongTo.getNAMSX();
     }
 
     public String getmSoCto() {
-        if (TextUtils.isEmpty(mCongTo.getmSoCto())) {
+        if (TextUtils.isEmpty(mCongTo.getSO_CTO())) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmSoCto(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.SoCto.getNameCollumn())));
+            mCongTo.setSO_CTO(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.SO_CTO.getNameCollumn())));
         }
-        return mCongTo.getmSoCto();
+        return mCongTo.getSO_CTO();
     }
 
-    public int getmGhimCto() {
-        if(mCongTo.getmGhimCto()==-1) {
-            Cursor cursor = getmCursor();
-            cursor.moveToPosition(getmIndex());
-            mCongTo.setmGhimCto(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.GhimCto.getNameCollumn())));
-        }
-        return mCongTo.getmGhimCto();
-    }
-
-    public String getmTaiKhoan() {
-        if (TextUtils.isEmpty(mCongTo.getmTaiKhoan())) {
+    public String getNGAY_NHAP() {
+        if (TextUtils.isEmpty(mCongTo.getNGAY_NHAP())) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 
-            mCongTo.setmTaiKhoan(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.TaiKhoan.getNameCollumn())));
+            mCongTo.setNGAY_NHAP(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.NGAY_NHAP.getNameCollumn())));
         }
-        return mCongTo.getmTaiKhoan();
+        return mCongTo.getNGAY_NHAP();
     }
 
-    public int getmKieuCongTo() {
-        if(mCongTo.getmKieuCongTo()==-1) {
-            Cursor cursor = getmCursor();
-            cursor.moveToPosition(getmIndex());
-            mCongTo.setmKieuCongTo(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_CONG_TO.KieuCongToPhanBo.getNameCollumn())));
-        }
-        return mCongTo.getmKieuCongTo();
-    }
+
+//    public int getmGhimCto() {
+//        if(mCongTo.getmGhimCto()==-1) {
+//            Cursor cursor = getmCursor();
+//            cursor.moveToPosition(getmIndex());
+//            mCongTo.setmGhimCto(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.GhimCto.getNameCollumn())));
+//        }
+//        return mCongTo.getmGhimCto();
+//    }
+
+//    public String getmTaiKhoan() {
+//        if (TextUtils.isEmpty(mCongTo.getmTaiKhoan())) {
+//            Cursor cursor = getmCursor();
+//            cursor.moveToPosition(getmIndex());
+//
+//            mCongTo.setmTaiKhoan(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.TaiKhoan.getNameCollumn())));
+//        }
+//        return mCongTo.getmTaiKhoan();
+//    }
+
+//    public int getmKieuCongTo() {
+//        if(mCongTo.getmKieuCongTo()==-1) {
+//            Cursor cursor = getmCursor();
+//            cursor.moveToPosition(getmIndex());
+//            mCongTo.setmKieuCongTo(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.KieuCongToPhanBo.getNameCollumn())));
+//        }
+//        return mCongTo.getmKieuCongTo();
+//    }
 }

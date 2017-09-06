@@ -41,7 +41,7 @@ public class DangNhapCuActivity extends BaseActivity implements
     public static final String PARAM_PASS = "PARAM_PASS";
     public static final String PARAM_CODE_DIENLUC = "PARAM_CODE_DIENLUC";
 
-    public static final String PREF_LOGIN = "PREF_LOGIN";
+    public static final String PREF_LOGIN = "PREF_CONFIG";
     public static final String KEY_PREF_USER = "KEY_PREF_USER";
     public static final String KEY_PREF_PASS = "KEY_PREF_PASS";
     public static final String KEY_PREF_MA_DIEN_LUC = "KEY_PREF_MA_DIEN_LUC";
@@ -57,7 +57,7 @@ public class DangNhapCuActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        super.hideBar();
+//        super.hideBar();
         initView();
         handleListener();
         setAction(savedInstanceState);

@@ -5,111 +5,111 @@ package esolutions.com.barcodehungyenpc.entity;
  */
 
 public class CongTo {
-    private int mIdCto;
-    private String mMaDLuc;
-    private String mMaChungLoai;
-    private String mNamSX;
-    private String mSoCto;
-    private String mMaCto;
-    private String mChiSoThao;
+    private int STT;
+    private String MA_DVIQLY;
+    private String CLOAI;
+    private String NAMSX;
+    private String SO_CTO;
+    private String MA_CTO;
+    private String CHISO_THAO;
 
-    private int mGhimCto;
-    private String mTaiKhoan;
+//    private int mGhimCto;
+//    private String mTaiKhoan;
 
-    private String mNgayGhiDuLieu;
-    private int mKieuCongTo;
+    private String NGAY_NHAP;
+//    private int mKieuCongTo;
 
     public CongTo() {
-        mIdCto = -1;
-        mGhimCto = -1;
-        mKieuCongTo = -1;
+        STT = -1;
+//        mGhimCto = -1;
+//        mKieuCongTo = -1;
     }
 
-    public void setmIdCto(int mIdCto) {
-        this.mIdCto = mIdCto;
+    public void setSTT(int STT) {
+        this.STT = STT;
     }
 
-    public int getmIdCto() {
-        return mIdCto;
+    public int getSTT() {
+        return STT;
     }
 
-    public String getmMaDLuc() {
-        return mMaDLuc;
+    public String getMA_DVIQLY() {
+        return MA_DVIQLY;
     }
 
-    public void setmMaDLuc(String mMaDLuc) {
-        this.mMaDLuc = mMaDLuc;
+    public void setMA_DVIQLY(String MA_DVIQLY) {
+        this.MA_DVIQLY = MA_DVIQLY;
     }
 
-    public String getmMaChungLoai() {
-        return mMaChungLoai;
+    public String getCLOAI() {
+        return CLOAI;
     }
 
-    public void setmMaChungLoai(String mMaChungLoai) {
-        this.mMaChungLoai = mMaChungLoai;
+    public void setCLOAI(String CLOAI) {
+        this.CLOAI = CLOAI;
     }
 
-    public String getmNamSX() {
-        return mNamSX;
+    public String getNAMSX() {
+        return NAMSX;
     }
 
-    public void setmNamSX(String mNamSX) {
-        this.mNamSX = mNamSX;
+    public void setNAMSX(String NAMSX) {
+        this.NAMSX = NAMSX;
     }
 
-    public String getmSoCto() {
-        return mSoCto;
+    public String getSO_CTO() {
+        return SO_CTO;
     }
 
-    public void setmSoCto(String mSoCto) {
-        this.mSoCto = mSoCto;
+    public void setSO_CTO(String SO_CTO) {
+        this.SO_CTO = SO_CTO;
     }
 
-    public String getmMaCto() {
-        return mMaCto;
+    public String getMA_CTO() {
+        return MA_CTO;
     }
 
-    public void setmMaCto(String mMaCto) {
-        this.mMaCto = mMaCto;
+    public void setMA_CTO(String MA_CTO) {
+        this.MA_CTO = MA_CTO;
     }
 
-    public String getmChiSoThao() {
-        return mChiSoThao;
+    public String getCHISO_THAO() {
+        return CHISO_THAO;
     }
 
-    public void setmChiSoThao(String mChiSoThao) {
-        this.mChiSoThao = mChiSoThao;
+    public void setCHISO_THAO(String CHISO_THAO) {
+        this.CHISO_THAO = CHISO_THAO;
     }
 
-    public int getmGhimCto() {
-        return mGhimCto;
+//    public int getmGhimCto() {
+//        return mGhimCto;
+//    }
+//
+//    public void setmGhimCto(int mGhimCto) {
+//        this.mGhimCto = mGhimCto;
+//    }
+
+//    public String getmTaiKhoan() {
+//        return mTaiKhoan;
+//    }
+//
+//    public void setmTaiKhoan(String mTaiKhoan) {
+//        this.mTaiKhoan = mTaiKhoan;
+//    }
+
+    public String getNGAY_NHAP() {
+        return NGAY_NHAP;
     }
 
-    public void setmGhimCto(int mGhimCto) {
-        this.mGhimCto = mGhimCto;
+    public void setNGAY_NHAP(String NGAY_NHAP) {
+        this.NGAY_NHAP = NGAY_NHAP;
     }
 
-    public String getmTaiKhoan() {
-        return mTaiKhoan;
-    }
-
-    public void setmTaiKhoan(String mTaiKhoan) {
-        this.mTaiKhoan = mTaiKhoan;
-    }
-
-    public String getmNgayGhiDuLieu() {
-        return mNgayGhiDuLieu;
-    }
-
-    public void setmNgayGhiDuLieu(String mNgayGhiDuLieu) {
-        this.mNgayGhiDuLieu = mNgayGhiDuLieu;
-    }
-
-    public int getmKieuCongTo() {
-        return mKieuCongTo;
-    }
-
-    public void setmKieuCongTo(int mKieuCongTo) {
-        this.mKieuCongTo = mKieuCongTo;
-    }
+//    public int getmKieuCongTo() {
+//        return mKieuCongTo;
+//    }
+//
+//    public void setmKieuCongTo(int mKieuCongTo) {
+//        this.mKieuCongTo = mKieuCongTo;
+//    }
 }

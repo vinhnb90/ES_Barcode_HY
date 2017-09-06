@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/xml_border_full"
+        android:padding="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textStyle="bold"
+            android:id="@+id/tv_title_pick_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Chọn ngày"
+            android:textSize="@dimen/_12sdp" />
+
+        <LinearLayout
+            android:layout_below="@+id/tv_title_pick_date"
+            android:id="@+id/ll_date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <NumberPicker
+                android:id="@+id/picker_day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_weight="1">
+
+            </NumberPicker>
+
+            <NumberPicker
+                android:id="@+id/picker_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </NumberPicker>
+
+            <NumberPicker
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/picker_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </NumberPicker>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_below="@+id/ll_date_picker"
+            android:layout_width="match_parent"
+            android:gravity="right"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_cancel"
+                android:paddingLeft="@dimen/_10sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/xml_border_full_type2"
+                android:drawableRight="@mipmap/ic_undo"
+                android:text="Hủy"
+                android:textColor="@color/white" />
+
+            <Button
+                android:paddingLeft="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:id="@+id/btn_ok"
+                android:layout_height="wrap_content"
+                android:background="@drawable/xml_border_full_type2"
+                android:drawableRight="@mipmap/ic_done"
+                android:text="Chọn"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
+

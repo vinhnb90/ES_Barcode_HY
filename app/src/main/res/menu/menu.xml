@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_camera"
+        android:icon="@mipmap/ic_camera"
+        android:orderInCategory="100"
+        android:title="Camera" />
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_barcode_bluetooth"
+        android:icon="@mipmap/ic_blutooth"
+        android:orderInCategory="100"
+        android:title="Bluetooth" />
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_config"
+        android:icon="@mipmap/ic_setting"
+        android:orderInCategory="100"
+        android:title="Cấu hình" />
+</menu>

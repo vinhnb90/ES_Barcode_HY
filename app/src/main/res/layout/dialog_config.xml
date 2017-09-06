@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/xml_border_full"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/tv_title_config"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Cài đặt"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/tv_title_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_config"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="Đường dẫn máy chủ"
+            android:textSize="@dimen/_8sdp" />
+
+        <EditText
+            android:id="@+id/et_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_url"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:background="@drawable/xml_border_full"
+            android:hint="Nhập thông tin"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="@dimen/_5sdp"
+            android:scrollHorizontally="true"
+            android:scrollbars="horizontal"
+            android:singleLine="true"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/tv_title_dvi_qly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_url"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="Đơn vị quản lý"
+            android:textSize="@dimen/_8sdp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/ll_aet_dvi"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_below="@+id/tv_title_dvi_qly"
+            android:layout_marginRight="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_weight="1"
+            android:background="@drawable/xml_border_full"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <AutoCompleteTextView
+                android:id="@+id/aet_dvi"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:background="@drawable/xml_input"
+                android:gravity="center_vertical"
+                android:hint="Nhập đơn vị"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/_5sdp"
+                android:scrollHorizontally="true"
+                android:scrollbars="horizontal"
+                android:singleLine="true"
+                android:textColor="@color/row_rv_ds_cto"
+                android:textColorHint="@color/bb_inActiveBottomBarItemColor"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/ibtn_auto_dvi"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/xml_border_full"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_arrow_down" />
+        </LinearLayout>
+
+        <!-- <LinearLayout
+             android:id="@+id/ll_dvi"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/_25sdp"
+             android:layout_below="@+id/tv_title_dvi_qly"
+             android:layout_marginTop="@dimen/_2sdp"
+             android:orientation="horizontal"
+             android:weightSum="1">
+
+             <android.support.v7.widget.AppCompatSpinner
+                 android:id="@+id/spin_dvi"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"
+                 android:background="@drawable/xml_spinner"
+                 android:paddingTop="@dimen/_7sdp"
+                 android:paddingBottom="@dimen/_7sdp"
+                 ></android.support.v7.widget.AppCompatSpinner>
+
+             <Button
+                 android:id="@+id/button"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:layout_marginLeft="@dimen/_5sdp"
+                 android:background="@drawable/xml_border_full_type2"
+                 android:drawableRight="@mipmap/ic_download"
+                 android:paddingLeft="@dimen/_5sdp"
+                 android:text="Đồng bộ"
+                 android:textColor="@color/white" />
+         </LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_below="@+id/ll_aet_dvi"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_save_config"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/xml_border_full_type2"
+                android:drawableRight="@mipmap/ic_save"
+                android:paddingLeft="@dimen/_5sdp"
+                android:text="Lưu thông tin"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

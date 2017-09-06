@@ -5,32 +5,26 @@ package esolutions.com.barcodehungyenpc.entity;
  */
 
 public class DienLuc {
-    private String name;
-    private String code;
+    private int ID;
+    private String MA_DVIQLY;
 
-    public DienLuc(String name, String code) {
-        this.name = name;
-        this.code = code;
+    public DienLuc() {
+        ID = -1;
     }
 
-    public String getName() {
-        return name;
+    public int getID() {
+        return ID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
-    public String getCode() {
-        return code;
+    public String getMA_DVIQLY() {
+        return MA_DVIQLY;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    @Override
-    public String toString() {
-        return this.getName();
+    public void setMA_DVIQLY(String MA_DVIQLY) {
+        this.MA_DVIQLY = MA_DVIQLY;
     }
 }

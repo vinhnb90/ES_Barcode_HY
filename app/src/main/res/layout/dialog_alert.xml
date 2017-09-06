@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/xml_border_full"
+        android:padding="@dimen/_5sdp">
+
+        <TextView
+            android:id="@+id/tv_title_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="Thông báo"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/ll_line1_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_below="@+id/tv_title_dialog"
+            android:background="@color/black_less"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_message_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_line1_dialog"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textSize="@dimen/_10sdp"
+            tools:text="Message"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_message_dialog"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <Button
+                android:id="@+id/btn_dialog_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/xml_border_full_type2"
+                android:drawableRight="@mipmap/ic_undo"
+                android:paddingLeft="@dimen/_10sdp"
+                android:text="Hủy"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_dialog_ok"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@+id/btn_dialog_cancel"
+                android:layout_weight="1"
+                android:background="@drawable/xml_border_full_type2"
+                android:drawableRight="@mipmap/ic_done"
+                android:paddingLeft="@dimen/_10sdp"
+                android:text="Chọn"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
+

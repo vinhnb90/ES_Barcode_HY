@@ -7,6 +7,8 @@
     <color name="white">#ffffff</color>
     <color name="white_more_trans">#50ffff</color>
     <color name="black">#000000</color>
+    <color name="black_less">#75000000</color>
+    <color name="black_less_less">#50000000</color>
 
     <color name="violet">#222e70</color>
     <color name="button_dark_orange">#ff6e13</color>

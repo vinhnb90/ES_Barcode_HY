@@ -37,9 +37,10 @@ public class DangNhapActivity extends BaseActivity implements
     public static final String PARAM_PASS = "PARAM_PASS";
     public static final String PARAM_CODE_DIENLUC = "PARAM_CODE_DIENLUC";
 
-    public static final String PREF_LOGIN = "PREF_LOGIN";
+    public static final String PREF_LOGIN = "PREF_CONFIG";
     public static final String KEY_PREF_USER = "KEY_PREF_USER";
     public static final String KEY_PREF_PASS = "KEY_PREF_PASS";
+
     public static final String KEY_PREF_MA_DIEN_LUC = "KEY_PREF_MA_DIEN_LUC";
     public static final String KEY_PREF_SERVER_URL = "KEY_PREF_SERVER_URL";
     public static final String KEY_PREF_CHECK_BOX = "KEY_PREF_CHECK_BOX";
@@ -53,7 +54,7 @@ public class DangNhapActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        super.hideBar();
+//        super.hideBar();
         initView();
         handleListener();
         setAction(savedInstanceState);
@@ -72,9 +73,9 @@ public class DangNhapActivity extends BaseActivity implements
     private void fillInfoLogin() {
         if (mPrefManager == null)
             mPrefManager = SharePrefManager.getInstance(this);
-//        mUser = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
+//        mUser = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
 //                getString(KEY_PREF_USER, "");
-//        mPass = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
+//        mPass = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
 //                getString(KEY_PREF_PASS, "");
         mMaDienLuc = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
                 getString(KEY_PREF_MA_DIEN_LUC, "");
@@ -132,7 +133,7 @@ public class DangNhapActivity extends BaseActivity implements
             public void onClick(View view) {
                 if (validateInput()) {
 //                    if (isCbSaveInfoChecked) {
-//                        mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE)
+//                        mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
 //                                .edit()
 //                                .putString(KEY_PREF_USER, mUser)
 //                                .putString(KEY_PREF_PASS, mPass)
@@ -171,7 +172,7 @@ public class DangNhapActivity extends BaseActivity implements
 //                        isCbSaveInfoChecked = isChecked;
 //                        if (validateInput()) {
 //                            if (isChecked) {
-//                                mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE)
+//                                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
 //                                        .edit()
 //                                        .putString(KEY_PREF_USER, mUser)
 //                                        .putString(KEY_PREF_PASS, mPass)
@@ -180,7 +181,7 @@ public class DangNhapActivity extends BaseActivity implements
 //                                        .putBoolean(KEY_PREF_CHECK_BOX, isCbSaveInfoChecked)
 //                                        .commit();
 //                            } else
-//                                mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE)
+//                                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
 //                                        .edit()
 //                                        .clear()
 //                                        .commit();

@@ -75,28 +75,28 @@ public class DsCtoFragment extends BaseFragment {
     }
 
     private void setRecycler() {
-        try {
-            mListCto.clear();
-            mListCto.addAll(mListener.interactionDataCongTo(
-//                    Common.KIEU_DANHSACH.ALL
-            ));
-
-            if (mAdapter == null) {
-                mAdapter = new DsCongToAdapter(getContext(), mListCto, false);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                mRvDsCto.setLayoutManager(linearLayoutManager);
-                mRvDsCto.setHasFixedSize(true);
-                mRvDsCto.setAdapter(mAdapter);
-                mRvDsCto.invalidate();
-            } else {
-                mAdapter.refresh(mListCto, false);
-                mRvDsCto.invalidate();
-            }
-
-            Toast.makeText(this.getActivity(), "mListCto = " + mListCto.size(), Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e(TAG, "setRecycler: error" + e.getMessage());
-        }
+//        try {
+//            mListCto.clear();
+//            mListCto.addAll(mListener.interactionDataCongTo(
+////                    Common.KIEU_DANHSACH.ALL
+//            ));
+//
+//            if (mAdapter == null) {
+//                mAdapter = new DsCongToAdapter(getContext(), mListCto, false);
+//                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//                mRvDsCto.setLayoutManager(linearLayoutManager);
+//                mRvDsCto.setHasFixedSize(true);
+//                mRvDsCto.setAdapter(mAdapter);
+//                mRvDsCto.invalidate();
+//            } else {
+//                mAdapter.refresh(mListCto, false);
+//                mRvDsCto.invalidate();
+//            }
+//
+//            Toast.makeText(this.getActivity(), "mListCto = " + mListCto.size(), Toast.LENGTH_SHORT).show();
+//        } catch (Exception e) {
+//            Log.e(TAG, "setRecycler: error" + e.getMessage());
+//        }
     }
 
     public void clickBtnGhimRowCto(int pos) {
