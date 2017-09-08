@@ -33,13 +33,14 @@ public class SoapXML {
 
     public static String getURL(String address) {
         return "http://" + address + "/servicedodem28.8/ServiceTienIch_DoDem.asmx";
+//        return "http://" + address + "/ServiceTienIch_DoDem.asmx";
     }
 
     public static int TIME_OUT = 30000;
 
     public enum METHOD {
         CTO_PB("Select_Info_PBCT", new String[]{"strMaDViQLy", "strMaCTo"}),
-        CTO_KD("Select_Info_Send_KDCT_MTB", new String[]{"strMaDViQLy", "strMaCTo"});
+        CTO_KD("Select_Info_Send_KDCT_MTB", new String[]{"strDVi", "strMaCTo"});
 
         private String nameMethod;
         private String[] nameParams;
@@ -130,6 +131,22 @@ public class SoapXML {
                     Field[] allFields;
                     final GsonBuilder gsonBuilder = new GsonBuilder();
                     final Gson gson = gsonBuilder.create();
+
+
+                    if (dataRealResult.containsKey("CONG_TO")) {
+                        SoapObject dataReal = dataRealResult.get("CONG_TO");
+                        allFields = classType.getDeclaredFields();
+                        for (Field field : allFields) {
+                            if (dataReal.hasProperty(field.getName())) {
+                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+                            } else {
+                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+                            }
+                        }
+
+                        //convert to object
+                        responeObject = gson.fromJson(jsonObject.toString(), classType);
+                    }
 
                     if (dataRealResult.containsKey("CTO")) {
                         SoapObject dataReal = dataRealResult.get("CTO");

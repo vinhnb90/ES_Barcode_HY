@@ -58,6 +58,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
 import esolutions.com.barcodehungyenpc.entity.CToPBResponse;
 import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
@@ -129,6 +131,7 @@ public class MainActivity
     Bundle savedInstanceState;
 
     SoapXML.AsyncSoap<CToPBResponse> soapSearchCto = null;
+    BluetoothSPP bt;
 
 //    private int mCountCto;
 
@@ -153,7 +156,6 @@ public class MainActivity
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -410,6 +412,7 @@ public class MainActivity
             mKieuCongTo = Common.KIEU_CONG_TO.PHAN_BO;
 
             //init Data
+//            bt = new BluetoothSPP(this);
             mListCtoPB = mSqlDAO.getAllCongTo(Common.KIEU_CONG_TO.PHAN_BO);
             mListCtoKD = mSqlDAO.getAllCongTo(Common.KIEU_CONG_TO.KIEM_DINH);
             mDate = getDateTimeNow(Common.DATE_TIME_TYPE.ddMMyyyy);
@@ -451,7 +454,6 @@ public class MainActivity
         return arrayAdapter;
     }
 
-
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.i("key pressed", String.valueOf(event.getKeyCode()));
@@ -475,7 +477,6 @@ public class MainActivity
         return super.dispatchKeyEvent(event);
     }
 
-
     @Override
     protected void handleListener() {
         try {
@@ -485,6 +486,38 @@ public class MainActivity
 
             //hiển thị folder trên sdcard
             Common.showFolder(this);
+
+            //lắng nghe bluetooth
+//            bt.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+//                public void onDeviceConnected(String name, String address) {
+//                    Snackbar snackbar = Snackbar
+//                            .make(mCoordinatorLayout, Common.MESSAGE.ex14.getContent(), Snackbar.LENGTH_LONG);
+//                    snackbar.show();
+//                }
+//
+//                public void onDeviceDisconnected() {
+//                    Snackbar snackbar = Snackbar
+//                            .make(mCoordinatorLayout, Common.MESSAGE.ex16.getContent(), Snackbar.LENGTH_LONG);
+//                    snackbar.show();
+//                }
+//
+//                public void onDeviceConnectionFailed() {
+//                    Snackbar snackbar = Snackbar
+//                            .make(mCoordinatorLayout, Common.MESSAGE.ex15.getContent(), Snackbar.LENGTH_LONG);
+//                    snackbar.show();
+//                }
+//            });
+//
+//
+//
+//            bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+//                public void onDataReceived(byte[] data, String message) {
+//                    Snackbar snackbar = Snackbar
+//                            .make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+//                    snackbar.show();
+//                }
+//            });
+
 
             mTvDate.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -640,11 +673,7 @@ public class MainActivity
 
                         snackbar.show();
                         e.printStackTrace();
-                    } finally {
-                        //ẩn progress bar
-                        showProgresbar(false);
                     }
-
                 }
             });
 
@@ -892,13 +921,13 @@ public class MainActivity
                 HashMap<String, SoapObject> result = null;
                 SoapObject proInfoLv2 = null;
 
-                if (proInfoLv1.hasProperty("CTO")) {
-                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty("CTO");
+                if (proInfoLv1.hasProperty("CONG_TO")) {
+                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty("CONG_TO");
                     String soap = proInfoLv2.toString();
                     Log.d(TAG, "filterDataReal: " + soap);
 
                     result = new HashMap<>();
-                    result.put("CTO", proInfoLv2);
+                    result.put("CONG_TO", proInfoLv2);
                 }
 
                 if (proInfoLv1.hasProperty("Table1")) {
@@ -1380,6 +1409,28 @@ public class MainActivity
 //    };
 
     private void processBluetooth() {
+//        //check bluetooth
+//        if(!bt.isBluetoothAvailable()) {
+//            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex13.getContent(), Snackbar.LENGTH_LONG);
+//            snackbar.show();
+//            return;
+//        }
+//
+//        if (!bt.isBluetoothEnabled()) {
+//            //nếu bluetooth chưa bật
+//            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
+//        } else {
+//            //start service lib
+//            if(!bt.isServiceAvailable()) {
+//                bt.setupService();
+//                bt.startService(BluetoothState.DEVICE_ANDROID);
+////                setup();
+//            }
+//        }
+
+
+
         mEtSearchOnline.setFocusable(true);
         Intent settingsIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
         startActivity(settingsIntent);

@@ -85,7 +85,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="@dimen/_2sdp"
-                android:background="@drawable/xml_button_cricle_type3"
+                android:background="@drawable/xml_button_cricle_type2"
                 android:padding="@dimen/_2sdp"
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_search_online_white" />

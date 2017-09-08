@@ -191,6 +191,11 @@ public class Common {
         ex10("ex10", "Gặp ván đề khi xóa dữ liệu!."),
         ex11("ex11", "Đã có sẵn thông tin thiết bị trong dữ liệu!."),
         ex12("ex12", "Thành công"),
+        ex13("ex13", "Thiết bị không hỗ trợ bluetooth!"),
+        ex14("ex14", "Kết nối thiết bị qua bluetooth thành công!"),
+        ex15("ex15", "Kết nối thiết bị qua bluetooth thất bại!"),
+        ex16("ex16", "Kết nối bluetooth với thiết bị đã ngắt!"),
+
         ex("ex", "Gặp vấn đề không xác định.");
 
         private String code, content;
