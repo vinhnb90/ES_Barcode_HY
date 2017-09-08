@@ -196,6 +196,9 @@ public class Common {
         ex15("ex15", "Kết nối thiết bị qua bluetooth thất bại!"),
         ex16("ex16", "Kết nối bluetooth với thiết bị đã ngắt!"),
 
+        ex17("ex17", "Không tìm thấy thiết bị nào!"),
+        ex18("ex18", "Ngắt kết nối bluetooth!"),
+
         ex("ex", "Gặp vấn đề không xác định.");
 
         private String code, content;
@@ -212,7 +215,6 @@ public class Common {
         public String getContent() {
             return content;
         }
-
     }
 
     public static String getDateTimeNow(Common.DATE_TIME_TYPE formatDate) {

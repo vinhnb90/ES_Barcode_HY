@@ -55,7 +55,6 @@
 
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/ll_bluetooth_line1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -63,11 +62,13 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_toLeftOf="@+id/tv_off"
-            android:background="@color/black_less">
+            android:background="@color/black_less"
+            android:orientation="vertical">
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_list_bluetooth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ll_bluetooth_line1"
@@ -76,16 +77,61 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Danh sách các thiết bị bluetooth" />
+                android:text="Danh sách các thiết bị bluetooth hiện tại" />
 
             <ListView
                 android:id="@+id/lv_bluetooth"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp">
-            </ListView>
+                android:layout_height="@dimen/_200sdp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"></ListView>
+
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_scan_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_list_bluetooth"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_bluetooth_line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/black_less"
+                android:orientation="vertical"></LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_scan_bluetooth_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/ll_bluetooth_line2"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="Đang quét..." />
+
+            <ProgressBar
+                android:id="@+id/pbar_scan_bluetooth"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_scan_bluetooth_status"
+                android:layout_centerVertical="true" />
+            <Button
+                android:id="@+id/bt_sendtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pbar_scan_bluetooth"
+                android:text="Text" />
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
 </RelativeLayout>

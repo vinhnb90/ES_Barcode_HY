@@ -4,7 +4,11 @@ import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -31,24 +35,24 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -57,6 +61,7 @@ import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -74,7 +79,7 @@ import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
 import esolutions.com.barcodehungyenpc.utils.SoapXML;
 
-import static esolutions.com.barcodehungyenpc.utils.Common.checkPermission;
+import static app.akexorcist.bluetotohspp.library.BluetoothState.STATE_CONNECTED;
 import static esolutions.com.barcodehungyenpc.utils.Common.convertDateSQLToDateUI;
 import static esolutions.com.barcodehungyenpc.utils.Common.getDateTimeNow;
 
@@ -131,7 +136,15 @@ public class MainActivity
     Bundle savedInstanceState;
 
     SoapXML.AsyncSoap<CToPBResponse> soapSearchCto = null;
+
+    //Bluetooth
     BluetoothSPP bt;
+    private BluetoothAdapter mBtAdapter;
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+    private ArrayAdapter<String> mNewPairedDevicesArrayAdapter;
+    private Set<BluetoothDevice> pairedDevices;
+    private TextView tvStatusScan;
+    private static BroadcastReceiver mReceiver;
 
 //    private int mCountCto;
 
@@ -228,6 +241,19 @@ public class MainActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Make sure we're not doing discovery anymore
+        if (mBtAdapter != null) {
+            mBtAdapter.cancelDiscovery();
+        }
+
+        // Unregister broadcast listeners
+//        this.unregisterReceiver(mReceiver);
+        this.finish();
     }
 
     private void processCamera() {
@@ -425,7 +451,7 @@ public class MainActivity
 //                mListCtoKD = mSqlDAO.getAllCongTo(Common.KIEU_CONG_TO.KIEM_DINH);
 //            }
 
-            // setup kiểu list công tơ và refersh lại text thống kê
+            // setupBluetooth kiểu list công tơ và refersh lại text thống kê
             mKieuCongTo = Common.KIEU_CONG_TO.PHAN_BO;
             searchLocal(mDate);
 
@@ -486,38 +512,6 @@ public class MainActivity
 
             //hiển thị folder trên sdcard
             Common.showFolder(this);
-
-            //lắng nghe bluetooth
-//            bt.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
-//                public void onDeviceConnected(String name, String address) {
-//                    Snackbar snackbar = Snackbar
-//                            .make(mCoordinatorLayout, Common.MESSAGE.ex14.getContent(), Snackbar.LENGTH_LONG);
-//                    snackbar.show();
-//                }
-//
-//                public void onDeviceDisconnected() {
-//                    Snackbar snackbar = Snackbar
-//                            .make(mCoordinatorLayout, Common.MESSAGE.ex16.getContent(), Snackbar.LENGTH_LONG);
-//                    snackbar.show();
-//                }
-//
-//                public void onDeviceConnectionFailed() {
-//                    Snackbar snackbar = Snackbar
-//                            .make(mCoordinatorLayout, Common.MESSAGE.ex15.getContent(), Snackbar.LENGTH_LONG);
-//                    snackbar.show();
-//                }
-//            });
-//
-//
-//
-//            bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
-//                public void onDataReceived(byte[] data, String message) {
-//                    Snackbar snackbar = Snackbar
-//                            .make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
-//                    snackbar.show();
-//                }
-//            });
-
 
             mTvDate.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -1361,7 +1355,6 @@ public class MainActivity
         }
         return result;
     }
-
     //endregion
 
     //region DatePickerDialog.OnDateSetListener
@@ -1409,40 +1402,307 @@ public class MainActivity
 //    };
 
     private void processBluetooth() {
-//        //check bluetooth
-//        if(!bt.isBluetoothAvailable()) {
-//            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex13.getContent(), Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//            return;
+//        if(bt == null)
+//        {
+//            bt = new BluetoothSPP(this);
 //        }
+//        if(mPairedDevicesArrayAdapter == null)
+//        {
+//            mPairedDevicesArrayAdapter = new ArrayAdapter<String>(MainActivity.this, app.akexorcist.bluetotohspp.library.R.layout.device_name);
+//        }
+
+        //kiểm tra hỗ trợ bluetooth
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBtAdapter == null) {
+            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex13.getContent(), Snackbar.LENGTH_LONG);
+            snackbar.show();
+            return;
+        }
+
+        //mở dialog
+        final Dialog dialogConfig = new Dialog(this);
+        dialogConfig.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogConfig.setContentView(R.layout.dialog_bluetooth);
+        dialogConfig.setCanceledOnTouchOutside(true);
+        dialogConfig.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        dialogConfig.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        dialogConfig.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialogConfig.getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+
+        final Switch swt = (Switch) dialogConfig.findViewById(R.id.swt_bluetooth);
+        final ListView pairedListView = (ListView) dialogConfig.findViewById(R.id.lv_bluetooth);
+        tvStatusScan = (TextView) dialogConfig.findViewById(R.id.tv_scan_bluetooth_status);
+        final ProgressBar pbarScan = (ProgressBar) dialogConfig.findViewById(R.id.pbar_scan_bluetooth);
+        final Button btnSend = (Button) dialogConfig.findViewById(R.id.bt_sendtext);
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bt.send("Text", true);
+            }
+        });
+
+        swt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isPressed()) {
+                    //TODO nếu nhấn thì quét mới và refersh list hoặc tắt thì clear
+                    if (compoundButton.isChecked() == true) {
+                        Toast.makeText(MainActivity.this, "compoundButton.isChecked() == true", Toast.LENGTH_SHORT).show();
+
+                        mReceiver = new BroadcastReceiver() {
+                            @Override
+                            public void onReceive(Context context, Intent intent) {
+                                String action = intent.getAction();
+
+                                if (mNewPairedDevicesArrayAdapter == null)
+                                    mNewPairedDevicesArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1);
+
+                                // When discovery finds a device
+                                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                                    // Get the BluetoothDevice object from the Intent
+                                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                                    // If it's already paired, skip it, because it's been listed already
+                                    if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                                        mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                                    }
+                                    // When discovery is finished, change the Activity title
+                                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                                    mPairedDevicesArrayAdapter.notifyDataSetChanged();
+
+                                    if (tvStatusScan != null) {
+                                        if (mPairedDevicesArrayAdapter.getCount() == 0) {
+                                            tvStatusScan.setText(Common.MESSAGE.ex17.getContent());
+                                        } else
+                                            tvStatusScan.setText("Tìm thấy " + mPairedDevicesArrayAdapter.getCount() + " thiết bị.");
+                                    }
+                                }
+                            }
+                        };
+
+                        // Register for broadcasts when a device is discovered
+                        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                        MainActivity.this.registerReceiver(mReceiver, filter);
+
+                        // Register for broadcasts when discovery has finished
+                        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+                        MainActivity.this.registerReceiver(mReceiver, filter);
+
+                        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+                        mBtAdapter.enable();
 //
+//                        if (mBtAdapter.isDiscovering()) {
+//                            mBtAdapter.cancelDiscovery();
+//                        }
+
+                        Thread newThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                mBtAdapter.startDiscovery();
+                            }
+                        });
+                        newThread.start();
+
+
+//                        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+//                        registerReceiver(mReceiver, filter);
+//
+//                        //nếu bật thì refresh list mới, nhưng tại thời điểm kết thúc refresh
+//                        ArrayAdapter<String> mPairedDevicesArrayAdapterNew = getListParseBluetooth();
+//                        if (mPairedDevicesArrayAdapterNew.getCount() == 0) {
+//                            tvStatusScan.setText(Common.MESSAGE.ex17.getContent());
+//                        } else
+//                            tvStatusScan.setText("Tìm thấy " + mPairedDevicesArrayAdapter.getCount() + " thiết bị.");
+
+//
+//                        // Turn on sub-title for new devices
+//                        // findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
+//                        // If we're already discovering, stop it
+//                        if (mBtAdapter.isDiscovering()) {
+//                            mBtAdapter.cancelDiscovery();
+//                        }
+//
+//                        // Request discover from BluetoothAdapter
+//                        mBtAdapter.startDiscovery();
+                    } else {
+                        //TODO nếu nhấn tắt thì clear list paire và tắt bluetooth
+                        Toast.makeText(MainActivity.this, "compoundButton.isChecked() == false", Toast.LENGTH_SHORT).show();
+                        mPairedDevicesArrayAdapter.clear();
+                        mPairedDevicesArrayAdapter.notifyDataSetChanged();
+                        mBtAdapter.cancelDiscovery();
+                        mBtAdapter.disable();
+                        tvStatusScan.setText(Common.MESSAGE.ex18.getContent());
+
+                        try {
+                            MainActivity.this.unregisterReceiver(mReceiver);
+                        } catch (IllegalArgumentException e) {
+                            //nếu chưa register thì bỏ qua
+                            e.printStackTrace();
+                        }
+
+//                        mPairedDevicesArrayAdapter.clear();
+//                        pairedListView.invalidate();
+//                        if (mBtAdapter != null) {
+//                            mBtAdapter.cancelDiscovery();
+//                        }
+//
+//                        bt.disconnect();
+
+                    }
+                }
+            }
+        });
+//
+//        // Register for broadcasts when a device is discovered
+//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+//        this.registerReceiver(mReceiver, filter);
+//
+//        // Register for broadcasts when discovery has finished
+//        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+//        this.registerReceiver(mReceiver, filter);
+//
+//
+//        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+//        this.registerReceiver(mReceiver, filter);
+
+        //lắng nghe bluetooth
+//        bt.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+//            public void onDeviceConnected(String name, String address) {
+//                Snackbar snackbar = Snackbar
+//                        .make(mCoordinatorLayout, Common.MESSAGE.ex14.getContent(), Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
+//
+//            public void onDeviceDisconnected() {
+//                Snackbar snackbar = Snackbar
+//                        .make(mCoordinatorLayout, Common.MESSAGE.ex16.getContent(), Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
+//
+//            public void onDeviceConnectionFailed() {
+//                Snackbar snackbar = Snackbar
+//                        .make(mCoordinatorLayout, Common.MESSAGE.ex15.getContent(), Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
+//        });
+//
+//        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+//            public void onDataReceived(byte[] data, String message) {
+//                Snackbar snackbar = Snackbar
+//                        .make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
+//        });
+
+
+        //lấy trạng thái bluetooth để set trạng thái switch
+        if (mBtAdapter.isEnabled()) {
+            swt.setChecked(true);
+        } else {
+            swt.setChecked(false);
+        }
+
+        //hiển thị list cũ đã tìm thấy
+        if (mPairedDevicesArrayAdapter == null)
+            mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        pairedListView.setAdapter(mPairedDevicesArrayAdapter);
+        pairedListView.invalidate();
+
+        pbarScan.setVisibility(View.GONE);
+
+        pairedListView.setAdapter(mPairedDevicesArrayAdapter);
+        pairedListView.setOnItemClickListener(mDeviceClickListener);
+        pairedListView.invalidate();
+
+//        Thread scanDevice = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//            }
+//        });
+//        scanDevice.start();
+
+
+//        //kiểm tra trạng thái bluetooth
 //        if (!bt.isBluetoothEnabled()) {
 //            //nếu bluetooth chưa bật
-//            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
+//            swt.setChecked(false);
+//            bt.enable();
+//        }
+//
+//        if (!bt.isServiceAvailable()) {
+//            //nếu chưa bật service
+//            bt.setupService();
+//            bt.startService(BluetoothState.DEVICE_ANDROID);
+//        }
+//
+//        String adressDevice = "";
+//        if (bt.getServiceState() == STATE_CONNECTED) {
+//            //nếu đã kết nối thì lấy thông tin parse hiện tại
+//            swt.setChecked(true);
+//            adressDevice = bt.getConnectedDeviceAddress();
 //        } else {
-//            //start service lib
-//            if(!bt.isServiceAvailable()) {
-//                bt.setupService();
-//                bt.startService(BluetoothState.DEVICE_ANDROID);
-////                setup();
-//            }
+//            //ngược lại
+//            swt.setChecked(true);
 //        }
 
+//        //fill list bt hiện tại
+//        pairedListView.setAdapter(mPairedDevicesArrayAdapter);
+//        pairedListView.setOnItemClickListener(mDeviceClickListener);
+
+//        // Đăng kí broadcasts khi đã được discovered
+//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+//        this.registerReceiver(mReceiver, filter);
+//
+//        // Đăng kí broadcasts khi kết thúc discovered
+//        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+//        this.registerReceiver(mReceiver, filter);
 
 
-        mEtSearchOnline.setFocusable(true);
-        Intent settingsIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-        startActivity(settingsIntent);
-//        Intent intent = new Intent(MainActivity.this, BluetoothDemo.class);
-//        startActivity(intent);
-//        if (!BA.isEnabled()) {
-//            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(turnOn, 0);
-//            Toast.makeText(getApplicationContext(), "Turned on",Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_LONG).show();
-//        }
+//        // Get the local Bluetooth adapter
+//        if (mBtAdapter == null)
+//            mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+//
+//        // Hiển thị list danh sách hiện tại
+//        if (mPairedDevicesArrayAdapter.getCount() == 0) {
+//            tvStatusScan.setText(Common.MESSAGE.ex17.getContent());
+//        } else
+//            tvStatusScan.setText("Tìm thấy " + mPairedDevicesArrayAdapter.getCount() + " thiết bị.");
+//
+        dialogConfig.show();
+    }
+
+    private ArrayAdapter<String> getListParseBluetooth() {
+        Set<BluetoothDevice> pairedListDevices = mBtAdapter.getBondedDevices();
+        ArrayAdapter<String> mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        // If there are paired devices, add each one to the ArrayAdapter
+        if (pairedListDevices.size() > 0) {
+            for (BluetoothDevice device : pairedListDevices) {
+                mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        }
+
+        return mPairedDevicesArrayAdapter;
+
+    }
+
+    private void setupBluetooth(final Switch swt, final ListView pairedListView) {
+        String adressDevice = "";
+        if (bt.getServiceState() == STATE_CONNECTED) {
+            //nếu đã kết nối thì lấy thông tin parse hiện tại
+            swt.setChecked(true);
+            adressDevice = bt.getConnectedDeviceAddress();
+        } else {
+            //ngược lại
+            swt.setChecked(true);
+        }
+
     }
 
     public interface OnClickButtonAlertDialog {
@@ -1458,4 +1718,62 @@ public class MainActivity
     public void setPauseScannerBarcodeListner(IOnPauseScannerBarcodeListner pauseScannerBarcodeListner) {
         this.pauseScannerBarcodeListner = pauseScannerBarcodeListner;
     }
+
+    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+            // Cancel discovery because it's costly and we're about to connect
+            if (mBtAdapter.isDiscovering())
+                mBtAdapter.cancelDiscovery();
+
+            String strNoFound = getIntent().getStringExtra("no_devices_found");
+            if (strNoFound == null)
+                strNoFound = "No devices found";
+            if (!((TextView) v).getText().toString().equals(strNoFound)) {
+                // Get the device MAC address, which is the last 17 chars in the View
+                String info = ((TextView) v).getText().toString();
+                String address = info.substring(info.length() - 17);
+
+                // Create the result Intent and include the MAC address
+                Intent intent = new Intent();
+                intent.putExtra(BluetoothState.EXTRA_DEVICE_ADDRESS, address);
+
+//                // Set result and finish this Activity
+//                setResult(Activity.RESULT_OK, intent);
+//                finish();
+            }
+        }
+    };
+
+    // The BroadcastReceiver that listens for discovered devices and
+    // changes the title when discovery is finished
+//    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String action = intent.getAction();
+//
+//            if (mNewPairedDevicesArrayAdapter == null)
+//                mNewPairedDevicesArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1);
+//
+//            // When discovery finds a device
+//            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+//                // Get the BluetoothDevice object from the Intent
+//                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//                // If it's already paired, skip it, because it's been listed already
+//                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+//                    mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+//                }
+//                // When discovery is finished, change the Activity title
+//            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+//                mPairedDevicesArrayAdapter.notifyDataSetChanged();
+//
+//                if (tvStatusScan != null) {
+//                    if (mPairedDevicesArrayAdapter.getCount() == 0) {
+//                        tvStatusScan.setText(Common.MESSAGE.ex17.getContent());
+//                    } else
+//                        tvStatusScan.setText("Tìm thấy " + mPairedDevicesArrayAdapter.getCount() + " thiết bị.");
+//                }
+//            }
+//        }
+//    };
+
 }
