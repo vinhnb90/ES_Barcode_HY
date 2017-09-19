@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="esolutions.com.barcodehungyenpc">
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -9,8 +10,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <permission android:name="BLUETOOTH"/>
-    <permission android:name="BLUETOOTH_ADMIN"/>
+
+    <permission android:name="BLUETOOTH" />
+    <permission android:name="BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -19,15 +21,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BaseTheme">
-        <activity android:name=".view.MainActivity">
+        <activity
+            android:name=".view.MainKiemDinhActivity"
+            android:windowSoftInputMode="stateHidden">
+
+        </activity>
+        <activity
+            android:name=".view.DangNhapActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".view.BluetoothDemo"/>
+        <activity
+            android:name=".view.BluetoothDemo"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".view.BarcodeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Main2Activity"></activity>
     </application>
 
 </manifest>

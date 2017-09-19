@@ -17,12 +17,13 @@ public class CongTo {
 //    private String mTaiKhoan;
 
     private String NGAY_NHAP;
-//    private int mKieuCongTo;
+    private int TRANG_THAI_GHIM;
+    private int TRANG_THAI_CHON;
 
     public CongTo() {
         STT = -1;
-//        mGhimCto = -1;
-//        mKieuCongTo = -1;
+        TRANG_THAI_GHIM = -1;
+        TRANG_THAI_CHON = -1;
     }
 
     public void setSTT(int STT) {
@@ -81,21 +82,13 @@ public class CongTo {
         this.CHISO_THAO = CHISO_THAO;
     }
 
-//    public int getmGhimCto() {
-//        return mGhimCto;
-//    }
-//
-//    public void setmGhimCto(int mGhimCto) {
-//        this.mGhimCto = mGhimCto;
-//    }
+    public int getTRANG_THAI_GHIM() {
+        return TRANG_THAI_GHIM;
+    }
 
-//    public String getmTaiKhoan() {
-//        return mTaiKhoan;
-//    }
-//
-//    public void setmTaiKhoan(String mTaiKhoan) {
-//        this.mTaiKhoan = mTaiKhoan;
-//    }
+    public void setTRANG_THAI_GHIM(int TRANG_THAI_GHIM) {
+        this.TRANG_THAI_GHIM = TRANG_THAI_GHIM;
+    }
 
     public String getNGAY_NHAP() {
         return NGAY_NHAP;
@@ -105,7 +98,15 @@ public class CongTo {
         this.NGAY_NHAP = NGAY_NHAP;
     }
 
-//    public int getmKieuCongTo() {
+    public int getTRANG_THAI_CHON() {
+        return TRANG_THAI_CHON;
+    }
+
+    public void setTRANG_THAI_CHON(int TRANG_THAI_CHON) {
+        this.TRANG_THAI_CHON = TRANG_THAI_CHON;
+    }
+
+    //    public int getmKieuCongTo() {
 //        return mKieuCongTo;
 //    }
 //

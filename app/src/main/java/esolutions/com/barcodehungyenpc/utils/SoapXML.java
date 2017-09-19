@@ -32,7 +32,8 @@ public class SoapXML {
     public static String URL;
 
     public static String getURL(String address) {
-        return "http://" + address + "/servicedodem28.8/ServiceTienIch_DoDem.asmx";
+        return "http://" + address + "/servicedodemHungYen1509/ServiceTienIch_DoDem.asmx";
+//                "http://" + address + "/servicedodem28.8/ServiceTienIch_DoDem.asmx";
 //        return "http://" + address + "/ServiceTienIch_DoDem.asmx";
     }
 
@@ -121,7 +122,7 @@ public class SoapXML {
                         throw new Exception(Common.MESSAGE.ex06.getContent());
 
                     HashMap<String, SoapObject> dataRealResult = callBack.filterDataReal(result);
-                    if(dataRealResult == null)
+                    if (dataRealResult == null)
                         throw new Exception(Common.MESSAGE.ex05.getContent());
 
                     //check and get all data by key field project and put to gson object
@@ -286,9 +287,9 @@ public class SoapXML {
 //        protected void onPostExecute(Boolean result) {
 //            try {
 //                super.onPostExecute(result);
-//                ((ListView) MainActivity.this.findViewById(R.id.lv_1)).setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, new String[]{result.toString()}));
+//                ((ListView) MainKiemDinhActivity.this.findViewById(R.id.lv_1)).setAdapter(new ArrayAdapter<String>(MainKiemDinhActivity.this, android.R.layout.simple_list_item_1, new String[]{result.toString()}));
 //            } catch (Exception e) {
-//                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainKiemDinhActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 //            }
 //        }
 //    }

@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +22,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.File;
@@ -34,7 +37,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import esolutions.com.barcodehungyenpc.R;
-import esolutions.com.barcodehungyenpc.view.MainActivity;
+import esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity;
 
 import static android.support.v4.app.ActivityCompat.requestPermissions;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -112,8 +115,8 @@ public class Common {
         File db = new File(PATH_FOLDER_DB + File.separator + DB_NAME);
         if (!db.exists()) {
             return false;
-        }
-        return true;
+        } else
+            return true;
     }
     //endregion
 
@@ -148,13 +151,57 @@ public class Common {
     }
     //endregion
 
-    public enum KIEU_CONG_TO {
-        PHAN_BO(0),
-        KIEM_DINH(1);
+    public enum KIEU_CHUONG_TRINH {
+        PHAN_BO(0, "Chức năng phân bổ"),
+        KIEM_DINH(1, "Chức năng kiểm định");
+
+        private int code;
+        private String name;
+
+        KIEU_CHUONG_TRINH(int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public enum MENU_BOTTOM_KD {
+        ALL(0, "Danh sách thiết bị"),
+        DS_GHIM(1, "Danh sách chọn"),
+        LICH_SU(2, "Lịch sử");
+
+        private int code;
+        private String name;
+
+        MENU_BOTTOM_KD(int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+
+    public enum TRANG_THAI_GHIM {
+        CHUA_GHIM(0),
+        DA_GHIM(1);
 
         private int code;
 
-        KIEU_CONG_TO(int code) {
+        TRANG_THAI_GHIM(int code) {
             this.code = code;
         }
 
@@ -163,13 +210,13 @@ public class Common {
         }
     }
 
-    public enum KIEU_DANHSACH {
-        ALL(0),
-        GHIM(1);
+    public enum TRANG_THAI_CHON {
+        CHUA_CHON(0),
+        DA_CHON(1);
 
         private int code;
 
-        KIEU_DANHSACH(int code) {
+        TRANG_THAI_CHON(int code) {
             this.code = code;
         }
 
@@ -198,6 +245,10 @@ public class Common {
 
         ex17("ex17", "Không tìm thấy thiết bị nào!"),
         ex18("ex18", "Ngắt kết nối bluetooth!"),
+        ex19("ex19", "Đang quét...!"),
+        ex20("ex20", "Dữ liệu nhập rỗng...!"),
+
+        ex21("ex21", "Thao tác tìm kiếm phiên trước chưa kết thúc...!"),
 
         ex("ex", "Gặp vấn đề không xác định.");
 
@@ -341,7 +392,7 @@ public class Common {
         return false;
     }
 
-    public static void showAlertDialog(Context context, final MainActivity.OnClickButtonAlertDialog onClickButtonAlertDialog, String title, String message) throws Exception {
+    public static void showAlertDialog(Context context, final MainKiemDinhActivity.OnClickButtonAlertDialog onClickButtonAlertDialog, String title, String message) throws Exception {
         try {
             final Dialog dialogConfig = new Dialog(context);
             dialogConfig.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -409,5 +460,33 @@ public class Common {
         } else {
             return false;
         }
+    }
+
+    public static void hideKeyboard(Activity activity, View view) {
+        // Check if no view has focus:
+//        View view = activity.getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (view != null)
+//            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void disableSoftInputFromAppearing(EditText editText) {
+        if (Build.VERSION.SDK_INT >= 11) {
+            editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+            editText.setTextIsSelectable(true);
+        } else {
+            editText.setRawInputType(InputType.TYPE_NULL);
+            editText.setFocusable(true);
+        }
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View f = activity.getCurrentFocus();
+        if (null != f && null != f.getWindowToken() && EditText.class.isAssignableFrom(f.getClass()))
+            imm.hideSoftInputFromWindow(f.getWindowToken(), 0);
+        else
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }

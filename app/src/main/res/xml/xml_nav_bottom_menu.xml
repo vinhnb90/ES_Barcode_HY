@@ -3,11 +3,16 @@
     <tab
         barColorWhenSelected="@color/white"
         icon="@drawable/ic_list1"
-        id="@+id/nav_bottom_cto_phanbo"
-        title="Công tơ phân bổ" />
+        id="@+id/nav_bottom_ds_thietbi"
+        title="Danh sách thiết bị" />
     <tab
         barColorWhenSelected="@color/white"
         icon="@drawable/ic_pin"
-        id="@+id/nav_bottom_cto_kiemdinh"
-        title="Công tơ kiểm định" />
+        id="@+id/nav_bottom_ds_chon"
+        title="Danh sách chọn" />
+    <tab
+        barColorWhenSelected="@color/white"
+        icon="@drawable/ic_pin"
+        id="@+id/nav_bottom_lichsu"
+        title="Lịch sử đồng bộ" />
 </tabs>

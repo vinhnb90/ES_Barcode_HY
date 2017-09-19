@@ -1,63 +1,122 @@
 package esolutions.com.barcodehungyenpc.view;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.AppCompatSpinner;
+import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import esolutions.com.barcodehungyenpc.R;
-import esolutions.com.barcodehungyenpc.model.TabConfigLoginAdapter;
+import esolutions.com.barcodehungyenpc.database.SqlConnect;
+import esolutions.com.barcodehungyenpc.database.SqlDAO;
+import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
+import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
+
+import static esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity.KEY_PREF_HIDE_KEYBOARD;
+import static esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity.PREF_CONFIG;
 
 public class DangNhapActivity extends BaseActivity implements
         ActionBar.TabListener,
 //        InfoUserFragment.OnInfoUserFragmentInteractionListener,
         InfoConfigFragment.OnInfoConfigFragmentInteractionListener {
 
-    private static final String TAG = DangNhapActivity.class.getName();
-    private Button mBtnLogin;
-    private ViewPager mVPage;
-    private TabConfigLoginAdapter mAdapter;
-    private ActionBar mActionBar;
+    public static final String TAG = DangNhapActivity.class.getName();
+    public static final String PARAM_SERVER_URL = "PARAM_SERVER_URL";
+    public static final String PARAM_DVI = "PARAM_DVI";
+
+
+    private CoordinatorLayout mCoordinatorLayout;
+    private ImageButton mIbtnDownDvi;
+    private ProgressBar mPbarDownDvi;
+    private EditText mEtUser;
+    private EditText mEtPass;
+    private ImageButton mIbtnVisibePass;
     private CheckBox mCbSaveInfo;
+    private Button mBtnLogin;
+    private ProgressBar mPbarLogin;
+
 
     private SharePrefManager mPrefManager;
+    private SQLiteDatabase mDatabase;
+    private SqlDAO mSqlDAO;
+    private static boolean isLoadedFolder = false;
 
     public static final String PARAM_USER = "PARAM_USER";
     public static final String PARAM_PASS = "PARAM_PASS";
     public static final String PARAM_CODE_DIENLUC = "PARAM_CODE_DIENLUC";
 
     public static final String PREF_LOGIN = "PREF_CONFIG";
+    public static final String KEY_PREF_POS_PROGRAME = "KEY_PREF_POS_PROGRAME";
+    public static final String KEY_PREF_SERVER_URL = "KEY_PREF_SERVER_URL";
+    public static final String KEY_PREF_POS_DVI = "KEY_PREF_POS_DVI";
     public static final String KEY_PREF_USER = "KEY_PREF_USER";
     public static final String KEY_PREF_PASS = "KEY_PREF_PASS";
+    public static final String KEY_PREF_CB_SAVE = "KEY_PREF_CB_SAVE";
 
-    public static final String KEY_PREF_MA_DIEN_LUC = "KEY_PREF_MA_DIEN_LUC";
-    public static final String KEY_PREF_SERVER_URL = "KEY_PREF_SERVER_URL";
-    public static final String KEY_PREF_CHECK_BOX = "KEY_PREF_CHECK_BOX";
 
     private String[] tabs = {"Info Config"};
 
     private String mMaDienLuc, mURLServer;
-    private boolean isCbSaveInfoChecked;
+    private boolean mIsCbSaveChecked;
+    private AppCompatSpinner mCompatSpinnerPrograme;
+    private AppCompatSpinner mCompatSpinnerDvi;
+    private EditText mEtLink;
+    private String mUser;
+    private String mPass;
+    private int mPosPrograme;
+    private int mPosDvi;
+    private Bundle savedInstanceState;
+    public static final String PARAM_POS_PROGRAME = "PARAM_POS_PROGRAME";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        this.savedInstanceState = savedInstanceState;
+        setContentView(R.layout.activity_dangnhap);
 //        super.hideBar();
-        initView();
-        handleListener();
-        setAction(savedInstanceState);
+
+        SpannableString s = new SpannableString("Tìm kiếm công tơ");
+        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, "Tìm kiếm công tơ".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setTitle(s);
+        getSupportActionBar().setElevation(0);
+        if (Common.checkPermission(this)) {
+            return;
+        }
+        try {
+            initView();
+            handleListener();
+            setAction(savedInstanceState);
+        } catch (Exception e) {
+//            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+//            snackbar.show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -66,38 +125,66 @@ public class DangNhapActivity extends BaseActivity implements
         try {
             fillInfoLogin();
         } catch (Exception e) {
-            Log.e(DangNhapActivity.class.getName(), "fillInfoLogin: " + e.getMessage());
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+//            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+//            snackbar.show();
+//            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Common.REQUEST_CODE_PERMISSION: {
+                if (grantResults.length == 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED
+                        || grantResults[1] != PackageManager.PERMISSION_GRANTED
+                        || grantResults[2] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(DangNhapActivity.this, "Unable to show permission required", Toast.LENGTH_LONG).show();
+                    Log.e(getClass().getName(), "Unable to show permission required");
+                } else {
+                    try {
+                        initView();
+                        handleListener();
+                        setAction(savedInstanceState);
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return;
+            }
         }
     }
 
     private void fillInfoLogin() {
+        //get data shared pref
         if (mPrefManager == null)
             mPrefManager = SharePrefManager.getInstance(this);
-//        mUser = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
-//                getString(KEY_PREF_USER, "");
-//        mPass = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
-//                getString(KEY_PREF_PASS, "");
-        mMaDienLuc = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
-                getString(KEY_PREF_MA_DIEN_LUC, "");
+        mPosPrograme = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
+                getInt(KEY_PREF_POS_PROGRAME, 0);
         mURLServer = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
                 getString(KEY_PREF_SERVER_URL, "");
-        isCbSaveInfoChecked = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
-                getBoolean(KEY_PREF_CHECK_BOX, false);
+        mPosDvi = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
+                getInt(KEY_PREF_POS_DVI, 0);
+        mUser = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
+                getString(KEY_PREF_USER, "");
+        mPass = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
+                getString(KEY_PREF_PASS, "");
+        mIsCbSaveChecked = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
+                getBoolean(KEY_PREF_CB_SAVE, false);
 
-        if (mAdapter == null)
-//            mAdapter = new TabConfigLoginAdapter(getSupportFragmentManager(), mUser, mPass, mMaDienLuc, mURLServer);
-            mAdapter = new TabConfigLoginAdapter(getSupportFragmentManager(), mMaDienLuc, mURLServer);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.updateDataInfoUser(mURLServer, mMaDienLuc);
-            }
-        });
-
-        //dùng chung layout cũ, ẩn nút checkbox
-        mCbSaveInfo.setVisibility(View.GONE);
-//        mCbSaveInfo.setChecked(isCbSaveInfoChecked);
+        //fill data
+        mCompatSpinnerPrograme.setSelection(mPosPrograme);
+        mEtLink.setText(mURLServer);
+        if (mPosPrograme >= mCompatSpinnerDvi.getCount())
+            mCompatSpinnerDvi.setSelection(0);
+        else
+            mCompatSpinnerDvi.setSelection(mPosDvi);
+        mEtUser.setText(mUser);
+        mEtPass.setText(mPass);
+        mCbSaveInfo.setChecked(mIsCbSaveChecked);
     }
 
     @Override
@@ -107,69 +194,105 @@ public class DangNhapActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
-        mBtnLogin = (Button) findViewById(R.id.btn_dienLuc);
+        mCompatSpinnerPrograme = (AppCompatSpinner) findViewById(R.id.spin_program);
+        mCompatSpinnerDvi = (AppCompatSpinner) findViewById(R.id.spin_dvi);
+        mEtLink = (EditText) findViewById(R.id.et_link);
+        mIbtnDownDvi = (ImageButton) findViewById(R.id.ibtn_download_dvi);
+        mPbarDownDvi = (ProgressBar) findViewById(R.id.pbar_download_dvi);
+        mEtUser = (EditText) findViewById(R.id.et_user);
+        mEtPass = (EditText) findViewById(R.id.et_pass);
+        mIbtnVisibePass = (ImageButton) findViewById(R.id.ibtn_visible_pass);
         mCbSaveInfo = (CheckBox) findViewById(R.id.cb_save_info);
-        mVPage = (ViewPager) findViewById(R.id.vpage_login);
-//        mAdapter = new TabConfigLoginAdapter(getSupportFragmentManager(), mUser, mPass, mMaDienLuc, mURLServer);
-        mAdapter = new TabConfigLoginAdapter(getSupportFragmentManager(), mMaDienLuc, mURLServer);
-        mVPage.setAdapter(mAdapter);
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setHomeButtonEnabled(false);
-            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-            // Adding Tabs
-            for (String tab_name : tabs) {
-                mActionBar.addTab(mActionBar.newTab().setText(tab_name)
-                        .setTabListener(this));
-            }
-        }
+        mBtnLogin = (Button) findViewById(R.id.btn_login);
+        mPbarLogin = (ProgressBar) findViewById(R.id.pbar_login);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.cl_login);
     }
 
     @Override
-    protected void handleListener() {
-        //btnLogin
-        mBtnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (validateInput()) {
-//                    if (isCbSaveInfoChecked) {
-//                        mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
-//                                .edit()
-//                                .putString(KEY_PREF_USER, mUser)
-//                                .putString(KEY_PREF_PASS, mPass)
-//                                .putString(KEY_PREF_MA_DIEN_LUC, mMaDienLuc)
-//                                .putString(KEY_PREF_SERVER_URL, mURLServer)
-//                                .putBoolean(KEY_PREF_CHECK_BOX, isCbSaveInfoChecked)
-//                                .commit();
-//                    }
+    protected void handleListener() throws Exception {
+        try {
+            //btn Download dvi
+            mIbtnDownDvi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                    mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE)
-                            .edit()
-                            .putString(KEY_PREF_MA_DIEN_LUC, mMaDienLuc)
-                            .putString(KEY_PREF_SERVER_URL, mURLServer)
-                            .putBoolean(KEY_PREF_CHECK_BOX, isCbSaveInfoChecked)
-                            .commit();
+                }
+            });
 
-//                    Bundle bundle = new Bundle();
-////                    bundle.putString(DangNhapActivity.PARAM_USER, mUser);
-////                    bundle.putString(DangNhapActivity.PARAM_PASS, mPass);
-//                    bundle.putString(DangNhapActivity.PARAM_CODE_DIENLUC, "CODE");
-//
-//                    Intent intent = new Intent(DangNhapActivity.this, MainActivity.class);
-//                    intent.putExtras(bundle);
-                    Intent intent = new Intent(DangNhapActivity.this, MainActivity.class);
+            mIbtnVisibePass.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mEtPass.getInputType() != InputType.TYPE_CLASS_TEXT) {
+                        mEtPass.setInputType(InputType.TYPE_CLASS_TEXT);
+                        mIbtnVisibePass.setImageResource(R.mipmap.ic_visibe_off);
+                    } else {
+                        mEtPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        mIbtnVisibePass.setImageResource(R.mipmap.ic_visible);
+                    }
+                }
+            });
+
+            //btnLogin
+            mBtnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!validateInput())
+                        return;
+
+                    //save info or clear info
+                    if (mPrefManager == null)
+                        mPrefManager = SharePrefManager.getInstance(DangNhapActivity.this);
+
+                    mPosPrograme = (mCbSaveInfo.isChecked()) ? mCompatSpinnerPrograme.getSelectedItemPosition() : 0;
+                    mURLServer = (mCbSaveInfo.isChecked()) ? mEtLink.getText().toString() : "";
+                    mPosDvi = (mCbSaveInfo.isChecked()) ? mCompatSpinnerDvi.getSelectedItemPosition() : 0;
+                    mUser = (mCbSaveInfo.isChecked()) ? mEtUser.getText().toString() : "";
+                    mPass = (mCbSaveInfo.isChecked()) ? mEtPass.getText().toString() : "";
+                    mIsCbSaveChecked = mCbSaveInfo.isChecked();
+
+                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                            putInt(KEY_PREF_POS_PROGRAME, mPosPrograme).
+                            commit();
+
+                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                            putString(KEY_PREF_SERVER_URL, mURLServer).
+                            commit();
+
+                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                            putInt(KEY_PREF_POS_DVI, mPosDvi).
+                            commit();
+
+                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                            putString(KEY_PREF_USER, mUser).
+                            commit();
+
+                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                            putString(KEY_PREF_PASS, mPass).
+                            commit();
+
+                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                            putBoolean(KEY_PREF_CB_SAVE, mIsCbSaveChecked).
+                            commit();
+
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PARAM_POS_PROGRAME, mCompatSpinnerPrograme.getSelectedItemPosition());
+                    bundle.putString(PARAM_SERVER_URL, mEtLink.getText().toString());
+                    String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
+                    bundle.putString(PARAM_DVI, dvi);
+                    bundle.putString(PARAM_USER, mEtUser.getText().toString());
+                    Intent intent = new Intent(DangNhapActivity.this, MainKiemDinhActivity.class);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
-                ;
-            }
-        });
+            });
 
 //        mCbSaveInfo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 //                try {
 //                    if (mCbSaveInfo.isPressed()) {
-//                        isCbSaveInfoChecked = isChecked;
+//                        mIsCbSaveChecked = isChecked;
 //                        if (validateInput()) {
 //                            if (isChecked) {
 //                                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
@@ -178,7 +301,7 @@ public class DangNhapActivity extends BaseActivity implements
 //                                        .putString(KEY_PREF_PASS, mPass)
 //                                        .putString(KEY_PREF_MA_DIEN_LUC, mMaDienLuc)
 //                                        .putString(KEY_PREF_SERVER_URL, mURLServer)
-//                                        .putBoolean(KEY_PREF_CHECK_BOX, isCbSaveInfoChecked)
+//                                        .putBoolean(KEY_PREF_CB_SAVE, mIsCbSaveChecked)
 //                                        .commit();
 //                            } else
 //                                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
@@ -186,8 +309,8 @@ public class DangNhapActivity extends BaseActivity implements
 //                                        .clear()
 //                                        .commit();
 //                        } else {
-//                            isCbSaveInfoChecked = false;
-//                            mCbSaveInfo.setChecked(isCbSaveInfoChecked);
+//                            mIsCbSaveChecked = false;
+//                            mCbSaveInfo.setChecked(mIsCbSaveChecked);
 //                        }
 //                    }
 //                } catch (Exception e) {
@@ -195,72 +318,68 @@ public class DangNhapActivity extends BaseActivity implements
 //                }
 //            }
 //        });
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
-    public void setAction(Bundle savedInstanceState) {
+    public void setAction(Bundle savedInstanceState) throws Exception {
+
+        mDatabase = SqlConnect.getInstance(this).open();
+        mSqlDAO = new SqlDAO(mDatabase, this);
+
+        //hiển thị folder trên sdcard
+        if (!isLoadedFolder) {
+            Common.showFolder(this);
+            isLoadedFolder = !isLoadedFolder;
+        }
+
+        //init shared preref
         mPrefManager = SharePrefManager.getInstance(this);
-        mPrefManager.addSharePref(PREF_LOGIN, MODE_PRIVATE);
+
+        this.checkSharePreference(mPrefManager);
+
+        //show spin programe
+        mCompatSpinnerPrograme.setAdapter(new ArrayAdapter<String>(DangNhapActivity.this, R.layout.row_spin_type_1, R.id.tv_spin, new String[]{Common.KIEU_CHUONG_TRINH.PHAN_BO.getName(), Common.KIEU_CHUONG_TRINH.KIEM_DINH.getName()}));
+
+        //show spin dien luc
+        List<DienLucProxy> dienLucProxies = mSqlDAO.getAllTBL_DIENLUC();
+        List<String> dienLuc = new ArrayList<>();
+        //dump data
+        dienLuc.add("PD0100");
+        dienLuc.add("PD");
+//        for (DienLucProxy proxy :
+//                dienLucProxies) {
+//            dienLuc.add(proxy.getMA_DVIQLY());
+//        }
+        mCompatSpinnerDvi.setAdapter(new ArrayAdapter<String>(DangNhapActivity.this, R.layout.row_spin_type_1, R.id.tv_spin, dienLuc));
+
+
     }
 
     private boolean validateInput() {
-//
-//        if (TextUtils.isEmpty(mUser)) {
-//            mVPage.setCurrentItem(0);
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-//                    if (mVPage.getCurrentItem() == 0) {
-//                        ((InfoUserFragment) fragmentList.get(0)).setErrorUser("Vui lòng không để trống!");
-//                    }
-//                }
-//            });
-//            return false;
-//        }
-//
-//        if (TextUtils.isEmpty(mPass)) {
-//            mVPage.setCurrentItem(0);
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-//                    if (mVPage.getCurrentItem() == 0) {
-//                        ((InfoUserFragment) fragmentList.get(0)).setErrorPass("Vui lòng không để trống!");
-//                    }
-//                }
-//            });
-//            return false;
-//        }
-
-        if (TextUtils.isEmpty(mMaDienLuc)) {
-            mVPage.setCurrentItem(1);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-                    if (mVPage.getCurrentItem() == 1) {
-                        ((InfoConfigFragment) fragmentList.get(1)).setErrorMaDienLuc("Vui lòng không để trống!");
-                    }
-                }
-            });
+        if (TextUtils.isEmpty(mEtLink.getText().toString())) {
+            mEtLink.setError(Common.MESSAGE.ex03.getContent());
             return false;
         }
 
-        if (TextUtils.isEmpty(mURLServer)) {
-            mVPage.setCurrentItem(1);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-                    if (mVPage.getCurrentItem() == 1) {
-                        ((InfoConfigFragment) fragmentList.get(1)).setErrorUrlServer("Vui lòng không để trống!");
-                    }
-                }
-            });
+        if (TextUtils.isEmpty(mEtUser.getText().toString())) {
+            mEtUser.setError(Common.MESSAGE.ex03.getContent());
             return false;
         }
 
+        if (TextUtils.isEmpty(mEtPass.getText().toString())) {
+            mEtPass.setError(Common.MESSAGE.ex03.getContent());
+            return false;
+        }
+
+        String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
+        if (TextUtils.isEmpty(dvi)) {
+            ((TextView) mCompatSpinnerDvi.getChildAt(0)).setError(Common.MESSAGE.ex03.getContent());
+            return false;
+        }
         return true;
     }
 
@@ -302,6 +421,22 @@ public class DangNhapActivity extends BaseActivity implements
     @Override
     public void updateInfoCodeDienLuc(CharSequence charSequence) {
         mMaDienLuc = charSequence.toString();
+    }
+
+    public static void checkSharePreference(SharePrefManager mPrefManager) {
+        if (!mPrefManager.checkExistSharePref(PREF_CONFIG)) {
+            mPrefManager.addSharePref(PREF_CONFIG, MODE_PRIVATE);
+            mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
+                    .edit()
+                    .putInt(KEY_PREF_POS_PROGRAME, 0)
+                    .putString(KEY_PREF_SERVER_URL, "")
+                    .putInt(KEY_PREF_POS_DVI, 0)
+                    .putString(KEY_PREF_USER, "")
+                    .putString(KEY_PREF_PASS, "")
+                    .putBoolean(KEY_PREF_CB_SAVE, false)
+                    .putBoolean(KEY_PREF_HIDE_KEYBOARD, false)
+                    .commit();
+        }
     }
     //endregion
 

@@ -52,7 +52,7 @@
             android:layout_below="@id/iv_logo"
             android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:background="@drawable/xml_input"
+            android:background="@drawable/xml_et_bottom_border"
             android:drawableLeft="@drawable/ic_account"
             android:drawablePadding="@dimen/_5sdp"
             android:lines="1"

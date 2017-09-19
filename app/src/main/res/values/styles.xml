@@ -1,5 +1,5 @@
 <resources>
-<!--<item name="actionBarStyle">@style/myActionBarrStyle</item>-->
+    <!--<item name="actionBarStyle">@style/myActionBarrStyle</item>-->
     <!-- Base application theme. -->
     <style name="BaseTheme" parent="Theme.AppCompat.Light">
         <item name="android:actionButtonStyle">@style/myActionButtonStyle</item>
@@ -15,7 +15,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme" parent="BaseTheme"/>
+    <style name="AppTheme" parent="BaseTheme" />
 
     <style name="CustomTitleTextAppearance">
         <item name="android:textSize">@dimen/_10sdp</item>
@@ -40,12 +40,24 @@
 
     <!--setting size action barrd -->
     <style name="myActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
-        <item name="android:minHeight">@dimen/_48sdp </item>
+        <item name="android:minHeight">@dimen/_48sdp</item>
         <item name="android:maxHeight">@dimen/_48sdp</item>
         <item name="android:width">@dimen/_48sdp</item>
         <item name="android:height">@dimen/_48sdp</item>
     </style>
-<!--
+
+    <style name="FullscreenTheme" parent="BaseTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+    <!--
     <style name="myActionBarrStyle" parent="android:Theme.Holo.Light">
         <item name="android:minHeight">@dimen/_100sdp </item>
         <item name="android:actionBarSize">100dp</item>

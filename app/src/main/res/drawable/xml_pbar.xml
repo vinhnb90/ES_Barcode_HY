@@ -1,0 +1,28 @@
+<layer-list android:paddingBottom="@dimen/_2sdp" android:paddingLeft="@dimen/_2sdp" android:paddingRight="@dimen/_2sdp" android:paddingTop="@dimen/_2sdp" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@android:id/background"
+        android:drawable="@drawable/xml_border_full_type2_more"></item>
+    <item
+        android:id="@android:id/progress"
+        android:bottom="@dimen/_2sdp"
+        android:left="@dimen/_2sdp"
+        android:right="@dimen/_2sdp"
+        android:top="@dimen/_2sdp"
+        >
+        <clip>
+            <layer-list>
+                <item
+                    android:bottom="@dimen/_1sdp"
+                    android:end="@dimen/_1sdp"
+                    android:left="@dimen/_1sdp"
+                    android:top="@dimen/_1sdp" >
+                    <shape android:shape="rectangle">
+                        <solid android:color="@color/white" />
+                        <corners android:radius="@dimen/_5sdp" />
+                    </shape>
+                    </item>
+            </layer-list>
+        </clip>
+    </item>
+</layer-list>
