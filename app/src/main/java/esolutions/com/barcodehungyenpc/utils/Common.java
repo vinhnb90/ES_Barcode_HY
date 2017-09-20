@@ -52,7 +52,7 @@ public class Common {
 
     public static final int TIME_DELAY_ANIM = 150;
 
-    public static void runAnimationClickViewScale(final View view, int idAnimation, int timeDelayAnim) {
+    public static void runAnimationClickView(final View view, int idAnimation, int timeDelayAnim) {
         if (view == null)
             return;
         if (idAnimation <= 0)
@@ -249,6 +249,8 @@ public class Common {
         ex20("ex20", "Dữ liệu nhập rỗng...!"),
 
         ex21("ex21", "Thao tác tìm kiếm phiên trước chưa kết thúc...!"),
+        ex22("ex22", "Chưa có thiết bị nào được chọn để gửi kiểm định...!"),
+        ex23("ex23", "Thao tác tải đơn vị phiên trước chưa kết thúc...!"),
 
         ex("ex", "Gặp vấn đề không xác định.");
 

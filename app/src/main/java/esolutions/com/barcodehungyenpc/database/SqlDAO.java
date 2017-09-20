@@ -89,7 +89,7 @@ public class SqlDAO {
         List<CongToProxy> listCongToProxies = new ArrayList<>();
 
         Cursor cursor = null;
-            cursor = mSqLiteDatabase.rawQuery(SqlQuery.getAllCongToByDatePB(), args);
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getAllCongToByDatePB(), args);
 
         if (cursor == null) {
             Log.d(TAG, "getAllCongTo: null cursor");
@@ -336,7 +336,6 @@ public class SqlDAO {
     }
 
 
-
     public boolean checkExistTBL_CTO_GUI_KD(String MA_CTO) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -448,6 +447,33 @@ public class SqlDAO {
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_DIENLUC(), args);
+    }
+
+    public List<CongToProxy> getByDateAllCongToGhimAndChonKD(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+        List<CongToProxy> listCongToProxies = new ArrayList<>();
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllCongToGhimAndChonKD(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToProxy(cursor, cursor.getPosition(), Common.KIEU_CHUONG_TRINH.PHAN_BO));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
     }
     //endregion
 }

@@ -41,12 +41,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -69,6 +71,7 @@ import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
 import esolutions.com.barcodehungyenpc.utils.SoapXML;
 
+import static esolutions.com.barcodehungyenpc.utils.Common.TIME_DELAY_ANIM;
 import static esolutions.com.barcodehungyenpc.utils.Common.convertDateSQLToDateUI;
 import static esolutions.com.barcodehungyenpc.utils.Common.getDateTimeNow;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_DVI;
@@ -81,11 +84,19 @@ public class MainKiemDinhActivity
         DatePickerDialog.OnDateSetListener,
         DsCongToAdapter.OnDsCtoAdapterIteraction {
 
+    private LinearLayout mLLSearchOnline;
     private EditText mEtSearchOnline, mEtSearchLocal;
     private TextView mTvThongKeCto, mTvDate;
     private ImageButton mBtnDate, mBtnClearSearchOnline, mBtnClearSearchLocal, mBtnSearchOnline;
     private ProgressBar mPbarSearchOnline;
     private CoordinatorLayout mCoordinatorLayout;
+    //upload
+    private RelativeLayout mRvUpload;
+    private ProgressBar mPbarUpload;
+    private Button mBtnUpload;
+    private TextView mTvCountCtoUpload;
+    private TextView mTvStatusUpload;
+    private FloatingActionButton mFab;
 
     private SharePrefManager mPrefManager;
 
@@ -105,7 +116,7 @@ public class MainKiemDinhActivity
     private boolean isSearchOnline;
     private String mMatKhau;
     private List<CongToProxy> mListCtoKD = new ArrayList<>();
-
+    private List<CongToProxy> mListUploadCtoKD = new ArrayList<>();
     private DsCongToAdapter mCtoKDAdapter;
     private SQLiteDatabase mDatabase;
     private SqlDAO mSqlDAO;
@@ -352,6 +363,7 @@ public class MainKiemDinhActivity
 
         mEtSearchOnline = (EditText) findViewById(R.id.et_search_type);
         mEtSearchLocal = (EditText) findViewById(R.id.et_search_type2);
+        mLLSearchOnline = (LinearLayout) findViewById(R.id.ll_search);
 
         mTvThongKeCto = (TextView) findViewById(R.id.et_thongKe);
         mTvDate = (TextView) findViewById(R.id.et_ngay);
@@ -360,14 +372,22 @@ public class MainKiemDinhActivity
         mBtnClearSearchLocal = (ImageButton) findViewById(R.id.ibtn_clear_search_type2);
         mBtnSearchOnline = (ImageButton) findViewById(R.id.ibtn_search_online);
         mPbarSearchOnline = (ProgressBar) findViewById(R.id.pbar_search_online);
-
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.cl_main);
+
+        //upload
+        mRvUpload = (RelativeLayout) findViewById(R.id.rl_upload_data);
+        mPbarUpload = (ProgressBar) findViewById(R.id.pbar_upload);
+        mBtnUpload = (Button) findViewById(R.id.btn_upload);
+        mTvCountCtoUpload = (TextView) findViewById(R.id.tv_count_upload);
+        mTvStatusUpload = (TextView) findViewById(R.id.tv_date_upload);
+        mFab = (FloatingActionButton) findViewById(R.id.fab_upload);
 
         //init recycler dsCto
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRvCto.setLayoutManager(layoutManager);
         mRvCto.setHasFixedSize(true);
+
     }
 
     @Override
@@ -579,7 +599,7 @@ public class MainKiemDinhActivity
             mBtnDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Common.runAnimationClickViewScale(view, R.anim.scale_view_pull, Common.TIME_DELAY_ANIM);
+                    Common.runAnimationClickView(view, R.anim.scale_view_pull, Common.TIME_DELAY_ANIM);
                     showDialogChooseDate();
                 }
             });
@@ -594,11 +614,20 @@ public class MainKiemDinhActivity
                     try {
                         switch (tabId) {
                             case R.id.nav_bottom_ds_thietbi:
+                                //show ll search
+                                if (mLLSearchOnline.getVisibility() == View.GONE)
+                                    mLLSearchOnline.setVisibility(View.VISIBLE);
+
 //                                //init Data
                                 menuBottomKD = Common.MENU_BOTTOM_KD.ALL;
                                 mListCtoKD.clear();
                                 mListCtoKD = mSqlDAO.getByDateAllCongToKD(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
 
+                                //hide fab
+                                if (mFab.getVisibility() == View.VISIBLE) {
+                                    mFab.hide(true);
+                                    mFab.setVisibility(View.GONE);
+                                }
                                 break;
 
                             case R.id.nav_bottom_ds_chon:
@@ -607,6 +636,17 @@ public class MainKiemDinhActivity
                                 mListCtoKD.clear();
                                 mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
 
+                                //show fab
+                                if (mFab.getVisibility() == View.GONE) {
+                                    mFab.setVisibility(View.INVISIBLE);
+                                }
+                                mFab.setImageResource(R.mipmap.ic_upload_white);
+                                mFab.show(true);
+
+                                //hide search online
+                                if (mLLSearchOnline.getVisibility() == View.VISIBLE) {
+                                    mLLSearchOnline.setVisibility(View.GONE);
+                                }
                                 break;
 
                             case R.id.nav_bottom_lichsu:
@@ -627,9 +667,68 @@ public class MainKiemDinhActivity
                 }
             });
 
+            //button fab
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //click fab
+                    if (mRvUpload.getVisibility() == View.GONE) {
+                        mFab.hide(true);
+                        mFab.setImageResource(R.mipmap.ic_arrow_left);
+                        mFab.show(true);
+
+                        Common.runAnimationClickView(mRvUpload, R.anim.bottom_up, TIME_DELAY_ANIM);
+                        mRvUpload.setVisibility(View.VISIBLE);
+                    } else {
+                        mFab.hide(true);
+                        mFab.setImageResource(R.mipmap.ic_upload_white);
+                        mFab.show(true);
+                        Common.runAnimationClickView(mRvUpload, R.anim.bottom_down, TIME_DELAY_ANIM);
+                        mRvUpload.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            mBtnUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        upload();
+                    } catch (Exception e) {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void upload() throws Exception {
+        mListUploadCtoKD.clear();
+        mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(Common.convertDateUIToDateSQL(mDate));
+
+        if (mListUploadCtoKD.size() == 0)
+            throw new Exception(Common.MESSAGE.ex22.getContent());
+
+        mBtnUpload.setVisibility(View.GONE);
+        mPbarUpload.setVisibility(View.VISIBLE);
+//        MainKiemDinhActivity.this.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(5000);
+//                    mPbarUpload.setVisibility(View.GONE);
+//                    mBtnUpload.setVisibility(View.VISIBLE);
+//                    mTvStatusUpload.setText("CÓ LỖI");
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     private void getBundle() {
@@ -680,84 +779,84 @@ public class MainKiemDinhActivity
         }
 
         //hiện tại server đang trả về cùng 1 dạng response là CToPBResponse nên sẽ dùng chung
-        SoapXML.AsyncSoap.AsyncSoapCallBack<CToPBResponse> callBackCToKD = new SoapXML.AsyncSoap.AsyncSoapCallBack<CToPBResponse>() {
-            @Override
-            public void onPre(SoapXML.AsyncSoap soap) {
-                //show progress bar
-                showProgresbar(true);
-            }
+//        SoapXML.AsyncSoap.AsyncSoapCallBack<CToPBResponse> callBackCToKD = new SoapXML.AsyncSoap.AsyncSoapCallBack<CToPBResponse>() {
+//            @Override
+//            public void onPre(SoapXML.AsyncSoap soap) {
+//                //show progress bar
+//                showProgresbar(true);
+//            }
+//
+//            @Override
+//            public void onUpdate(String message) {
+//                //ẩn progress bar
+//                showProgresbar(false);
+//
+//                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
+//
+//            @Override
+//            public void onPost(CToPBResponse response) {
+//                //ẩn progress bar
+//                showProgresbar(false);
+//
+//                //Xử lý kết quả
+//                try {
+//                    doProcessAfterSearchOnline(response);
+//                } catch (Exception e) {
+//                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+//                    snackbar.show();
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public HashMap<String, SoapObject> filterDataReal(SoapObject response) {
+//                //lọc từ response trả về những giá trị thực sự của API
+//                //tùy chỉnh theo thuộc tính xml node trả về
+//                if (response == null)
+//                    return null;
+//
+//                SoapObject soapLv1 = (SoapObject) response.getProperty("diffgram");
+//                SoapObject proInfoLv1 = (SoapObject) soapLv1.getProperty("NewDataSet");
+//
+//                //kiểm tra nếu có property 'CTO' thì lấy dữ liệu dataset
+//                //ngược lại nếu là 'Table1" thì lấy dữ liệu thông báo
+//                //2 giá trị này được cung cấp bởi server, nên debug các giá trị cây của soapObject để nắm rõ
+//
+//                HashMap<String, SoapObject> result = null;
+//                SoapObject proInfoLv2 = null;
+//
+//                if (proInfoLv1.hasProperty("CONG_TO")) {
+//                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty("CONG_TO");
+//                    String soap = proInfoLv2.toString();
+//                    Log.d(TAG, "filterDataReal: " + soap);
+//
+//                    result = new HashMap<>();
+//                    result.put("CONG_TO", proInfoLv2);
+//                }
+//
+//                if (proInfoLv1.hasProperty("Table1")) {
+//                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty("Table1");
+//                    String soap = proInfoLv2.toString();
+//                    Log.d(TAG, "filterDataReal: " + soap);
+//
+//                    result = new HashMap<>();
+//                    result.put("Table1", proInfoLv2);
+//                }
+//                return result;
+//            }
+//        };
 
-            @Override
-            public void onUpdate(String message) {
-                //ẩn progress bar
-                showProgresbar(false);
-
-                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-
-            @Override
-            public void onPost(CToPBResponse response) {
-                //ẩn progress bar
-                showProgresbar(false);
-
-                //Xử lý kết quả
-                try {
-                    doProcessAfterSearchOnline(response);
-                } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public HashMap<String, SoapObject> filterDataReal(SoapObject response) {
-                //lọc từ response trả về những giá trị thực sự của API
-                //tùy chỉnh theo thuộc tính xml node trả về
-                if (response == null)
-                    return null;
-
-                SoapObject soapLv1 = (SoapObject) response.getProperty("diffgram");
-                SoapObject proInfoLv1 = (SoapObject) soapLv1.getProperty("NewDataSet");
-
-                //kiểm tra nếu có property 'CTO' thì lấy dữ liệu dataset
-                //ngược lại nếu là 'Table1" thì lấy dữ liệu thông báo
-                //2 giá trị này được cung cấp bởi server, nên debug các giá trị cây của soapObject để nắm rõ
-
-                HashMap<String, SoapObject> result = null;
-                SoapObject proInfoLv2 = null;
-
-                if (proInfoLv1.hasProperty("CONG_TO")) {
-                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty("CONG_TO");
-                    String soap = proInfoLv2.toString();
-                    Log.d(TAG, "filterDataReal: " + soap);
-
-                    result = new HashMap<>();
-                    result.put("CONG_TO", proInfoLv2);
-                }
-
-                if (proInfoLv1.hasProperty("Table1")) {
-                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty("Table1");
-                    String soap = proInfoLv2.toString();
-                    Log.d(TAG, "filterDataReal: " + soap);
-
-                    result = new HashMap<>();
-                    result.put("Table1", proInfoLv2);
-                }
-                return result;
-            }
-        };
-
-        soapSearchCto = new SoapXML.AsyncSoap(
-                CToPBResponse.class,
-                callBackCToKD,
-                SoapXML.METHOD.CTO_KD.getNameMethod(),
-                SoapXML.getURL(mURL),
-                SoapXML.METHOD.CTO_KD.getNameParams()
-        );
-
-        soapSearchCto.execute(requestParams);
+//        soapSearchCto = new SoapXML.AsyncSoap(
+//                CToPBResponse.class,
+//                callBackCToKD,
+//                SoapXML.METHOD.CTO_KD.getNameMethod(),
+//                SoapXML.getURL(mURL),
+//                SoapXML.METHOD.CTO_KD.getNameParams()
+//        );
+//
+//        soapSearchCto.execute(requestParams);
 
     }
 
@@ -825,16 +924,21 @@ public class MainKiemDinhActivity
 
 
             mListCtoKD.clear();
+            String dateSQL = Common.convertDateUIToDateSQL(mDate);
 
             if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
                 mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToKD(Common.convertDateUIToDateSQL(mDate));
+                mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
             }
 
 
             if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
                 mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(Common.convertDateUIToDateSQL(mDate));
+                mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
+
+                mListUploadCtoKD.clear();
+                mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
+                mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
             }
 
             fillDataReyclerFull();
@@ -917,16 +1021,20 @@ public class MainKiemDinhActivity
 
 
             mListCtoKD.clear();
+            String dateSQL = Common.convertDateUIToDateSQL(mDate);
 
             if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
                 mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToKD(Common.convertDateUIToDateSQL(mDate));
+                mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
             }
-
 
             if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
                 mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(Common.convertDateUIToDateSQL(mDate));
+                mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
+
+                mListUploadCtoKD.clear();
+                mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
+                mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
             }
 
             fillDataReyclerFull();

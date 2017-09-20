@@ -270,6 +270,32 @@ public class SqlQuery {
 //                ;
 //    }
 
+    public static String getByDateAllCongToGhimAndChonKD() {
+        return "SELECT " +
+                TBL_CTO_GUI_KD.STT.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CLOAI.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NAMSX.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.SO_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.MA_CTO.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + ", " +
+//                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() + ", " +
+                TBL_CTO_GUI_KD.TRANG_THAI_CHON.getNameCollumn() +
+                " FROM " +
+                TBL_CTO_GUI_KD.getNameTable() +
+                " WHERE " +
+                TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_CTO_GUI_KD.TRANG_THAI_GHIM +
+                " = " + Common.TRANG_THAI_GHIM.DA_GHIM.getCode() +
+                " AND " +
+                TBL_CTO_GUI_KD.TRANG_THAI_CHON +
+                " = " + Common.TRANG_THAI_CHON.DA_CHON.getCode();
+    }
+
     public static String getAllCongToByDateKD() {
         return "SELECT " +
                 TBL_CTO_GUI_KD.STT.getNameCollumn() + ", " +
@@ -396,7 +422,7 @@ public class SqlQuery {
                 TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + ", " +
 //                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() + ", " +
-                TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() +", " +
+                TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.TRANG_THAI_CHON.getNameCollumn() +
                 " FROM " +
                 TBL_CTO_GUI_KD.getNameTable()

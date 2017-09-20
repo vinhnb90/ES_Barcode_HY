@@ -77,7 +77,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     @Override
     public void onBindViewHolder(DsCtoViewHolder holder, int position) {
-        Common.runAnimationClickViewScale(holder.relativeLayout, R.anim.twinking_view, Common.TIME_DELAY_ANIM);
+        Common.runAnimationClickView(holder.relativeLayout, R.anim.twinking_view, Common.TIME_DELAY_ANIM);
 
         holder.tvSTT.setText(position + 1 + "");
         holder.tvSoCto.setText(mListCongToProxies.get(position).getmSoCto());
@@ -193,7 +193,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 //            fabGhim.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
-//                    Common.runAnimationClickViewScale(view, R.anim.scale_view_pull, Common.TIME_DELAY_ANIM);
+//                    Common.runAnimationClickView(view, R.anim.scale_view_pull, Common.TIME_DELAY_ANIM);
 //                    //gửi ra ngoài vị trí  list đó để xử lý
 //                    int pos = getAdapterPosition();
 //                    mListener.clickBtnGhimRowCto(pos);

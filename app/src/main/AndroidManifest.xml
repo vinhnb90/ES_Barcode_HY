@@ -41,7 +41,6 @@
         <activity
             android:name=".view.BarcodeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Main2Activity"></activity>
     </application>
 
 </manifest>

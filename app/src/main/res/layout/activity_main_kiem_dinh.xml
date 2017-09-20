@@ -12,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/rl_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/ll_menu_bottom"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
@@ -184,6 +184,7 @@
                 android:src="@mipmap/ic_date_white" />
 
         </LinearLayout>
+
         <!--   <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -219,6 +220,7 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/ic_clear" />
             </LinearLayout>-->
+
         <LinearLayout
             android:id="@+id/ll_search2"
             android:layout_width="match_parent"
@@ -234,7 +236,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_24sdp"
-                android:layout_marginRight="@dimen/_1sdp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -263,7 +264,6 @@
                     android:id="@+id/et_thongKe"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/_5sdp"
                     android:layout_weight="1"
                     android:background="@drawable/xml_border_full_type3"
                     android:gravity="center_vertical|center_horizontal"
@@ -371,208 +371,131 @@
                 app:bb_titleTextAppearance="@style/CustomTitleTextAppearance" />
         </RelativeLayout>
 
-        <android.support.design.widget.CoordinatorLayout
+        <RelativeLayout
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:id="@+id/rl_upload_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:padding="@dimen/activity_horizontal_margin">
 
-            <LinearLayout
-                android:id="@+id/cl_upload_data"
+            <RelativeLayout
+                android:id="@+id/rl_upload_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center_vertical">
 
-                <!--  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="@dimen/_200sdp"
-                      android:background="@color/white"
-                      android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/iv_logo_4"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/xml_button_cricle_type1"
+                    android:src="@mipmap/ic_upload_black" />
 
-                      <LinearLayout
-                          android:id="@+id/viewOne"
-                          android:layout_width="match_parent"
-                          android:layout_height="match_parent"
-                          android:layout_weight="0.6"
-                          android:background="@android:color/holo_blue_light"
-                          android:orientation="horizontal" />
-
-                      <LinearLayout
-                          android:id="@+id/viewTwo"
-                          android:layout_width="match_parent"
-                          android:layout_height="match_parent"
-                          android:layout_weight="0.4"
-                          android:background="@android:color/holo_orange_light"
-                          android:orientation="horizontal" />
-
-                  </LinearLayout>
-
-                  <com.github.clans.fab.FloatingActionButton
-                      android:id="@+id/fab"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_margin="16dp"
-                      android:clickable="true"
-                      android:src="@drawable/ic_add"
-                      app:backgroundTint="#FF0000"
-                      app:layout_anchor="@id/viewOne"
-                      app:layout_anchorGravity="bottom|right|end"
-                      app:rippleColor="#FFF" />
-        -->
-                <LinearLayout
-                    android:id="@+id/ll_upload_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_upload_4"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_date_upload"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/iv_logo_4"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:textSize="@dimen/_12sdp"
+                    tools:text="19/09/2017 12h30" />
+
+                <TextView
+                    android:id="@+id/tv_title_upload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/iv_logo_4"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toRightOf="@+id/iv_logo_4"
+                    android:text="Tải dữ liệu lên máy chủ"
+                    android:textSize="@dimen/_12sdp" />
+
+                <LinearLayout
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/tv_title_upload"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/accent"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/rl_upload_data"
+                    <Button
+
+                        android:id="@+id/btn_upload"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_gravity="bottom"
-                        android:background="@color/white"
-                        android:padding="@dimen/activity_horizontal_margin">
+                        android:layout_height="@dimen/_24sdp"
+                        android:background="@color/accent"
 
-                        <RelativeLayout
-                            android:id="@+id/rl_upload_1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical">
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:drawableRight="@mipmap/ic_upload_white"
+                        android:padding="@dimen/_2sdp"
+                        android:text="TẢI LÊN"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
+                        />
 
-                            <ImageView
-                                android:id="@+id/iv_logo_4"
-                                android:layout_width="@dimen/_24sdp"
-                                android:layout_height="@dimen/_24sdp"
-                                android:layout_alignParentLeft="true"
-                                android:background="@drawable/xml_button_cricle_type1"
-                                android:gravity="center_horizontal|center_vertical"
-                                android:scaleType="centerInside"
-                                android:src="@mipmap/ic_upload_black" />
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:id="@+id/pbar_upload"
+                        android:padding="@dimen/_2sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:indeterminateTint="@color/white" />
 
-                            <TextView
-                                android:id="@+id/tv_date_upload"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBaseline="@+id/iv_logo_4"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                android:textSize="@dimen/_12sdp"
-                                tools:text="19/09/2017 12h30" />
-
-                            <TextView
-                                android:id="@+id/tv_title_upload"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBaseline="@+id/iv_logo_4"
-                                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                android:layout_toRightOf="@+id/iv_logo_4"
-                                android:text="Tải dữ liệu lên máy chủ"
-                                android:textSize="@dimen/_12sdp" />
-
-                            <TextView
-                                android:id="@+id/tv_title_upload_2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/tv_title_upload"
-                                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_toRightOf="@+id/iv_logo_4"
-                                android:text="Số thiết bị gửi kiểm định"
-                                android:textSize="@dimen/_10sdp" />
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/tv_title_upload"
-                                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_toRightOf="@+id/tv_title_upload_2"
-                                android:text="3"
-                                android:textSize="@dimen/_10sdp"
-                                android:textStyle="bold" />
-
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/tv_title_upload_2"
-                                android:layout_toRightOf="@id/iv_logo_4">
-
-                                <RelativeLayout
-                                    android:id="@+id/rl_upload_3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:id="@+id/tv_upload_process"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                        android:gravity="center_horizontal"
-                                        android:text="0%"
-                                        android:textSize="@dimen/_12sdp" />
-
-                                    <ProgressBar
-                                        android:id="@+id/pbar_upload"
-                                        style="?android:attr/progressBarStyleHorizontal"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignBaseline="@+id/tv_upload_process"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                        android:layout_toLeftOf="@+id/tv_upload_process"
-                                        android:indeterminate="false"
-                                        android:indeterminateOnly="false"
-                                        android:minHeight="@dimen/_15sdp"
-                                        android:progressDrawable="@drawable/xml_pbar"
-                                        tools:max="100"
-                                        tools:progress="50" />
-                                </RelativeLayout>
-
-
-                                <Button
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:layout_below="@+id/rl_upload_3"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@color/accent"
-                                    android:drawableRight="@mipmap/ic_upload_white"
-                                    android:padding="@dimen/_2sdp"
-                                    android:text="TẢI LÊN MÁY CHỦ"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_12sdp" />
-                            </RelativeLayout>
-
-                        </RelativeLayout>
-
-                    </RelativeLayout>
                 </LinearLayout>
+                <!-- <ProgressBar
+                                        android:id="@+id/prbar_upload"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="@dimen/_24sdp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_below="@+id/tv_title_upload"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:background="@color/accent"
+                                        android:drawablePadding="@dimen/_5sdp"
+                                        android:drawableRight="@mipmap/ic_upload_white"
+                                        android:padding="@dimen/_2sdp"
+                                        android:text="TẢI LÊN"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_10sdp" /> -->
 
-            </LinearLayout>
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:src="@drawable/ic_add"
-                app:layout_anchor="@id/ll_upload_2"
-                app:layout_anchorGravity="bottom|right"
-                app:rippleColor="#FFF"
-                fab:layout_anchor="@id/ll_upload_2" />
-        </android.support.design.widget.CoordinatorLayout>
+                <TextView
+                    android:id="@+id/tv_title_upload_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/tv_count_upload"
+                    android:layout_below="@+id/tv_title_upload"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_toRightOf="@+id/iv_logo_4"
+                    android:text="Số thiết bị gửi kiểm định"
+                    android:textSize="@dimen/_12sdp" />
+
+
+                <TextView
+                    android:id="@+id/tv_count_upload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_title_upload"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_toRightOf="@+id/tv_title_upload_2"
+                    android:text="0"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_ds_cto"
@@ -581,10 +504,22 @@
             android:layout_above="@+id/ll_menu_bottom"
             android:layout_below="@+id/ll_search2"
             android:background="@android:color/transparent"
-            android:visibility="gone">
+            android:visibility="visible">
 
         </android.support.v7.widget.RecyclerView>
+        <!--android:layout_above="@+id/rl_upload_data"-->
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_upload"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/_72sdp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:src="@mipmap/ic_upload_white" />
 
     </RelativeLayout>
 

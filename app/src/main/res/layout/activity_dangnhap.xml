@@ -162,6 +162,7 @@
 
                     android:scaleType="centerCrop"
                     android:src="@mipmap/ic_download_2"
+                    tools:visibility="visible"
                     android:visibility="gone" />
 
             </LinearLayout>

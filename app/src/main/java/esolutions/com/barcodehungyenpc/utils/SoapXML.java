@@ -41,7 +41,9 @@ public class SoapXML {
 
     public enum METHOD {
         CTO_PB("Select_Info_PBCT", new String[]{"strMaDViQLy", "strMaCTo"}),
-        CTO_KD("Select_Info_Send_KDCT_MTB", new String[]{"strDVi", "strMaCTo"});
+        CTO_KD("Select_Info_Send_KDCT_MTB", new String[]{"strDVi", "strMaCTo"}),
+
+        Select_MADVIQLY("Select_MADVIQLY", new String[]{});
 
         private String nameMethod;
         private String[] nameParams;
@@ -60,7 +62,11 @@ public class SoapXML {
         }
     }
 
-    public static class AsyncSoap<T extends ResponseSoap> extends AsyncTask<String, String, T> {
+    public static class AsyncSoap<T extends ResponseSoap> extends AsyncTask<String, String, String> {
+
+        public Class<T> getClassType() {
+            return classType;
+        }
 
         Class<T> classType;
 
@@ -89,9 +95,10 @@ public class SoapXML {
         }
 
         @Override
-        protected T doInBackground(String... argParams) {
+        protected String doInBackground(String... argParams) {
             //check size argParams with nameParams
             T responeObject = null;
+            String jsonResponse = "";
 
             try {
                 if (argParams.length != METHOD_PARAM.length) {
@@ -121,68 +128,67 @@ public class SoapXML {
                     if (result == null)
                         throw new Exception(Common.MESSAGE.ex06.getContent());
 
-                    HashMap<String, SoapObject> dataRealResult = callBack.filterDataReal(result);
-                    if (dataRealResult == null)
+                    jsonResponse = callBack.filterDataReal(result);
+                    if (jsonResponse == null)
                         throw new Exception(Common.MESSAGE.ex05.getContent());
 
-                    //check and get all data by key field project and put to gson object
-                    JSONObject jsonObject = new JSONObject();
-
-                    //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
-                    Field[] allFields;
-                    final GsonBuilder gsonBuilder = new GsonBuilder();
-                    final Gson gson = gsonBuilder.create();
-
-
-                    if (dataRealResult.containsKey("CONG_TO")) {
-                        SoapObject dataReal = dataRealResult.get("CONG_TO");
-                        allFields = classType.getDeclaredFields();
-                        for (Field field : allFields) {
-                            if (dataReal.hasProperty(field.getName())) {
-                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
-                            } else {
-                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
-                            }
-                        }
-
-                        //convert to object
-                        responeObject = gson.fromJson(jsonObject.toString(), classType);
-                    }
-
-                    if (dataRealResult.containsKey("CTO")) {
-                        SoapObject dataReal = dataRealResult.get("CTO");
-                        allFields = classType.getDeclaredFields();
-                        for (Field field : allFields) {
-                            if (dataReal.hasProperty(field.getName())) {
-                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
-                            } else {
-                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
-                            }
-                        }
-
-                        //convert to object
-                        responeObject = gson.fromJson(jsonObject.toString(), classType);
-                    }
+//                    //check and get all data by key field project and put to gson object
+//                    JSONObject jsonObject = new JSONObject();
+//
+//                    //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
+//                    Field[] allFields;
+//                    final GsonBuilder gsonBuilder = new GsonBuilder();
+//                    final Gson gson = gsonBuilder.create();
+//
+//                    if (dataRealResult.containsKey("CONG_TO")) {
+//                        SoapObject dataReal = dataRealResult.get("CONG_TO");
+//                        allFields = classType.getDeclaredFields();
+//                        for (Field field : allFields) {
+//                            if (dataReal.hasProperty(field.getName())) {
+//                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+//                            } else {
+//                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+//                            }
+//                        }
+//
+//                        //convert to object
+//                        responeObject = gson.fromJson(jsonObject.toString(), classType);
+//                    }
+//
+//                    if (dataRealResult.containsKey("CTO")) {
+//                        SoapObject dataReal = dataRealResult.get("CTO");
+//                        allFields = classType.getDeclaredFields();
+//                        for (Field field : allFields) {
+//                            if (dataReal.hasProperty(field.getName())) {
+//                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+//                            } else {
+//                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+//                            }
+//                        }
+//
+//                        //convert to object
+//                        responeObject = gson.fromJson(jsonObject.toString(), classType);
+//                    }
 
                     //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với string  server trả về thông báo tới UI
-                    if (dataRealResult.containsKey("Table1")) {
-                        SoapObject dataReal = dataRealResult.get("Table1");
-                        allFields = ThongBaoResponse.class.getDeclaredFields();
-                        for (Field field : allFields) {
-                            if (dataReal.hasProperty(field.getName())) {
-                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
-                            } else {
-                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
-                            }
-                        }
+//                    if (dataRealResult.containsKey("Table1")) {
+//                        SoapObject dataReal = dataRealResult.get("Table1");
+//                        allFields = ThongBaoResponse.class.getDeclaredFields();
+//                        for (Field field : allFields) {
+//                            if (dataReal.hasProperty(field.getName())) {
+//                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+//                            } else {
+//                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+//                            }
+//                        }
 
-                        //convert to object
-                        ThongBaoResponse thongBaoResponse = null;
-                        thongBaoResponse = gson.fromJson(jsonObject.toString(), ThongBaoResponse.class);
-
-                        publishProgress(thongBaoResponse.getThongbao());
-                        return null;
-                    }
+//                        //convert to object
+//                        ThongBaoResponse thongBaoResponse = null;
+//                        thongBaoResponse = gson.fromJson(jsonObject.toString(), ThongBaoResponse.class);
+//
+//                        publishProgress(thongBaoResponse.getThongbao());
+//                        return null;
+//                    }
 
                 } catch (Exception e) {
                     throw new Exception(e.getMessage());
@@ -193,7 +199,7 @@ public class SoapXML {
                 e.printStackTrace();
             }
 
-            return responeObject;
+            return jsonResponse;
         }
 
         @Override
@@ -204,11 +210,12 @@ public class SoapXML {
         }
 
         @Override
-        protected void onPostExecute(T response) {
-            super.onPostExecute(response);
-            if (response == null)
+        protected void onPostExecute(String jsonResponse) {
+            super.onPostExecute(jsonResponse);
+            if (TextUtils.isEmpty(jsonResponse))
                 return;
-            callBack.onPost(response);
+
+            callBack.onPost(jsonResponse);
         }
 
         public static abstract class AsyncSoapCallBack<T extends ResponseSoap> {
@@ -216,12 +223,176 @@ public class SoapXML {
 
             public abstract void onUpdate(String message);
 
-            public abstract void onPost(T response);
+            public abstract void onPost(String jsonResponse);
 
-            public abstract HashMap<String, SoapObject> filterDataReal(SoapObject response);
+            public abstract String filterDataReal(SoapObject response);
 
         }
     }
+
+
+//    public static class AsyncSoapExamp<T extends ResponseSoap> extends AsyncTask<String, String, T> {
+//
+//        Class<T> classType;
+//
+//        //request action to eStore
+//        private String METHOD_NAME;
+//        private String URL;
+//        private static final String NAMESPACE = "http://tempuri.org/";
+//        private String SOAP_ACTION;
+//        private String[] METHOD_PARAM;
+//        private AsyncSoapCallBack callBack;
+//
+//        public AsyncSoapExamp(Class<T> type, AsyncSoapCallBack callBack, String methodName, String URL, String... nameParams) throws Exception {
+//            this.callBack = callBack;
+//            this.classType = type;
+//
+//            this.METHOD_NAME = methodName;
+//            this.URL = URL;
+//            this.METHOD_PARAM = nameParams;
+//            this.SOAP_ACTION = NAMESPACE + METHOD_NAME;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            callBack.onPre(this);
+//        }
+//
+//        @Override
+//        protected T doInBackground(String... argParams) {
+//            //check size argParams with nameParams
+//            T responeObject = null;
+//
+//            try {
+//                if (argParams.length != METHOD_PARAM.length) {
+//                    throw new Exception(Common.MESSAGE.ex04.getContent());
+//                }
+//
+//                //truyền đủ các tham số tương ứng
+//                SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+//                for (int i = 0; i < argParams.length; i++) {
+//                    request.addProperty(METHOD_PARAM[i], argParams[i]);
+//                }
+//
+//                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+//                envelope.setOutputSoapObject(request);
+//                envelope.dotNet = true;
+//                envelope.implicitTypes = true;
+//                envelope.setAddAdornments(false);
+////                envelope.addMapping(NAMESPACE, "CTO1", new CToPBResponse().getClass());
+//
+//                HttpTransportSE ht;
+//                try {
+//                    ht = new HttpTransportSE(URL, TIME_OUT);
+//                    ht.call(SOAP_ACTION, envelope);
+//
+//                    SoapObject result = (SoapObject) envelope.getResponse();
+//
+//                    if (result == null)
+//                        throw new Exception(Common.MESSAGE.ex06.getContent());
+//
+//                    HashMap<String, SoapObject> dataRealResult = callBack.filterDataReal(result);
+//                    if (dataRealResult == null)
+//                        throw new Exception(Common.MESSAGE.ex05.getContent());
+//
+//                    //check and get all data by key field project and put to gson object
+//                    JSONObject jsonObject = new JSONObject();
+//
+//                    //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
+//                    Field[] allFields;
+//                    final GsonBuilder gsonBuilder = new GsonBuilder();
+//                    final Gson gson = gsonBuilder.create();
+//
+//                    if (dataRealResult.containsKey("CONG_TO")) {
+//                        SoapObject dataReal = dataRealResult.get("CONG_TO");
+//                        allFields = classType.getDeclaredFields();
+//                        for (Field field : allFields) {
+//                            if (dataReal.hasProperty(field.getName())) {
+//                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+//                            } else {
+//                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+//                            }
+//                        }
+//
+//                        //convert to object
+//                        responeObject = gson.fromJson(jsonObject.toString(), classType);
+//                    }
+//
+//                    if (dataRealResult.containsKey("CTO")) {
+//                        SoapObject dataReal = dataRealResult.get("CTO");
+//                        allFields = classType.getDeclaredFields();
+//                        for (Field field : allFields) {
+//                            if (dataReal.hasProperty(field.getName())) {
+//                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+//                            } else {
+//                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+//                            }
+//                        }
+//
+//                        //convert to object
+//                        responeObject = gson.fromJson(jsonObject.toString(), classType);
+//                    }
+//
+//                    //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với string  server trả về thông báo tới UI
+//                    if (dataRealResult.containsKey("Table1")) {
+//                        SoapObject dataReal = dataRealResult.get("Table1");
+//                        allFields = ThongBaoResponse.class.getDeclaredFields();
+//                        for (Field field : allFields) {
+//                            if (dataReal.hasProperty(field.getName())) {
+//                                jsonObject.accumulate(field.getName(), dataReal.getPropertyAsString(field.getName()));
+//                            } else {
+//                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+//                            }
+//                        }
+//
+//                        //convert to object
+//                        ThongBaoResponse thongBaoResponse = null;
+//                        thongBaoResponse = gson.fromJson(jsonObject.toString(), ThongBaoResponse.class);
+//
+//                        publishProgress(thongBaoResponse.getThongbao());
+//                        return null;
+//                    }
+//
+//                } catch (Exception e) {
+//                    throw new Exception(e.getMessage());
+//                }
+//
+//            } catch (Exception e) {
+//                publishProgress(e.getMessage());
+//                e.printStackTrace();
+//            }
+//
+//            return responeObject;
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(String... values) {
+//            super.onProgressUpdate(values);
+//            String message = values[0];
+//            callBack.onUpdate(message);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(T response) {
+//            super.onPostExecute(response);
+//            if (response == null)
+//                return;
+//            callBack.onPost(response);
+//        }
+//
+//        public static abstract class AsyncSoapCallBack<T extends ResponseSoap> {
+//            public abstract void onPre(final AsyncSoap soap);
+//
+//            public abstract void onUpdate(String message);
+//
+//            public abstract void onPost(T response);
+//
+//            public abstract HashMap<String, SoapObject> filterDataReal(SoapObject response);
+//
+//        }
+//    }
+
 
 //    public class AsyncSoapCtoPB extends AsyncTask<Void, String, Boolean> {
 //        //request action to eStore

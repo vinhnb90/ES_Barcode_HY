@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatSpinner;
@@ -26,15 +28,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.ksoap2.serialization.SoapObject;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import esolutions.com.barcodehungyenpc.R;
 import esolutions.com.barcodehungyenpc.database.SqlConnect;
 import esolutions.com.barcodehungyenpc.database.SqlDAO;
+import esolutions.com.barcodehungyenpc.entity.CToPBResponse;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
+import esolutions.com.barcodehungyenpc.entity.DonViResponse;
+import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
+import esolutions.com.barcodehungyenpc.utils.SoapXML;
 
 import static esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity.KEY_PREF_HIDE_KEYBOARD;
 import static esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity.PREF_CONFIG;
@@ -65,6 +81,8 @@ public class DangNhapActivity extends BaseActivity implements
     private SqlDAO mSqlDAO;
     private static boolean isLoadedFolder = false;
 
+    SoapXML.AsyncSoap<CToPBResponse> soapSearchCto = null;
+
     public static final String PARAM_USER = "PARAM_USER";
     public static final String PARAM_PASS = "PARAM_PASS";
     public static final String PARAM_CODE_DIENLUC = "PARAM_CODE_DIENLUC";
@@ -84,7 +102,7 @@ public class DangNhapActivity extends BaseActivity implements
     private boolean mIsCbSaveChecked;
     private AppCompatSpinner mCompatSpinnerPrograme;
     private AppCompatSpinner mCompatSpinnerDvi;
-    private EditText mEtLink;
+    private EditText mEtURL;
     private String mUser;
     private String mPass;
     private int mPosPrograme;
@@ -177,7 +195,7 @@ public class DangNhapActivity extends BaseActivity implements
 
         //fill data
         mCompatSpinnerPrograme.setSelection(mPosPrograme);
-        mEtLink.setText(mURLServer);
+        mEtURL.setText(mURLServer);
         if (mPosPrograme >= mCompatSpinnerDvi.getCount())
             mCompatSpinnerDvi.setSelection(0);
         else
@@ -196,7 +214,7 @@ public class DangNhapActivity extends BaseActivity implements
     protected void initView() {
         mCompatSpinnerPrograme = (AppCompatSpinner) findViewById(R.id.spin_program);
         mCompatSpinnerDvi = (AppCompatSpinner) findViewById(R.id.spin_dvi);
-        mEtLink = (EditText) findViewById(R.id.et_link);
+        mEtURL = (EditText) findViewById(R.id.et_link);
         mIbtnDownDvi = (ImageButton) findViewById(R.id.ibtn_download_dvi);
         mPbarDownDvi = (ProgressBar) findViewById(R.id.pbar_download_dvi);
         mEtUser = (EditText) findViewById(R.id.et_user);
@@ -215,7 +233,13 @@ public class DangNhapActivity extends BaseActivity implements
             mIbtnDownDvi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    try {
+                        downloadDonVi();
+                    } catch (Exception e) {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -244,7 +268,7 @@ public class DangNhapActivity extends BaseActivity implements
                         mPrefManager = SharePrefManager.getInstance(DangNhapActivity.this);
 
                     mPosPrograme = (mCbSaveInfo.isChecked()) ? mCompatSpinnerPrograme.getSelectedItemPosition() : 0;
-                    mURLServer = (mCbSaveInfo.isChecked()) ? mEtLink.getText().toString() : "";
+                    mURLServer = (mCbSaveInfo.isChecked()) ? mEtURL.getText().toString() : "";
                     mPosDvi = (mCbSaveInfo.isChecked()) ? mCompatSpinnerDvi.getSelectedItemPosition() : 0;
                     mUser = (mCbSaveInfo.isChecked()) ? mEtUser.getText().toString() : "";
                     mPass = (mCbSaveInfo.isChecked()) ? mEtPass.getText().toString() : "";
@@ -277,7 +301,7 @@ public class DangNhapActivity extends BaseActivity implements
 
                     Bundle bundle = new Bundle();
                     bundle.putInt(PARAM_POS_PROGRAME, mCompatSpinnerPrograme.getSelectedItemPosition());
-                    bundle.putString(PARAM_SERVER_URL, mEtLink.getText().toString());
+                    bundle.putString(PARAM_SERVER_URL, mEtURL.getText().toString());
                     String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
                     bundle.putString(PARAM_DVI, dvi);
                     bundle.putString(PARAM_USER, mEtUser.getText().toString());
@@ -324,6 +348,154 @@ public class DangNhapActivity extends BaseActivity implements
         }
     }
 
+    private void downloadDonVi() throws Exception {
+        //check thread hiện tại
+        if (soapSearchCto != null) {
+            if (soapSearchCto.getStatus() == AsyncTask.Status.RUNNING || soapSearchCto.getStatus() == AsyncTask.Status.PENDING) {
+                throw new Exception(Common.MESSAGE.ex23.getContent());
+            }
+        }
+
+        //check url
+        if (TextUtils.isEmpty(mEtURL.getText().toString().trim())) {
+            throw new Exception(Common.MESSAGE.ex08.getContent());
+        }
+
+        String[] requestParams = new String[]{};
+
+        if (!Common.isNetworkConnected(this)) {
+            throw new Exception(Common.MESSAGE.ex07.getContent());
+        }
+
+        SoapXML.AsyncSoap.AsyncSoapCallBack<DonViResponse> callBackDonVi = new SoapXML.AsyncSoap.AsyncSoapCallBack<DonViResponse>() {
+            private Class<?> classType;
+
+            @Override
+            public void onPre(SoapXML.AsyncSoap soap) {
+                classType = soap.getClassType();
+                //show progress bar dvi
+                mIbtnDownDvi.setVisibility(View.GONE);
+                mPbarDownDvi.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onUpdate(String message) {
+                //ẩn progress bar
+                mIbtnDownDvi.setVisibility(View.VISIBLE);
+                mPbarDownDvi.setVisibility(View.GONE);
+
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+            @Override
+            public void onPost(String response) {
+                //ẩn progress bar
+                mIbtnDownDvi.setVisibility(View.VISIBLE);
+                mPbarDownDvi.setVisibility(View.GONE);
+
+                //Xử lý kết quả
+                final GsonBuilder gsonBuilder = new GsonBuilder();
+                final Gson gson = gsonBuilder.create();
+                try {
+                    ThongBaoResponse thongBaoResponse = null;
+                    try {
+                        thongBaoResponse = gson.fromJson(response, ThongBaoResponse.class);
+                    } catch (Exception ex) {
+                    }
+                    if (thongBaoResponse != null)
+                        throw new Exception(thongBaoResponse.getThongbao());
+
+                    DonViResponse responeObject = (DonViResponse) gson.fromJson(response.toString(), classType);
+                    if (response == null)
+                        throw new Exception(Common.MESSAGE.ex06.getContent());
+
+                    doProcessAfterDownloadDvi(responeObject);
+                } catch (Exception e) {
+                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public String filterDataReal(SoapObject response) {
+                //lọc từ response trả về những giá trị thực sự của API
+                //tùy chỉnh theo thuộc tính xml node trả về
+                if (response == null)
+                    return null;
+                String jsonReponse = "";
+                try {
+                    SoapObject soapLv1 = (SoapObject) response.getProperty("diffgram");
+                    SoapObject proInfoLv1 = (SoapObject) soapLv1.getProperty("NewDataSet");
+
+                    //kiểm tra nếu có property 'CTO' thì lấy dữ liệu dataset
+                    //ngược lại nếu là 'Table1" thì lấy dữ liệu thông báo
+                    //2 giá trị này được cung cấp bởi server, nên debug các giá trị cây của soapObject để nắm rõ
+
+                    HashMap<String, SoapObject> result = null;
+                    SoapObject proInfoLv2 = null;
+
+                    //check and get all data by key field project and put to gson object
+                    JSONArray jsonArray = new JSONArray();
+
+                    //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
+                    Field[] allFields = null;
+
+
+                    if (proInfoLv1.hasProperty("thongbao")) {
+                        allFields = ThongBaoResponse.class.getDeclaredFields();
+                    } else {
+                        allFields = classType.getDeclaredFields();
+                    }
+
+                    if (allFields == null) {
+                        return jsonReponse;
+                    }
+
+                    int countProInfoLv1 = proInfoLv1.getPropertyCount();
+
+                    for (int i = 0; i < countProInfoLv1; i++) {
+                        proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
+                        JSONObject jsonObject = new JSONObject();
+
+                        for (Field field : allFields) {
+                            if (proInfoLv2.hasProperty(field.getName())) {
+                                jsonObject.accumulate(field.getName(), proInfoLv2.getPropertyAsString(field.getName()));
+                            } else {
+                                jsonObject.accumulate(field.getName(), JSONObject.NULL);
+                            }
+                        }
+
+                        jsonArray.put(jsonObject);
+                    }
+
+                    jsonReponse = jsonArray.toString();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return jsonReponse;
+            }
+        };
+
+        soapSearchCto = new SoapXML.AsyncSoap(
+                DonViResponse.class,
+                callBackDonVi,
+                SoapXML.METHOD.Select_MADVIQLY.getNameMethod(),
+                SoapXML.getURL(mEtURL.getText().toString()),
+                SoapXML.METHOD.Select_MADVIQLY.getNameParams()
+        );
+
+        soapSearchCto.execute(requestParams);
+    }
+
+    private void doProcessAfterDownloadDvi(DonViResponse response) {
+        if (response == null)
+            return;
+
+    }
+
     @Override
     public void setAction(Bundle savedInstanceState) throws Exception {
 
@@ -360,8 +532,8 @@ public class DangNhapActivity extends BaseActivity implements
     }
 
     private boolean validateInput() {
-        if (TextUtils.isEmpty(mEtLink.getText().toString())) {
-            mEtLink.setError(Common.MESSAGE.ex03.getContent());
+        if (TextUtils.isEmpty(mEtURL.getText().toString())) {
+            mEtURL.setError(Common.MESSAGE.ex03.getContent());
             return false;
         }
 
