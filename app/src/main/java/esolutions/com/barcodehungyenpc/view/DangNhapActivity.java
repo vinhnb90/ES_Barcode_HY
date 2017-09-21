@@ -28,15 +28,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.ksoap2.serialization.SoapObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import esolutions.com.barcodehungyenpc.R;
 import esolutions.com.barcodehungyenpc.database.SqlConnect;
 import esolutions.com.barcodehungyenpc.database.SqlDAO;
-import esolutions.com.barcodehungyenpc.entity.CToPBResponse;
 import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
 import esolutions.com.barcodehungyenpc.entity.DonViResponse;
@@ -45,9 +42,6 @@ import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
 import esolutions.com.barcodehungyenpc.utils.SoapXML;
-
-import static esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity.KEY_PREF_HIDE_KEYBOARD;
-import static esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity.PREF_CONFIG;
 
 public class DangNhapActivity extends BaseActivity implements
         ActionBar.TabListener,
@@ -83,14 +77,14 @@ public class DangNhapActivity extends BaseActivity implements
     public static final String PARAM_PASS = "PARAM_PASS";
     public static final String PARAM_CODE_DIENLUC = "PARAM_CODE_DIENLUC";
 
-    public static final String PREF_LOGIN = "PREF_CONFIG";
+    public static final String PREF_CONFIG = "PREF_CONFIG";
     public static final String KEY_PREF_POS_PROGRAME = "KEY_PREF_POS_PROGRAME";
     public static final String KEY_PREF_SERVER_URL = "KEY_PREF_SERVER_URL";
     public static final String KEY_PREF_POS_DVI = "KEY_PREF_POS_DVI";
     public static final String KEY_PREF_USER = "KEY_PREF_USER";
     public static final String KEY_PREF_PASS = "KEY_PREF_PASS";
     public static final String KEY_PREF_CB_SAVE = "KEY_PREF_CB_SAVE";
-
+    public static final String KEY_PREF_KEYBOARD = "KEY_PREF_CB_SAVE";
 
     private String[] tabs = {"Info Config"};
 
@@ -178,7 +172,7 @@ public class DangNhapActivity extends BaseActivity implements
             mPrefManager = SharePrefManager.getInstance(this);
         mPosPrograme = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
                 getInt(KEY_PREF_POS_PROGRAME, 0);
-        mURLServer = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
+        mURLServer = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
                 getString(KEY_PREF_SERVER_URL, "");
         mPosDvi = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
                 getInt(KEY_PREF_POS_DVI, 0);
@@ -186,7 +180,7 @@ public class DangNhapActivity extends BaseActivity implements
                 getString(KEY_PREF_USER, "");
         mPass = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
                 getString(KEY_PREF_PASS, "");
-        mIsCbSaveChecked = mPrefManager.getSharePref(PREF_LOGIN, MODE_PRIVATE).
+        mIsCbSaveChecked = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).
                 getBoolean(KEY_PREF_CB_SAVE, false);
 
         //fill data
@@ -259,59 +253,13 @@ public class DangNhapActivity extends BaseActivity implements
                     if (!validateInput())
                         return;
 
-//                    try {
-//                        callLogin();
-//                    } catch (Exception e) {
-//                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-//                        snackbar.show();
-//                        e.printStackTrace();
-//                    }
-
-                    //save info or clear info
-                    if (mPrefManager == null)
-                        mPrefManager = SharePrefManager.getInstance(DangNhapActivity.this);
-
-                    mPosPrograme = (mCbSaveInfo.isChecked()) ? mCompatSpinnerPrograme.getSelectedItemPosition() : 0;
-                    mURLServer = (mCbSaveInfo.isChecked()) ? mEtURL.getText().toString() : "";
-                    mPosDvi = (mCbSaveInfo.isChecked()) ? mCompatSpinnerDvi.getSelectedItemPosition() : 0;
-                    mUser = (mCbSaveInfo.isChecked()) ? mEtUser.getText().toString() : "";
-                    mPass = (mCbSaveInfo.isChecked()) ? mEtPass.getText().toString() : "";
-                    mIsCbSaveChecked = mCbSaveInfo.isChecked();
-
-                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
-                            putInt(KEY_PREF_POS_PROGRAME, mPosPrograme).
-                            commit();
-
-                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
-                            putString(KEY_PREF_SERVER_URL, mURLServer).
-                            commit();
-
-                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
-                            putInt(KEY_PREF_POS_DVI, mPosDvi).
-                            commit();
-
-                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
-                            putString(KEY_PREF_USER, mUser).
-                            commit();
-
-                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
-                            putString(KEY_PREF_PASS, mPass).
-                            commit();
-
-                    mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
-                            putBoolean(KEY_PREF_CB_SAVE, mIsCbSaveChecked).
-                            commit();
-
-
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(PARAM_POS_PROGRAME, mCompatSpinnerPrograme.getSelectedItemPosition());
-                    bundle.putString(PARAM_SERVER_URL, mEtURL.getText().toString());
-                    String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
-                    bundle.putString(PARAM_DVI, dvi);
-                    bundle.putString(PARAM_USER, mEtUser.getText().toString());
-                    Intent intent = new Intent(DangNhapActivity.this, MainKiemDinhActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    try {
+                        callLogin();
+                    } catch (Exception e) {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -365,13 +313,14 @@ public class DangNhapActivity extends BaseActivity implements
             throw new Exception(Common.MESSAGE.ex08.getContent());
         }
 
-        String[] requestParams = new String[]{mUser.trim(), mPass.trim(), mMaDienLuc};
+        String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
+        String[] requestParams = new String[]{mEtUser.getText().toString().trim(), mEtPass.getText().toString().trim(), dvi};
 
         if (!Common.isNetworkConnected(this)) {
             throw new Exception(Common.MESSAGE.ex07.getContent());
         }
 
-        SoapXML.AsyncSoap.AsyncSoapCallBack<LoginResponse, ThongBaoResponse> callbackLogin = new SoapXML.AsyncSoap.AsyncSoapCallBack<LoginResponse, ThongBaoResponse>() {
+        SoapXML.AsyncSoap.AsyncSoapCallBack<Boolean, ThongBaoResponse> callbackLogin = new SoapXML.AsyncSoap.AsyncSoapCallBack<Boolean, ThongBaoResponse>() {
             @Override
             public void onPre(SoapXML.AsyncSoap soap) {
                 //show progress Login
@@ -389,21 +338,73 @@ public class DangNhapActivity extends BaseActivity implements
                 snackbar.show();
             }
 
+
             @Override
-            public void onPostData(LoginResponse dataResponse) {
+            public void onPostData(Boolean dataResponse) {
                 Log.d(TAG, "onPostData: " + dataResponse.toString());
                 mBtnLogin.setVisibility(View.VISIBLE);
                 mPbarLogin.setVisibility(View.GONE);
+
+                if (dataResponse.equals(false)) {
+                    onUpdate(Common.MESSAGE.ex24.getContent());
+                    return;
+                }
+                //save info or clear info
+                if (mPrefManager == null)
+                    mPrefManager = SharePrefManager.getInstance(DangNhapActivity.this);
+
+                mPosPrograme = (mCbSaveInfo.isChecked()) ? mCompatSpinnerPrograme.getSelectedItemPosition() : 0;
+                mURLServer = (mCbSaveInfo.isChecked()) ? mEtURL.getText().toString() : "";
+                mPosDvi = (mCbSaveInfo.isChecked()) ? mCompatSpinnerDvi.getSelectedItemPosition() : 0;
+                mUser = (mCbSaveInfo.isChecked()) ? mEtUser.getText().toString() : "";
+                mPass = (mCbSaveInfo.isChecked()) ? mEtPass.getText().toString() : "";
+                mIsCbSaveChecked = mCbSaveInfo.isChecked();
+
+                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                        putInt(KEY_PREF_POS_PROGRAME, mPosPrograme).
+                        commit();
+
+                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                        putString(KEY_PREF_SERVER_URL, mURLServer).
+                        commit();
+
+                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                        putInt(KEY_PREF_POS_DVI, mPosDvi).
+                        commit();
+
+                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                        putString(KEY_PREF_USER, mUser).
+                        commit();
+
+                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                        putString(KEY_PREF_PASS, mPass).
+                        commit();
+
+                mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).edit().
+                        putBoolean(KEY_PREF_CB_SAVE, mIsCbSaveChecked).
+                        commit();
+
+
+                Bundle bundle = new Bundle();
+                bundle.putInt(PARAM_POS_PROGRAME, mCompatSpinnerPrograme.getSelectedItemPosition());
+                bundle.putString(PARAM_SERVER_URL, mEtURL.getText().toString());
+                String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
+                bundle.putString(PARAM_DVI, dvi);
+                bundle.putString(PARAM_USER, mEtUser.getText().toString());
+                Intent intent = new Intent(DangNhapActivity.this, MainKiemDinhActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
             }
 
             @Override
-            public void onPostEror(ThongBaoResponse errorResponse) {
-
+            public void onPostMessageSever(ThongBaoResponse errorResponse) {
             }
+
         };
 
         soapLogin = new SoapXML.AsyncSoap(
-                LoginResponse.class,
+                Boolean.class,
                 ThongBaoResponse.class,
                 "thongbao",
                 callbackLogin,
@@ -435,7 +436,6 @@ public class DangNhapActivity extends BaseActivity implements
         }
 
         SoapXML.AsyncSoap.AsyncSoapCallBack<List<DonViResponse>, ThongBaoResponse> callBackDonVi = new SoapXML.AsyncSoap.AsyncSoapCallBack<List<DonViResponse>, ThongBaoResponse>() {
-
             @Override
             public void onPre(SoapXML.AsyncSoap soap) {
                 //show progress bar dvi
@@ -485,7 +485,7 @@ public class DangNhapActivity extends BaseActivity implements
             }
 
             @Override
-            public void onPostEror(ThongBaoResponse errorResponse) {
+            public void onPostMessageSever(ThongBaoResponse errorResponse) {
                 Log.e(TAG, "onPostData: " + errorResponse.toString());
                 mPbarDownDvi.setVisibility(View.GONE);
                 mIbtnDownDvi.setVisibility(View.VISIBLE);
@@ -620,7 +620,7 @@ public class DangNhapActivity extends BaseActivity implements
                     .putString(KEY_PREF_USER, "")
                     .putString(KEY_PREF_PASS, "")
                     .putBoolean(KEY_PREF_CB_SAVE, false)
-                    .putBoolean(KEY_PREF_HIDE_KEYBOARD, false)
+                    .putBoolean(KEY_PREF_KEYBOARD, false)
                     .commit();
         }
     }

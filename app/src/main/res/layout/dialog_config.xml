@@ -72,7 +72,7 @@
 
         </RelativeLayout>
 
-        <TextView
+      <!--  <TextView
             android:id="@+id/tv_title_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 android:background="@drawable/xml_border_full"
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_arrow_down" />
-        </LinearLayout>
+        </LinearLayout>-->
 
         <!-- <LinearLayout
              android:id="@+id/ll_dvi"
@@ -184,7 +184,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_25sdp"
-            android:layout_below="@+id/ll_aet_dvi"
+            android:layout_below="@+id/rl_keyboard"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:gravity="right"
             android:orientation="horizontal">

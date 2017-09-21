@@ -251,7 +251,7 @@ public class Common {
         ex21("ex21", "Thao tác tìm kiếm phiên trước chưa kết thúc...!"),
         ex22("ex22", "Chưa có thiết bị nào được chọn để gửi kiểm định...!"),
         ex23("ex23", "Thao tác tải đơn vị phiên trước chưa kết thúc...!"),
-
+        ex24("ex24", "Đăng nhập không thành công, vui lòng kiểm tra lại thông tin!"),
         ex("ex", "Gặp vấn đề không xác định.");
 
         private String code, content;

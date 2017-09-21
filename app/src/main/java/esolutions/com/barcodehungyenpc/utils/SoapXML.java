@@ -1,16 +1,10 @@
 package esolutions.com.barcodehungyenpc.utils;
 
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,13 +15,13 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by VinhNB on 8/31/2017.
@@ -102,8 +96,8 @@ public class SoapXML {
             this.keyDataSetServerError = keyDataSetServerError;
             this.classTypeData = classTypeData;
             this.classTypeError = classTypeError;
-            objectTypeData = classTypeData.newInstance();
-            objectTypeError = classTypeError.newInstance();
+//            objectTypeData = classTypeData.newInstance();
+//            objectTypeError = classTypeError.newInstance();
             this.METHOD_NAME = methodName;
             this.URL = URL;
             this.METHOD_PARAM = nameParams;
@@ -144,21 +138,51 @@ public class SoapXML {
                     ht = new HttpTransportSE(URL, TIME_OUT);
                     ht.call(SOAP_ACTION, envelope);
 
-                    SoapObject result;
+                    SoapObject result = null;
+                    SoapPrimitive primitive = null;
+//                    int field = classTypeData.getDeclaredFields().length;
+//                    if (field == 2) {
+////                        SoapFault soapFault = (SoapFault) envelope.bodyIn;
+//                        primitive = (SoapPrimitive) envelope.getResponse();
+//                        Object a =
+//                        jsonResponse = convertDataSoapPrimitive(primitive);
+//                    } else {
+//                        result = (SoapObject) envelope.getResponse();
+//                        jsonResponse = convertDataSoapObject(result);
+//                        if (jsonResponse == null)
+//                            throw new Exception(Common.MESSAGE.ex05.getContent());
+//                    }
 
-                    try {
+                    //kiểm tra là kiểu nguyên thủy hay kiểu object
+                    if (isWrapperType(classTypeData)) {
+                        primitive = (SoapPrimitive) envelope.getResponse();
+                        if (primitive == null)
+                            throw new Exception(Common.MESSAGE.ex06.getContent());
+                        jsonResponse = primitive.toString();
+
+                    } else {
                         result = (SoapObject) envelope.getResponse();
-                    } catch (Exception ex) {
-
-                        throw ex;
+                        if (result == null)
+                            throw new Exception(Common.MESSAGE.ex06.getContent());
+                        jsonResponse = convertDataSoapObject(result);
                     }
 
-                    if (result == null)
-                        throw new Exception(Common.MESSAGE.ex06.getContent());
-
-                    jsonResponse = filterDataReal(result);
                     if (jsonResponse == null)
                         throw new Exception(Common.MESSAGE.ex05.getContent());
+//                    if (envelope.bodyIn instanceof SoapObject) {
+//                        // SoapObject = SUCCESS
+//                        result = (SoapObject) envelope.bodyIn;
+//                        jsonResponse = convertDataSoapObject(result);
+//                        if (jsonResponse == null)
+//                            throw new Exception(Common.MESSAGE.ex05.getContent());
+////                        response = (SoapObject) envelope.bodyIn;
+//                    } else if (envelope.bodyIn instanceof SoapFault) { // SoapFault =
+//                        // FAILURE
+//                        SoapFault soapFault = (SoapFault) envelope.bodyIn;
+//                        throw new Exception(soapFault.getMessage());
+//                    }
+
+
 
                 } catch (Exception e) {
                     throw new Exception(e.getMessage());
@@ -172,7 +196,20 @@ public class SoapXML {
             return jsonResponse;
         }
 
-        private String filterDataReal(SoapObject response) throws Exception {
+//        private String convertDataSoapPrimitive(SoapPrimitive primitive) throws Exception {
+//            if (primitive == null)
+//                return null;
+//            String jsonReponse = "";
+//            try {
+//                JSONObject o = new JSONObject();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                throw new Exception(Common.MESSAGE.ex06.getContent());
+//            }
+//            return jsonReponse;
+//        }
+
+        private String convertDataSoapObject(SoapObject response) throws Exception {
             if (response == null)
                 return null;
             String jsonReponse = "";
@@ -254,17 +291,38 @@ public class SoapXML {
             Type type = null;
             try {
                 List<V> objectTypeError = null;
-                List<K> objectTypeData = null;
+
                 if (isServerErrorResponse) {
+                    if(isWrapperType(classTypeError))
+                    {
+                        V primitiveTypeData = setValueWrapperTypes(jsonResponse, classTypeError);
+                        callBack.onPostData(primitiveTypeData);
+                    }else {
+                        List<V> objectTypeData = null;
+                        objectTypeData = toList(jsonResponse, classTypeError);
+                        callBack.onPostData(objectTypeData);
+                    }
                     objectTypeError = toList(jsonResponse, classTypeError);
-                    callBack.onPostEror(objectTypeError);
+                    callBack.onPostMessageSever(objectTypeError);
                 } else {
-                    objectTypeData = toList(jsonResponse, classTypeData);
-                    callBack.onPostData(objectTypeData);
+                    if(isWrapperType(classTypeData))
+                    {
+                        K primitiveTypeData = setValueWrapperTypes(jsonResponse, classTypeData);
+//                        K newT1 = (K)(Object)jsonResponse;
+//                        string newT2 = (string)(object)t;
+//                        K primitiveTypeData = (K)Convert.ChangeType(jsonResponse, typeof(K));
+                        callBack.onPostData(primitiveTypeData);
+                    }else {
+                        List<K> objectTypeData = null;
+                        objectTypeData = toList(jsonResponse, classTypeData);
+                        callBack.onPostData(objectTypeData);
+
+                    }
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
+                callBack.onUpdate(e.getMessage());
             }
 
         }
@@ -284,6 +342,47 @@ public class SoapXML {
             return t;
 
         }
+
+        private static final Set<Class<?>> WRAPPER_TYPES = checkWrapperTypes();
+
+        public static boolean isWrapperType(Class<?> clazz) {
+            return WRAPPER_TYPES.contains(clazz);
+        }
+
+        private static Set<Class<?>> checkWrapperTypes() {
+            Set<Class<?>> ret = new HashSet<Class<?>>();
+            ret.add(Boolean.class);
+            ret.add(Character.class);
+            ret.add(Byte.class);
+            ret.add(Short.class);
+            ret.add(Integer.class);
+            ret.add(Long.class);
+            ret.add(Float.class);
+            ret.add(Double.class);
+            ret.add(Void.class);
+            return ret;
+        }
+
+        @SuppressWarnings("unchecked")
+        public static <T> T setValueWrapperTypes(String input, Class<T> clazz) throws Exception {
+            T value = null;
+            if (clazz.isAssignableFrom(String.class)) {
+                value = (T) input;
+            } else if (clazz.isAssignableFrom(Integer.class)) {
+                value = (T) Integer.valueOf(input);
+            } else if (clazz.isAssignableFrom(Boolean.class)) {
+                value = (T) Boolean.valueOf(input);
+            } else if (clazz.isAssignableFrom(Double.class)) {
+                value = (T) Double.valueOf(input);
+            } else {
+                throw new IllegalArgumentException("Bad type.");
+            }
+
+           if(value == null)
+               throw new IllegalArgumentException("Null data.");
+            return value;
+        }
+
 
         public class ObjectOfJson<T> implements ParameterizedType {
             private Class<?> wrapped;
@@ -340,7 +439,8 @@ public class SoapXML {
 
             public abstract void onPostData(K dataResponse);
 
-            public abstract void onPostEror(V errorResponse);
+            public abstract void onPostMessageSever(V errorResponse);
+
         }
     }
 
@@ -406,7 +506,7 @@ public class SoapXML {
 //                    if (result == null)
 //                        throw new Exception(Common.MESSAGE.ex06.getContent());
 //
-//                    HashMap<String, SoapObject> dataRealResult = callBack.filterDataReal(result);
+//                    HashMap<String, SoapObject> dataRealResult = callBack.convertDataSoapObject(result);
 //                    if (dataRealResult == null)
 //                        throw new Exception(Common.MESSAGE.ex05.getContent());
 //
@@ -502,7 +602,7 @@ public class SoapXML {
 //
 //            public abstract void onPost(T response);
 //
-//            public abstract HashMap<String, SoapObject> filterDataReal(SoapObject response);
+//            public abstract HashMap<String, SoapObject> convertDataSoapObject(SoapObject response);
 //
 //        }
 //    }
@@ -552,14 +652,14 @@ public class SoapXML {
 //                return null;
 //            }
 //
-//            String filterDataReal = response.toString();
+//            String convertDataSoapObject = response.toString();
 //
-//            if (filterDataReal.isEmpty()) {
+//            if (convertDataSoapObject.isEmpty()) {
 //                publishProgress("Dữ liệu trả về rỗng!");
 //                return null;
 //            }
 //
-//            return Boolean.parseBoolean(filterDataReal);
+//            return Boolean.parseBoolean(convertDataSoapObject);
 //        }
 //
 //        @Override

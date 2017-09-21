@@ -61,8 +61,8 @@ import esolutions.com.barcodehungyenpc.database.SqlDAO;
 import esolutions.com.barcodehungyenpc.entity.CToPBResponse;
 import esolutions.com.barcodehungyenpc.entity.CongTo;
 import esolutions.com.barcodehungyenpc.entity.CongToProxy;
-import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
+import esolutions.com.barcodehungyenpc.entity.DonViResponse;
 import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.model.DsCongToAdapter;
 import esolutions.com.barcodehungyenpc.utils.Common;
@@ -72,9 +72,11 @@ import esolutions.com.barcodehungyenpc.utils.SoapXML;
 import static esolutions.com.barcodehungyenpc.utils.Common.TIME_DELAY_ANIM;
 import static esolutions.com.barcodehungyenpc.utils.Common.convertDateSQLToDateUI;
 import static esolutions.com.barcodehungyenpc.utils.Common.getDateTimeNow;
+import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.KEY_PREF_KEYBOARD;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_DVI;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_SERVER_URL;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_USER;
+import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PREF_CONFIG;
 
 public class MainKiemDinhActivity
         extends BaseActivity
@@ -98,11 +100,6 @@ public class MainKiemDinhActivity
 
     private SharePrefManager mPrefManager;
 
-    public static final String PREF_CONFIG = "PREF_CONFIG";
-    public static final String KEY_PREF_HIDE_KEYBOARD = "KEY_PREF_HIDE_KEYBOARD";
-    public static final String KEY_PREF_MA_DIEN_LUC = "KEY_PREF_MA_DIEN_LUC";
-    public static final String KEY_PREF_SERVER_URL = "KEY_PREF_SERVER_URL";
-
     private Handler mUiHandler = new Handler();
 
     private static final String TAG = MainKiemDinhActivity.class.getName();
@@ -124,6 +121,7 @@ public class MainKiemDinhActivity
     Bundle savedInstanceState;
 
     SoapXML.AsyncSoap<List<CToPBResponse>, ThongBaoResponse> soapSearchCto = null;
+    SoapXML.AsyncSoap<List<DonViResponse>, ThongBaoResponse> soapUpload = null;
     private static boolean isLoadedFolder = false;
 
     //bundle
@@ -156,8 +154,8 @@ public class MainKiemDinhActivity
     protected void onResume() {
         super.onResume();
         //check file config
-        Boolean isHideKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_HIDE_KEYBOARD, false);
-        if (isHideKeyboard) {
+        Boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, false);
+        if (isShowKeyboard) {
             mEtSearchOnline.setInputType(InputType.TYPE_NULL);
             mEtSearchOnline.setRawInputType(InputType.TYPE_CLASS_TEXT);
             mEtSearchOnline.setTextIsSelectable(true);
@@ -253,89 +251,89 @@ public class MainKiemDinhActivity
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
 
-        final EditText etURL = (EditText) dialogConfig.findViewById(R.id.et_url);
-        final EditText etDvi = (EditText) dialogConfig.findViewById(R.id.aet_dvi);
+//        final EditText etURL = (EditText) dialogConfig.findViewById(R.id.et_url);
+//        final EditText etDvi = (EditText) dialogConfig.findViewById(R.id.aet_dvi);
         final Button btSave = (Button) dialogConfig.findViewById(R.id.btn_save_config);
 
         final ImageButton mBtnListDvi = (ImageButton) dialogConfig.findViewById(R.id.ibtn_auto_dvi);
         final AutoCompleteTextView mAutoEtDvi = (AutoCompleteTextView) dialogConfig.findViewById(R.id.aet_dvi);
-        final Switch swtHideKeyboard = (Switch) dialogConfig.findViewById(R.id.swt_keyboard);
+        final Switch swtShowKeyboard = (Switch) dialogConfig.findViewById(R.id.swt_keyboard);
 
         //fill Data
         if (mPrefManager == null)
             mPrefManager = SharePrefManager.getInstance(this);
 
         //check setup keyboard, ban đầu là show
-        final boolean isHideKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_HIDE_KEYBOARD, false);
-        swtHideKeyboard.setChecked(!isHideKeyboard);
+        final boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, false);
+        swtShowKeyboard.setChecked(isShowKeyboard);
 
-        //check url
-        String URL = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getString(KEY_PREF_SERVER_URL, "");
-        etURL.setText(URL);
-
-        //check dvi
-        String dvi = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getString(KEY_PREF_MA_DIEN_LUC, "");
-        mAutoEtDvi.setText(dvi);
-
-        //set Adapter autoComplex dvi
-        mAutoEtDvi.setThreshold(2);
-        mAutoEtDvi.setAdapter(initAdapterDvi());
-        mAutoEtDvi.invalidate();
-
-        mBtnListDvi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAutoEtDvi.showDropDown();
-            }
-        });
-
+//        //check url
+//        String URL = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getString(KEY_PREF_SERVER_URL, "");
+//        etURL.setText(URL);
+//
+//        //check dvi
+//        String dvi = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getString(KEY_PREF_MA_DIEN_LUC, "");
+//        mAutoEtDvi.setText(dvi);
+//
+//        //set Adapter autoComplex dvi
+//        mAutoEtDvi.setThreshold(2);
+//        mAutoEtDvi.setAdapter(initAdapterDvi());
+//        mAutoEtDvi.invalidate();
+//
+//        mBtnListDvi.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mAutoEtDvi.showDropDown();
+//            }
+//        });
+//
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     //true nếu ẩn bàn phím, nếu bật ẩn thì checked = true
-                    Boolean isHideKeyboard = swtHideKeyboard.isChecked();
-
-                    String dvi = etDvi.getText().toString();
-                    String url = etURL.getText().toString();
-
-                    //check
-                    if (TextUtils.isEmpty(url)) {
-                        etURL.setError(Common.MESSAGE.ex03.getContent());
-                        etURL.setFocusable(true);
-                        return;
-                    }
-
-                    if (TextUtils.isEmpty(dvi)) {
-                        etDvi.setError(Common.MESSAGE.ex03.getContent());
-                        etDvi.setFocusable(true);
-                        return;
-                    }
+                    Boolean isHideKeyboard = swtShowKeyboard.isChecked();
+//
+//                    String dvi = etDvi.getText().toString();
+//                    String url = etURL.getText().toString();
+//
+//                    //check
+//                    if (TextUtils.isEmpty(url)) {
+//                        etURL.setError(Common.MESSAGE.ex03.getContent());
+//                        etURL.setFocusable(true);
+//                        return;
+//                    }
+//
+//                    if (TextUtils.isEmpty(dvi)) {
+//                        etDvi.setError(Common.MESSAGE.ex03.getContent());
+//                        etDvi.setFocusable(true);
+//                        return;
+//                    }
 
                     mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
                             .edit()
-                            .putBoolean(KEY_PREF_HIDE_KEYBOARD, isHideKeyboard)
-                            .putString(KEY_PREF_MA_DIEN_LUC, dvi)
-                            .putString(KEY_PREF_SERVER_URL, url)
+                            .putBoolean(DangNhapActivity.KEY_PREF_KEYBOARD, isHideKeyboard)
+//                            .putString(KEY_PREF_MA_DIEN_LUC, dvi)
+//                            .putString(KEY_PREF_SERVER_URL, url)
                             .commit();
 
                     //check nếu dvi mơi thì thêm vào database và làm mới lại auto et dvi
                     //lưu shared pref
-                    boolean isHasDviExits = false;
-
-                    isHasDviExits = mSqlDAO.checkExistTBL_DIENLUC(dvi);
-
-                    if (!isHasDviExits) {
-                        DienLuc dienLuc = new DienLuc();
-                        dienLuc.setMA_DVIQLY(dvi);
-
-                        mSqlDAO.insertTBL_DIENLUC(dienLuc);
-
-                        //set Adapter autoComplex dvi
-                        mAutoEtDvi.setThreshold(1);
-                        mAutoEtDvi.setAdapter(initAdapterDvi());
-                        mAutoEtDvi.invalidate();
-                    }
+//                    boolean isHasDviExits = false;
+//
+//                    isHasDviExits = mSqlDAO.checkExistTBL_DIENLUC(dvi);
+//
+//                    if (!isHasDviExits) {
+//                        DienLuc dienLuc = new DienLuc();
+//                        dienLuc.setMA_DVIQLY(dvi);
+//
+//                        mSqlDAO.insertTBL_DIENLUC(dienLuc);
+//
+//                        //set Adapter autoComplex dvi
+//                        mAutoEtDvi.setThreshold(1);
+//                        mAutoEtDvi.setAdapter(initAdapterDvi());
+//                        mAutoEtDvi.invalidate();
+//                    }
                     Snackbar snackbar = Snackbar
                             .make(mCoordinatorLayout, Common.MESSAGE.ex12.getContent(), Snackbar.LENGTH_LONG);
 
@@ -672,33 +670,43 @@ public class MainKiemDinhActivity
                 @Override
                 public void onClick(View view) {
                     //click fab
-                    if (mRvUpload.getVisibility() == View.GONE) {
-                        //bật form upload
-                        mFab.hide(true);
-                        mFab.setImageResource(R.mipmap.ic_arrow_left);
-                        mFab.show(true);
+                    try {
+                        if (mRvUpload.getVisibility() == View.GONE) {
+                            //bật form upload
+                            mFab.hide(true);
+                            mFab.setImageResource(R.mipmap.ic_arrow_left);
+                            mFab.show(true);
 
-                        Common.runAnimationClickView(mRvUpload, R.anim.bottom_up, TIME_DELAY_ANIM);
-                        mRvUpload.setVisibility(View.VISIBLE);
-                        mNavigation.setVisibility(View.GONE);
+                            Common.runAnimationClickView(mRvUpload, R.anim.bottom_up, TIME_DELAY_ANIM);
+                            mRvUpload.setVisibility(View.VISIBLE);
+                            mNavigation.setVisibility(View.GONE);
 
-                        //set tự động trên khung upload
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRvCto.getLayoutParams();
-                        params.addRule(RelativeLayout.ABOVE, R.id.rl_upload_data);
-                        mRvCto.setLayoutParams(params);
+                            //set tự động trên khung upload
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRvCto.getLayoutParams();
+                            params.addRule(RelativeLayout.ABOVE, R.id.rl_upload_data);
+                            mRvCto.setLayoutParams(params);
 
-                    } else {
-                        //tắt form upload
-                        mFab.hide(true);
-                        mFab.setImageResource(R.mipmap.ic_upload_white);
-                        mFab.show(true);
-                        Common.runAnimationClickView(mRvUpload, R.anim.bottom_down, TIME_DELAY_ANIM);
-                        mRvUpload.setVisibility(View.GONE);
-                        mNavigation.setVisibility(View.VISIBLE);
-                        //set tự động trên khung bottom menu
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRvCto.getLayoutParams();
-                        params.addRule(RelativeLayout.ABOVE, mNavigation.getId());
-                        mRvCto.setLayoutParams(params);
+                            //chuẩn bị dữ liệu upload
+                            prepareDataUpload();
+
+                        } else {
+                            //tắt form upload
+                            mFab.hide(true);
+                            mFab.setImageResource(R.mipmap.ic_upload_white);
+                            mFab.show(true);
+                            Common.runAnimationClickView(mRvUpload, R.anim.bottom_down, TIME_DELAY_ANIM);
+                            mRvUpload.setVisibility(View.GONE);
+                            mNavigation.setVisibility(View.VISIBLE);
+                            //set tự động trên khung bottom menu
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRvCto.getLayoutParams();
+                            params.addRule(RelativeLayout.ABOVE, mNavigation.getId());
+                            mRvCto.setLayoutParams(params);
+                        }
+                    }catch (Exception e)
+                    {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        e.printStackTrace();
                     }
                 }
             });
@@ -722,14 +730,24 @@ public class MainKiemDinhActivity
     }
 
     private void upload() throws Exception {
-        mListUploadCtoKD.clear();
-        mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(Common.convertDateUIToDateSQL(mDate));
+        prepareDataUpload();
 
         if (mListUploadCtoKD.size() == 0)
             throw new Exception(Common.MESSAGE.ex22.getContent());
 
         mBtnUpload.setVisibility(View.GONE);
         mPbarUpload.setVisibility(View.VISIBLE);
+
+
+        //check thread hiện tại
+        if (soapSearchCto != null) {
+            if (soapSearchCto.getStatus() == AsyncTask.Status.RUNNING || soapSearchCto.getStatus() == AsyncTask.Status.PENDING) {
+                throw new Exception(Common.MESSAGE.ex23.getContent());
+            }
+        }
+
+
+
 //        MainKiemDinhActivity.this.runOnUiThread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -809,8 +827,6 @@ public class MainKiemDinhActivity
             }
 
 
-
-
 //            @Override
 //            public void onPost(CToPBResponse response) {
 //                //ẩn progress bar
@@ -880,8 +896,8 @@ public class MainKiemDinhActivity
             }
 
             @Override
-            public void onPostEror(ThongBaoResponse errorResponse) {
-                Log.d(TAG, "onPostEror: ");
+            public void onPostMessageSever(ThongBaoResponse errorResponse) {
+                Log.d(TAG, "onPostMessageSever: ");
                 Snackbar snackbar = Snackbar.make(mCoordinatorLayout, errorResponse.getThongbao(), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
@@ -901,12 +917,11 @@ public class MainKiemDinhActivity
 
     }
 
-    private void doProcessAfterSearchOnline(List<CToPBResponse>  listResponse) throws Exception {
+    private void doProcessAfterSearchOnline(List<CToPBResponse> listResponse) throws Exception {
         if (listResponse == null)
             throw new Exception(Common.MESSAGE.ex06.getContent());
 
-        for(CToPBResponse cToPBResponse: listResponse)
-        {
+        for (CToPBResponse cToPBResponse : listResponse) {
             //lấy các dữ liệu cần thiết ghi vào database
             CongTo congTo = new CongTo();
 //        congTo.setMA_DVIQLY(response.getMA_DVIQLY());
@@ -963,8 +978,10 @@ public class MainKiemDinhActivity
             int statusGhimCto = mListCtoKD.get(pos).getTRANG_THAI_GHIM();
             if (statusGhimCto == Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode())
                 statusGhimCto = Common.TRANG_THAI_GHIM.DA_GHIM.getCode();
-            else
+            else {
                 statusGhimCto = Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode();
+                mSqlDAO.updateChonCtoKD(mListCtoKD.get(pos).getSTT(), Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+            }
             mSqlDAO.updateGhimCtoKD(mListCtoKD.get(pos).getSTT(), statusGhimCto);
 
 
@@ -981,9 +998,7 @@ public class MainKiemDinhActivity
                 mListCtoKD.clear();
                 mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
 
-                mListUploadCtoKD.clear();
-                mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
-                mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
+                prepareDataUpload();
             }
 
             fillDataReyclerFull();
@@ -991,8 +1006,17 @@ public class MainKiemDinhActivity
             mRvCto.invalidate();
 
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+            snackbar.show();
+            e.printStackTrace();
         }
+    }
+
+    private void prepareDataUpload() throws Exception{
+        String dateSQL = Common.convertDateUIToDateSQL(mDate);
+        mListUploadCtoKD.clear();
+        mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
+        mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
     }
 
     @Override
@@ -1077,9 +1101,8 @@ public class MainKiemDinhActivity
                 mListCtoKD.clear();
                 mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
 
-                mListUploadCtoKD.clear();
-                mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
-                mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
+                prepareDataUpload();
+
             }
 
             fillDataReyclerFull();
