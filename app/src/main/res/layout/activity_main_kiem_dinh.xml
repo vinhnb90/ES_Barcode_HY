@@ -13,7 +13,7 @@
         android:id="@+id/rl_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_menu_bottom"
+        android:layout_above="@+id/nav_bottom_menu"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
 
@@ -347,42 +347,39 @@
                  android:src="@mipmap/ic_search_online" />-->
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/ll_menu_bottom"
+
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/nav_bottom_menu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom">
-
-            <com.roughike.bottombar.BottomBar
-                android:id="@+id/nav_bottom_menu"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_gravity="bottom"
-                android:background="@color/button_dark_orange"
-                android:backgroundTint="@color/white"
-                app:bb_activeTabColor="@color/white"
-                app:bb_badgeBackgroundColor="@color/white"
-                app:bb_behavior="shifting"
-                app:bb_inActiveTabAlpha="0.8"
-                app:bb_inActiveTabColor="@color/white"
-                app:bb_showShadow="true"
-                app:bb_tabXmlResource="@xml/xml_nav_bottom_menu"
-                app:bb_titleTextAppearance="@style/CustomTitleTextAppearance" />
-        </RelativeLayout>
+            android:layout_gravity="bottom"
+            android:background="@color/button_dark_orange"
+            android:backgroundTint="@color/white"
+            app:bb_activeTabColor="@color/white"
+            app:bb_badgeBackgroundColor="@color/white"
+            app:bb_behavior="shifting"
+            app:bb_inActiveTabAlpha="0.8"
+            app:bb_inActiveTabColor="@color/white"
+            app:bb_showShadow="true"
+            app:bb_tabXmlResource="@xml/xml_nav_bottom_menu"
+            app:bb_titleTextAppearance="@style/CustomTitleTextAppearance" />
 
         <RelativeLayout
-            tools:visibility="visible"
-            android:visibility="gone"
             android:id="@+id/rl_upload_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:background="@color/white"
-            android:padding="@dimen/activity_horizontal_margin">
+
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <RelativeLayout
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/xml_border_full"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:id="@+id/rl_upload_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -439,16 +436,15 @@
                         android:padding="@dimen/_2sdp"
                         android:text="TẢI LÊN"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_10sdp"
-                        />
+                        android:textSize="@dimen/_10sdp" />
 
                     <ProgressBar
-                        android:visibility="gone"
                         android:id="@+id/pbar_upload"
-                        android:padding="@dimen/_2sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:indeterminateTint="@color/white" />
+                        android:indeterminateTint="@color/white"
+                        android:padding="@dimen/_2sdp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
                 <!-- <ProgressBar
@@ -501,7 +497,7 @@
             android:id="@+id/rv_ds_cto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/ll_menu_bottom"
+            android:layout_above="@+id/nav_bottom_menu"
             android:layout_below="@+id/ll_search2"
             android:background="@android:color/transparent"
             android:visibility="visible">
@@ -511,15 +507,15 @@
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_upload"
-            tools:visibility="visible"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/_72sdp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:src="@mipmap/ic_upload_white" />
+            android:src="@mipmap/ic_upload_white"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </RelativeLayout>
 

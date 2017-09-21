@@ -52,10 +52,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import org.ksoap2.serialization.SoapObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import esolutions.com.barcodehungyenpc.R;
@@ -66,6 +63,7 @@ import esolutions.com.barcodehungyenpc.entity.CongTo;
 import esolutions.com.barcodehungyenpc.entity.CongToProxy;
 import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
+import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.model.DsCongToAdapter;
 import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
@@ -125,7 +123,7 @@ public class MainKiemDinhActivity
     private String mDate;
     Bundle savedInstanceState;
 
-    SoapXML.AsyncSoap<CToPBResponse> soapSearchCto = null;
+    SoapXML.AsyncSoap<List<CToPBResponse>, ThongBaoResponse> soapSearchCto = null;
     private static boolean isLoadedFolder = false;
 
     //bundle
@@ -581,10 +579,12 @@ public class MainKiemDinhActivity
             mBtnSearchOnline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (TextUtils.isEmpty(mEtSearchOnline.getText().toString()))
-                        return;
-
                     try {
+                        if (TextUtils.isEmpty(mEtSearchOnline.getText().toString())) {
+                            mEtSearchOnline.setError(Common.MESSAGE.ex03.getContent());
+                            return;
+                        }
+
                         searchOnline(mEtSearchOnline.getText().toString());
                     } catch (Exception e) {
                         Snackbar snackbar = Snackbar
@@ -673,18 +673,32 @@ public class MainKiemDinhActivity
                 public void onClick(View view) {
                     //click fab
                     if (mRvUpload.getVisibility() == View.GONE) {
+                        //bật form upload
                         mFab.hide(true);
                         mFab.setImageResource(R.mipmap.ic_arrow_left);
                         mFab.show(true);
 
                         Common.runAnimationClickView(mRvUpload, R.anim.bottom_up, TIME_DELAY_ANIM);
                         mRvUpload.setVisibility(View.VISIBLE);
+                        mNavigation.setVisibility(View.GONE);
+
+                        //set tự động trên khung upload
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRvCto.getLayoutParams();
+                        params.addRule(RelativeLayout.ABOVE, R.id.rl_upload_data);
+                        mRvCto.setLayoutParams(params);
+
                     } else {
+                        //tắt form upload
                         mFab.hide(true);
                         mFab.setImageResource(R.mipmap.ic_upload_white);
                         mFab.show(true);
                         Common.runAnimationClickView(mRvUpload, R.anim.bottom_down, TIME_DELAY_ANIM);
                         mRvUpload.setVisibility(View.GONE);
+                        mNavigation.setVisibility(View.VISIBLE);
+                        //set tự động trên khung bottom menu
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRvCto.getLayoutParams();
+                        params.addRule(RelativeLayout.ABOVE, mNavigation.getId());
+                        mRvCto.setLayoutParams(params);
                     }
                 }
             });
@@ -778,23 +792,25 @@ public class MainKiemDinhActivity
             throw new Exception(Common.MESSAGE.ex07.getContent());
         }
 
-        //hiện tại server đang trả về cùng 1 dạng response là CToPBResponse nên sẽ dùng chung
-//        SoapXML.AsyncSoap.AsyncSoapCallBack<CToPBResponse> callBackCToKD = new SoapXML.AsyncSoap.AsyncSoapCallBack<CToPBResponse>() {
-//            @Override
-//            public void onPre(SoapXML.AsyncSoap soap) {
-//                //show progress bar
-//                showProgresbar(true);
-//            }
-//
-//            @Override
-//            public void onUpdate(String message) {
-//                //ẩn progress bar
-//                showProgresbar(false);
-//
-//                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
-//                snackbar.show();
-//            }
-//
+        SoapXML.AsyncSoap.AsyncSoapCallBack<List<CToPBResponse>, ThongBaoResponse> callBackCToKD = new SoapXML.AsyncSoap.AsyncSoapCallBack<List<CToPBResponse>, ThongBaoResponse>() {
+            @Override
+            public void onPre(SoapXML.AsyncSoap soap) {
+                //show progress bar
+                showProgresbar(true);
+            }
+
+            @Override
+            public void onUpdate(String message) {
+                //ẩn progress bar
+                showProgresbar(false);
+
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+
+
+
 //            @Override
 //            public void onPost(CToPBResponse response) {
 //                //ẩn progress bar
@@ -809,7 +825,7 @@ public class MainKiemDinhActivity
 //                    e.printStackTrace();
 //                }
 //            }
-//
+
 //            @Override
 //            public HashMap<String, SoapObject> filterDataReal(SoapObject response) {
 //                //lọc từ response trả về những giá trị thực sự của API
@@ -846,38 +862,67 @@ public class MainKiemDinhActivity
 //                }
 //                return result;
 //            }
-//        };
 
-//        soapSearchCto = new SoapXML.AsyncSoap(
-//                CToPBResponse.class,
-//                callBackCToKD,
-//                SoapXML.METHOD.CTO_KD.getNameMethod(),
-//                SoapXML.getURL(mURL),
-//                SoapXML.METHOD.CTO_KD.getNameParams()
-//        );
-//
-//        soapSearchCto.execute(requestParams);
+            @Override
+            public void onPostData(List<CToPBResponse> dataResponse) {
+                Log.d(TAG, "onPostData: ");
+                //ẩn progress bar
+                showProgresbar(false);
+
+                //Xử lý kết quả
+                try {
+                    doProcessAfterSearchOnline(dataResponse);
+                } catch (Exception e) {
+                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onPostEror(ThongBaoResponse errorResponse) {
+                Log.d(TAG, "onPostEror: ");
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, errorResponse.getThongbao(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        };
+
+        soapSearchCto = new SoapXML.AsyncSoap(
+                CToPBResponse.class,
+                ThongBaoResponse.class,
+                "thongbao",
+                callBackCToKD,
+                SoapXML.METHOD.CTO_KD.getNameMethod(),
+                SoapXML.getURL(mURL),
+                SoapXML.METHOD.CTO_KD.getNameParams()
+        );
+
+        soapSearchCto.execute(requestParams);
 
     }
 
-    private void doProcessAfterSearchOnline(CToPBResponse response) throws Exception {
-        if (response == null)
+    private void doProcessAfterSearchOnline(List<CToPBResponse>  listResponse) throws Exception {
+        if (listResponse == null)
             throw new Exception(Common.MESSAGE.ex06.getContent());
 
-        //lấy các dữ liệu cần thiết ghi vào database
-        CongTo congTo = new CongTo();
+        for(CToPBResponse cToPBResponse: listResponse)
+        {
+            //lấy các dữ liệu cần thiết ghi vào database
+            CongTo congTo = new CongTo();
 //        congTo.setMA_DVIQLY(response.getMA_DVIQLY());
-        congTo.setMA_DVIQLY(mStringDvi);
-        //tạm thời chỉ số tháo đang lược bỏ đi từ server
-        congTo.setCHISO_THAO("");
-        congTo.setCLOAI(String.valueOf(response.getMA_CLOAI()));
-        congTo.setMA_CTO(response.getMA_CTO());
-        congTo.setNAMSX(response.getNAM_SX());
-        congTo.setSO_CTO(response.getSO_CTO());
-        congTo.setNGAY_NHAP(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
-        congTo.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
-        congTo.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
-        mSqlDAO.insertTBL_CTO_GUI_KD(congTo);
+            congTo.setMA_DVIQLY(mStringDvi);
+            //tạm thời chỉ số tháo đang lược bỏ đi từ server
+            congTo.setCHISO_THAO("");
+            congTo.setCLOAI(String.valueOf(cToPBResponse.getMA_CLOAI()));
+            congTo.setMA_CTO(cToPBResponse.getMA_CTO());
+            congTo.setNAMSX(cToPBResponse.getNAM_SX());
+            congTo.setSO_CTO(cToPBResponse.getSO_CTO());
+            congTo.setNGAY_NHAP(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
+            congTo.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+            congTo.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+            mSqlDAO.insertTBL_CTO_GUI_KD(congTo);
+
+        }
 
         //làm mới lại list với việc search local
         searchLocal(mEtSearchOnline.getText().toString());
@@ -1096,17 +1141,32 @@ public class MainKiemDinhActivity
         }
     }
 
-    private void fillDataReyclerFull() throws Exception {
-        int mCountCto = 0;
-        mCtoKDAdapter = new DsCongToAdapter(this, mListCtoKD);
-        ((DsCongToAdapter) mCtoKDAdapter).setMenuBottomKD(menuBottomKD);
-        mRvCto.setAdapter(mCtoKDAdapter);
-        mCountCto = mListCtoKD.size();
 
+    private void fillDataReyclerFull() throws Exception {
+        int mCountCto = mListCtoKD.size();
+        if (mCtoKDAdapter == null) {
+            mCtoKDAdapter = new DsCongToAdapter(this, mListCtoKD);
+            mCtoKDAdapter.setMenuBottomKD(menuBottomKD);
+            mRvCto.setAdapter(mCtoKDAdapter);
+        } else {
+            mCtoKDAdapter.setMenuBottomKD(menuBottomKD);
+            mCtoKDAdapter.refresh(mListCtoKD);
+
+        }
         mRvCto.invalidate();
 
         //set text thống kê cto theo số item adapter
         setTextCountCtoAndDate(mCountCto);
+//        int mCountCto = 0;
+//        mCtoKDAdapter = new DsCongToAdapter(this, mListCtoKD);
+//        ((DsCongToAdapter) mCtoKDAdapter).setMenuBottomKD(menuBottomKD);
+//        mRvCto.setAdapter(mCtoKDAdapter);
+//        mCountCto = mListCtoKD.size();
+//
+//        mRvCto.invalidate();
+//
+//        //set text thống kê cto theo số item adapter
+//        setTextCountCtoAndDate(mCountCto);
     }
 
     private void fillDataReyclerLocal(Common.KIEU_CHUONG_TRINH kieuCongTo, List<CongToProxy> data) throws Exception {

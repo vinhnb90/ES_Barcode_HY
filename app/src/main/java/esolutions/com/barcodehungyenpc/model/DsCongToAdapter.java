@@ -2,6 +2,7 @@ package esolutions.com.barcodehungyenpc.model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -107,14 +108,23 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
         if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
             //ẩn nút
+            holder.btnXoa.setVisibility(View.GONE);
             holder.btnChon.setVisibility(View.VISIBLE);
             //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
             holder.btnGhim.setVisibility(View.VISIBLE);
+
+            RelativeLayout.LayoutParams paramsChon = (RelativeLayout.LayoutParams) holder.btnChon.getLayoutParams();
+            paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.btnChon.setLayoutParams(paramsChon);
+
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            }else {
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            }
             params.addRule(RelativeLayout.LEFT_OF, R.id.btn_chon);
             holder.btnGhim.setLayoutParams(params);
-
-            holder.btnXoa.setVisibility(View.GONE);
         }
 
         //xử lý nút ghim

@@ -354,17 +354,18 @@
                     android:visibility="visible" />
 
                 <Button
-                    android:layout_toLeftOf="@+id/btn_chon"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:id="@+id/btn_ghim"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_5sdp"
                     android:background="@drawable/xml_border_full_type2"
                     android:drawableRight="@mipmap/ic_ghim"
 
                     android:paddingLeft="@dimen/_5sdp"
                     android:text="Ghim"
                     android:textColor="@color/white"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/btn_chon"
                     />
 
                 <Button

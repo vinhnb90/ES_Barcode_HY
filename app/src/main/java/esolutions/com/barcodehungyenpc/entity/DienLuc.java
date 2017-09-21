@@ -12,6 +12,10 @@ public class DienLuc {
         ID = -1;
     }
 
+    public DienLuc(String MA_DVIQLY) {
+        this.MA_DVIQLY = MA_DVIQLY;
+    }
+
     public int getID() {
         return ID;
     }
