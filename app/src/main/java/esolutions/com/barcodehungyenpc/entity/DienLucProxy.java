@@ -24,7 +24,7 @@ public class DienLucProxy extends CursorItemProxy {
         if(mDienLuc.getID()==-1) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
-            mDienLuc.setID(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_DIENLUC.ID.getNameCollumn())));
+            mDienLuc.setID(cursor.getInt(cursor.getColumnIndex(SqlQuery.TBL_DIENLUC.ID_TBL_DIENLUC.getNameCollumn())));
         }
         return mDienLuc.getID();
     }

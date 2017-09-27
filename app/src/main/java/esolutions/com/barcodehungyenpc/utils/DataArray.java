@@ -34,7 +34,7 @@ public class DataArray extends Vector<DataPlusID> implements KvmSerializable {
 
         DataPlusID daten = new DataPlusID();
         daten.setProperty(0, soapObject.getProperty("filterDataReal"));
-        daten.setProperty(1, soapObject.getProperty("ID"));
+        daten.setProperty(1, soapObject.getProperty("ID_TBL_DIENLUC"));
 
         this.add(daten);
     }

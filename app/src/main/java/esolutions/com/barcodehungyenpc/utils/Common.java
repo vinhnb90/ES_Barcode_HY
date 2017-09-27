@@ -125,9 +125,11 @@ public class Common {
         HHmmss,
         yyyyMMdd,
         yyyyMMddHHmmssSSS,
+        yyyyMMddHHmmssSSZ,
         MMyyyy,
         ddMMyyyy,
         ddMMyyyyHHmmss,
+
         FULL;
 
         @Override
@@ -137,7 +139,9 @@ public class Common {
             if (this == yyyyMMdd)
                 return "yyyyMMdd";
             if (this == yyyyMMddHHmmssSSS)
-                return "yyyyMMddHHmmssSSS";
+                return "yyyyMMddHHmmss";
+            if (this == yyyyMMddHHmmssSSZ)
+                return "yyyy-MM-dd'T'hh:mm:ssZ";
             if (this == MMyyyy)
                 return "MM/yyyy";
             if (this == ddMMyyyy)
@@ -194,6 +198,64 @@ public class Common {
         }
     }
 
+    public enum CHON {
+        CHUA_GUI(0, "Chưa gửi"),
+        GUI_THANH_CONG(1, "Đã gửi"),
+        GUI_THAT_BAI(2, "Gửi thất bại");
+        private int code;
+        private String name;
+
+        CHON(int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static CHON findNameBy(int code) {
+            for (CHON v : values()) {
+                if (v.getCode() == code) {
+                    return v;
+                }
+            }
+            return null;
+        }
+    }
+
+//    public enum REQUEST_CHON {
+//        HUY(0, "Gửi yêu cầu hủy"),
+//        GUI(1, "Gửi yêu cầu đăng ký");
+//        private int code;
+//        private String name;
+//
+//        REQUEST_CHON(int code, String name) {
+//            this.code = code;
+//            this.name = name;
+//        }
+//
+//        public int getCode() {
+//            return code;
+//        }
+//
+//        public String getName() {
+//            return name;
+//        }
+//
+//        public static REQUEST_CHON findNameBy(int code) {
+//            for (REQUEST_CHON v : values()) {
+//                if (v.getCode() == code) {
+//                    return v;
+//                }
+//            }
+//            return null;
+//        }
+//    }
 
     public enum TRANG_THAI_GHIM {
         CHUA_GHIM(0),
@@ -252,6 +314,9 @@ public class Common {
         ex22("ex22", "Chưa có thiết bị nào được chọn để gửi kiểm định...!"),
         ex23("ex23", "Thao tác tải đơn vị phiên trước chưa kết thúc...!"),
         ex24("ex24", "Đăng nhập không thành công, vui lòng kiểm tra lại thông tin!"),
+        ex25("ex25", "Vui lòng chọn đơn vị!"),
+        ex26("ex26", "Quá trình gửi kiểm định kết thúc!"),
+
         ex("ex", "Gặp vấn đề không xác định.");
 
         private String code, content;
@@ -280,12 +345,12 @@ public class Common {
         if (time == null || time.trim().isEmpty())
             return "";
 
-        if (typeDefault != DATE_TIME_TYPE.FULL) {
-            time = time.replaceAll("-", "");
-            for (int i = time.length(); i <= 17; i++) {
-                time += "0";
-            }
-        }
+//        if (typeDefault != DATE_TIME_TYPE.FULL) {
+//            time = time.replaceAll("-", "");
+//            for (int i = time.length(); i <= 17; i++) {
+//                time += "0";
+//            }
+//        }
 
         long longDate = Common.convertDateToLong(time, typeDefault);
 

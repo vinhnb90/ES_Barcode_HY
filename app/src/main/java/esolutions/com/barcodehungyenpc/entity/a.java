@@ -1,59 +1,54 @@
-package esolutions.com.barcodehungyenpc.utils;
+package esolutions.com.barcodehungyenpc.entity;
 
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
 
-public class DataPlusID implements KvmSerializable
+public class a implements KvmSerializable
 {
+    public ListUpdate_GuiKD_CTO listUpdateGuiKDCTO;
 
-    private String data;
-    private int ID;
+    public a(){}
 
-    @Override
+
+    public a(ListUpdate_GuiKD_CTO listUpdateGuiKDCTO) {
+        this.listUpdateGuiKDCTO = listUpdateGuiKDCTO;
+    }
+
+
     public Object getProperty(int arg0) {
 
         switch(arg0)
         {
         case 0:
-            return data;
-        case 1:
-            return ID;
-        }        
+            return listUpdateGuiKDCTO;
+        }
+
         return null;
     }
 
-    @Override
     public int getPropertyCount() {
-        return 2;
-    }
 
+        return 1;
+    }
     @Override
     public void getPropertyInfo(int index, Hashtable arg1, PropertyInfo info) {
         switch(index)
         {
         case 0:
-            info.type = PropertyInfo.STRING_CLASS;
-            info.name = "filterDataReal";
-            break;
-        case 1:
-            info.type = PropertyInfo.INTEGER_CLASS;
-            info.name = "ID_TBL_DIENLUC";
+            info.type = PropertyInfo.VECTOR_CLASS;
+            info.name = "NewDataSet";
             break;
         default:break;
         }
     }
 
-    @Override
     public void setProperty(int index, Object value) {
         switch(index)
         {
         case 0:
-            data = value.toString();
-            break;
-        case 1:
-            ID = Integer.parseInt(value.toString());
+            this.listUpdateGuiKDCTO = (ListUpdate_GuiKD_CTO)value;
             break;
         default:
             break;

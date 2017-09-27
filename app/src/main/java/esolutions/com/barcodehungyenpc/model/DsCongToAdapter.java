@@ -29,7 +29,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
     private List<CongToProxy> mListCongToProxies;
     private OnDsCtoAdapterIteraction mListener;
     private static Drawable sDrawableUnGhim, sDrawableGhim, sDrawableChon, sDrawableUnChon;
-    private static int sWhiteColor, sLightColor;
+    private static int sWhiteColor, sLightColor, sBlackColor;
     private Common.MENU_BOTTOM_KD menuBottomKD;
     //phân biệt adapter đang sử dụng các công tơ được ghim = true
     // hoặc đang sử dụng tất cả các công tơ = false
@@ -57,6 +57,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
         sWhiteColor = ContextCompat.getColor(mContext.getApplicationContext(), R.color.white);
         sLightColor = ContextCompat.getColor(mContext.getApplicationContext(), R.color.primary_light);
+        sBlackColor = ContextCompat.getColor(mContext.getApplicationContext(), R.color.black_less);
+
 //        this.isDsCtoGhim = isDsCtoGhim;
 
         if (mContext instanceof OnDsCtoAdapterIteraction) {
@@ -66,7 +68,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         }
     }
 
-    public void setMenuBottomKD(Common.MENU_BOTTOM_KD menuBottomKD) {
+    public void setMenuBottom(Common.MENU_BOTTOM_KD menuBottomKD) {
         this.menuBottomKD = menuBottomKD;
     }
 
@@ -81,53 +83,28 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         Common.runAnimationClickView(holder.relativeLayout, R.anim.twinking_view, Common.TIME_DELAY_ANIM);
 
         holder.tvSTT.setText(position + 1 + "");
-        holder.tvSoCto.setText(mListCongToProxies.get(position).getmSoCto());
-        holder.tvMaCto.setText(mListCongToProxies.get(position).getmMaCto());
-        holder.tvMaCLoai.setText(mListCongToProxies.get(position).getmMaChungLoai());
+        holder.tvSoCto.setText(mListCongToProxies.get(position).getSO_CTO());
+        holder.tvMaCto.setText(mListCongToProxies.get(position).getMA_CTO());
+        holder.tvMaCLoai.setText(mListCongToProxies.get(position).getMA_CLOAI());
 
-        holder.tvCSThao.setText(mListCongToProxies.get(position).getmChiSoThao());
+        holder.tvCSThao.setText(mListCongToProxies.get(position).getCHISO_THAO());
         //hiện tại không cần hiển thị chỉ số tháo
         holder.tvCSThao.setVisibility(View.INVISIBLE);
 
-        holder.tvNamSx.setText(mListCongToProxies.get(position).getmNamSX());
-        holder.tvMaDvi.setText(mListCongToProxies.get(position).getMaDLuc());
-        holder.tvNgayNhap.setText(Common.convertDateSQLToDateUI(mListCongToProxies.get(position).getNGAY_NHAP()));
+        holder.tvNamSx.setText(mListCongToProxies.get(position).getNAM_SX());
+        holder.tvMaDvi.setText(mListCongToProxies.get(position).getMA_DVIQLY());
+        holder.tvNgayNhap.setText(Common.convertDateSQLToDateUI(mListCongToProxies.get(position).getNGAY_NHAP_MTB()));
 
-        //một số khác biệt giữa ds ghim và ds tất cả
-        if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
-            //ẩn nút
-            holder.btnChon.setVisibility(View.GONE);
-            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
-            holder.btnGhim.setVisibility(View.VISIBLE);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.btnGhim.setLayoutParams(params);
-
-            holder.btnXoa.setVisibility(View.VISIBLE);
-        }
-
-        if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
-            //ẩn nút
-            holder.btnXoa.setVisibility(View.GONE);
-            holder.btnChon.setVisibility(View.VISIBLE);
-            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
-            holder.btnGhim.setVisibility(View.VISIBLE);
-
-            RelativeLayout.LayoutParams paramsChon = (RelativeLayout.LayoutParams) holder.btnChon.getLayoutParams();
-            paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.btnChon.setLayoutParams(paramsChon);
-
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            }else {
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-            }
-            params.addRule(RelativeLayout.LEFT_OF, R.id.btn_chon);
-            holder.btnGhim.setLayoutParams(params);
-        }
 
         //xử lý nút ghim
+        holder.btnGhim.setText("GHIM");
+        holder.btnGhim.setText("GHIM");
+        holder.btnGhim.setClickable(true);
+        holder.btnChon.setClickable(true);
+        int valueInPixels = (int) mContext.getResources().getDimension(R.dimen._5sdp);
+        holder.btnGhim.setPadding(valueInPixels, 0, 0, 0);
+        holder.btnChon.setPadding(valueInPixels, 0, 0, 0);
+
         int getTRANG_THAI_GHIM = mListCongToProxies.get(position).getTRANG_THAI_GHIM();
         Drawable drawable = null;
         int color = 0;
@@ -157,7 +134,121 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         drawable.setBounds(0, 0, w, h);
         holder.btnChon.setCompoundDrawables(null, null, drawable, null);
 
+        RelativeLayout.LayoutParams paramsGhim = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
+        RelativeLayout.LayoutParams paramsChon = (RelativeLayout.LayoutParams) holder.btnChon.getLayoutParams();
+        //một số khác biệt giữa ds ghim và ds tất cả
+        if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
+            //ẩn nút
+            holder.btnXoa.setVisibility(View.VISIBLE);
+            holder.btnGhim.setVisibility(View.VISIBLE);
+            holder.btnChon.setVisibility(View.GONE);
+
+            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
+            paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            valueInPixels = (int) mContext.getResources().getDimension(R.dimen._5sdp);
+            paramsGhim.setMargins(valueInPixels, 0, 0, 0);
+            holder.btnGhim.setLayoutParams(paramsGhim);
+
+            //xử lý dữ liệu gửi
+            int CHON = mListCongToProxies.get(position).getCHON();
+
+            //nếu gửi thành công
+            if (CHON == Common.CHON.GUI_THANH_CONG.getCode()) {
+                //đổi màu đen khi thao tác với server
+                color = sBlackColor;
+                holder.btnGhim.setClickable(false);
+                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                holder.btnGhim.setPadding(0, 0, 0, 0);
+                holder.btnGhim.setClickable(false);
+                holder.btnGhim.setCompoundDrawables(null, null, null, null);
+                holder.btnGhim.setText(Common.CHON.findNameBy(CHON).getName());
+                holder.btnGhim.setLayoutParams(paramsGhim);
+            }
+
+            //nếu gửi thất bại
+            if (CHON == Common.CHON.GUI_THAT_BAI.getCode()) {
+                color = sBlackColor;
+                holder.btnGhim.setClickable(false);
+                holder.btnGhim.setPadding(0, 0, 0, 0);
+                holder.btnGhim.setClickable(false);
+                holder.btnGhim.setCompoundDrawables(null, null, null, null);
+                holder.btnGhim.setText(Common.CHON.findNameBy(CHON).getName());
+            }
+
+        }
+
+
+        if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
+            //ẩn và hiện nút
+            holder.btnXoa.setVisibility(View.GONE);
+            holder.btnGhim.setVisibility(View.VISIBLE);
+            holder.btnGhim.setClickable(true);
+            holder.btnChon.setClickable(true);
+            holder.btnChon.setVisibility(View.VISIBLE);
+
+            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
+            paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.btnChon.setLayoutParams(paramsChon);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                paramsGhim.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            } else {
+                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            }
+            paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_chon);
+
+
+            //xử lý dữ liệu gửi
+            int CHON = mListCongToProxies.get(position).getCHON();
+
+            //nếu gửi thành công
+            if (CHON == Common.CHON.GUI_THANH_CONG.getCode()) {
+                //đổi màu đen khi thao tác với server
+                color = sBlackColor;
+                holder.btnChon.setClickable(false);
+                paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_ghim);
+                holder.btnChon.setPadding(0, 0, 0, 0);
+                holder.btnChon.setClickable(false);
+                holder.btnChon.setCompoundDrawables(null, null, null, null);
+                holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
+
+            }
+
+            //nếu gửi thất bại
+            if (CHON == Common.CHON.GUI_THAT_BAI.getCode()) {
+                color = sBlackColor;
+                holder.btnChon.setClickable(false);
+                holder.btnChon.setPadding(0, 0, 0, 0);
+                holder.btnChon.setClickable(false);
+                holder.btnChon.setCompoundDrawables(null, null, null, null);
+                holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
+            }
+
+
+//                       if (CHON == Common.CHON.GUI_THAT_BAI.getCode() || CHON == Common.CHON.GUI_THANH_CONG.getCode()) {
+//                //đổi màu đen khi thao tác với server
+//                color = sBlackColor;
+//                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                holder.btnGhim.setPadding(0, 0, 0, 0);
+//                holder.btnGhim.setClickable(false);
+//                holder.btnGhim.setCompoundDrawables(null, null, null, null);
+//                holder.btnGhim.setText(Common.CHON.findNameBy(CHON).getName());
+//                holder.btnGhim.setLayoutParams(paramsGhim);
+//                if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
+//
+//                }
+//
+//                if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
+//                    holder.btnChon.setVisibility(View.GONE);
+//                }
+//            }
+        }
+
+
         //set Background row ghim
+        holder.btnChon.setLayoutParams(paramsChon);
+        holder.btnGhim.setLayoutParams(paramsGhim);
         holder.relativeLayout.setBackgroundColor(color);
 
 //        floatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_check_white_24dp);

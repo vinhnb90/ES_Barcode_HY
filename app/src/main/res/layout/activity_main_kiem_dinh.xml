@@ -261,6 +261,7 @@
                     android:visibility="visible" />
 
                 <TextView
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:id="@+id/et_thongKe"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -280,6 +281,21 @@
                     android:textCursorDrawable="@null"
                     android:textSize="@dimen/_10sdp"
                     android:visibility="visible" />
+
+
+                <Button
+                    android:id="@+id/btn_clear_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/btn_ghim"
+                    android:background="@color/accent"
+                    android:layout_toStartOf="@+id/btn_ghim"
+                    android:drawableRight="@mipmap/ic_delete"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="Xóa tất cả"
+                    android:textColor="@color/white" />
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"

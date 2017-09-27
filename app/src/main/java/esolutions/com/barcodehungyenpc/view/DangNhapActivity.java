@@ -106,12 +106,12 @@ public class DangNhapActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_dangnhap);
-//        super.hideBar();
+        super.hideBar();
 
-        SpannableString s = new SpannableString("Tìm kiếm công tơ");
-        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, "Tìm kiếm công tơ".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        getSupportActionBar().setTitle(s);
-        getSupportActionBar().setElevation(0);
+//        SpannableString s = new SpannableString("Tìm kiếm công tơ");
+//        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, "Tìm kiếm công tơ".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        getSupportActionBar().setTitle(s);
+//        getSupportActionBar().setElevation(0);
         if (Common.checkPermission(this)) {
             return;
         }
@@ -398,7 +398,8 @@ public class DangNhapActivity extends BaseActivity implements
             }
 
             @Override
-            public void onPostMessageSever(ThongBaoResponse errorResponse) {
+            public void onPostMessageSever(String errorResponse) {
+
             }
 
         };
@@ -485,13 +486,22 @@ public class DangNhapActivity extends BaseActivity implements
             }
 
             @Override
-            public void onPostMessageSever(ThongBaoResponse errorResponse) {
+            public void onPostMessageSever(String errorResponse) {
                 Log.e(TAG, "onPostData: " + errorResponse.toString());
                 mPbarDownDvi.setVisibility(View.GONE);
                 mIbtnDownDvi.setVisibility(View.VISIBLE);
-                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, errorResponse.getThongbao(), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, errorResponse, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
+
+//            @Override
+//            public void onPostMessageSever(ThongBaoResponse errorResponse) {
+//                Log.e(TAG, "onPostData: " + errorResponse.toString());
+//                mPbarDownDvi.setVisibility(View.GONE);
+//                mIbtnDownDvi.setVisibility(View.VISIBLE);
+//                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, errorResponse.getThongbao(), Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
         };
 
         soapDownloadDvi = new SoapXML.AsyncSoap(
@@ -557,7 +567,13 @@ public class DangNhapActivity extends BaseActivity implements
         }
 
         if (TextUtils.isEmpty(mEtPass.getText().toString())) {
-            mEtPass.setError(Common.MESSAGE.ex03.getContent());
+            mEtPass.setError(Common.MESSAGE.ex25.getContent());
+            return false;
+        }
+
+        if (mCompatSpinnerDvi.getAdapter().getCount() == 0) {
+            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex03.getContent(), Snackbar.LENGTH_LONG);
+            snackbar.show();
             return false;
         }
 

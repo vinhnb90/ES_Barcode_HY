@@ -17,7 +17,7 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     public static final String PATH_FOLDER_DB = Environment.getExternalStorageDirectory() + File.separator + "BARCODE_HY" + File.separator;
     public static final String DB_NAME = "BARCODE_HUNGYEN_PC.s3db";
-    private static final int DB_VER = 21;
+    private static final int DB_VER = 35;
 
     public SqlHelper(Context context) {
         super(context, PATH_FOLDER_DB + DB_NAME, null, DB_VER);
@@ -31,6 +31,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SqlQuery.getCreateTBL_CTO_PB());
         sqLiteDatabase.execSQL(SqlQuery.getCreateTBL_CTO_GUI_KD());
         sqLiteDatabase.execSQL(SqlQuery.getCreateTBL_DIENLUC());
+        sqLiteDatabase.execSQL(SqlQuery.getCreateTBL_HISTORY());
     }
 
     @Override
@@ -39,6 +40,7 @@ public class SqlHelper extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL(SqlQuery.getDropTBL_CTO_PB());
             sqLiteDatabase.execSQL(SqlQuery.getDropTBL_CTO_GUI_KD());
             sqLiteDatabase.execSQL(SqlQuery.getDropTBL_DIENLUC());
+            sqLiteDatabase.execSQL(SqlQuery.getDropTBL_HISTORY()    );
             onCreate(sqLiteDatabase);
         }
     }
