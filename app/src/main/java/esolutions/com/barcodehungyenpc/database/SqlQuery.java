@@ -126,7 +126,9 @@ public class SqlQuery {
         ID_TBL_CTO("ID_TBL_CTO"),
         TYPE_TBL_CTO("TYPE_TBL_CTO"),
         TYPE_SESSION("TYPE_SESSION"),
-        DATE_SESSION("DATE_SESSION");
+        DATE_SESSION("DATE_SESSION"),
+        TYPE_RESULT("TYPE_RESULT"),
+        INFO_SEARCH("INFO_SEARCH");
 
         private String mNameCollumn;
 
@@ -203,7 +205,9 @@ public class SqlQuery {
                 TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " TEXT, " +
                 TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() + " TEXT, " +
                 TBL_HISTORY.TYPE_SESSION.getNameCollumn() + " TEXT, " +
-                TBL_HISTORY.DATE_SESSION.getNameCollumn() + " TEXT" +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() + " TEXT, " +
+                TBL_HISTORY.TYPE_RESULT.getNameCollumn() + " TEXT, " +
+                TBL_HISTORY.INFO_SEARCH.getNameCollumn() + " TEXT" +
                 ");";
     }
 
@@ -290,8 +294,11 @@ public class SqlQuery {
                 TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + ", " +
                 TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() + ", " +
                 TBL_HISTORY.TYPE_SESSION.getNameCollumn() + ", " +
-                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
-                ") " + "VALUES (?, ?, ?, ?" +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() + ", " +
+                TBL_HISTORY.TYPE_RESULT.getNameCollumn() + ", " +
+                TBL_HISTORY.INFO_SEARCH.getNameCollumn() +
+
+                ") " + "VALUES (?, ?, ?, ?, ?, ?" +
                 ");"
                 ;
     }
@@ -387,8 +394,42 @@ public class SqlQuery {
                 " = " + Common.TRANG_THAI_GHIM.DA_GHIM.getCode() +
                 " AND " +
                 TBL_CTO_GUI_KD.TRANG_THAI_CHON +
-                " = " + Common.TRANG_THAI_CHON.DA_CHON.getCode();
+                " = " + Common.TRANG_THAI_CHON.DA_CHON.getCode() +
+                " AND " +
+                TBL_CTO_GUI_KD.CHON +
+                " = " + Common.CHON.CHUA_GUI.getCode();
     }
+
+    public static String getBydateALLHistoryCtoKD() {
+        return "SELECT DISTINCT *" +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " BETWEEN ? AND ? " +
+                " GROUP BY " +
+                TBL_HISTORY.DATE_SESSION +
+                " ORDER BY " +
+                TBL_HISTORY.DATE_SESSION +
+                " DESC";
+    }
+
+    public static String getByDateDeleteAllHistory() {
+        return "DELETE" +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " BETWEEN ? AND ? "
+                ;
+    }
+
 
     public static String getAllCongToByDateKD() {
         return "SELECT * " +
@@ -423,6 +464,7 @@ public class SqlQuery {
                 " = ? "
                 ;
     }
+
     public static String updateGhimCtoKDUploadSuccess() {
         return "UPDATE " +
                 TBL_CTO_GUI_KD.getNameTable() +
@@ -480,6 +522,21 @@ public class SqlQuery {
 //                " = ?"
                 ;
     }
+
+    public static String getByDateDeleteHistory() {
+        return "DELETE FROM " +
+                TBL_HISTORY.getNameTable()
+                +
+                " WHERE " +
+                TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +
+                " = ? AND " +
+                TBL_HISTORY.TYPE_TBL_CTO +
+                " = ? AND " +
+                TBL_HISTORY.DATE_SESSION +
+                " BETWEEN ? AND ?"
+                ;
+    }
+
 
     public static String getDeleteAllTBL_CTO_GUI_KD() {
         return "DELETE FROM " +
@@ -591,6 +648,51 @@ public class SqlQuery {
                 + " = ?"
                 ;
     }
+
+    public static String countByDateSessionHistoryCto() {
+        return "SELECT COUNT(*) FROM " +
+                TBL_HISTORY.getNameTable()
+                +
+                " WHERE " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_SESSION.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_RESULT.getNameCollumn()
+                + " = ?"
+                ;
+    }
+
+
+    public static String getByDateAllCongToKDByDATE_SESSION() {
+        return "SELECT B.* FROM(SELECT " +
+                TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +
+                " FROM " +
+                TBL_HISTORY.getNameTable()
+                +
+                " WHERE " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_SESSION.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn()
+                + " = '"
+                + Common.TYPE_TBL_CTO.KD.getCode()
+                + "' ) AS A INNER JOIN " +
+                TBL_CTO_GUI_KD.getNameTable() +
+                " AS B ON A." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +
+                " = B." + TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn()
+                ;
+    }
+
+
     //endregion
 
     //region TBL_DIENLUC query

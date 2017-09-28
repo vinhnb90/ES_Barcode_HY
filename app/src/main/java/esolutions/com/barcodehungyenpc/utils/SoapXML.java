@@ -265,9 +265,10 @@ public class SoapXML {
                 //2 giá trị này được cung cấp bởi server, nên debug các giá trị cây của soapObject để nắm rõ
 
 
-                HashMap<String, String> hashMap = new HashMap<>();
+
                 ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
                 for (int j = 0; j < proInfoLv1.getPropertyCount(); j++) {
+                    HashMap<String, String> hashMap = new HashMap<>();
                     SoapObject finalObject = (SoapObject) proInfoLv1.getProperty(j);
                     for (int i = 0; i < finalObject.getPropertyCount(); i++) {
                         Object object = finalObject.getProperty(i);

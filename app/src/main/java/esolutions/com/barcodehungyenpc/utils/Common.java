@@ -127,8 +127,10 @@ public class Common {
         yyyyMMddHHmmssSSS,
         yyyyMMddHHmmssSSZ,
         MMyyyy,
+        ddMMyyyyHHmm,
         ddMMyyyy,
         ddMMyyyyHHmmss,
+//        YYYY-MM-DD HH:MM:SS.SSS
 
         FULL;
 
@@ -148,6 +150,9 @@ public class Common {
                 return "dd/MM/yyyy";
             if (this == ddMMyyyyHHmmss)
                 return "dd/MM/yyyy HH:mm:ss";
+            if (this == ddMMyyyyHHmm)
+                return "dd/MM/yyyy HH'h'mm";
+
             if (this == FULL)
                 return "yyyy-MM-dd HH:mm:ss";
             return super.toString();
@@ -287,6 +292,83 @@ public class Common {
         }
     }
 
+    public enum TYPE_RESULT {
+        SUCCESS("SUCCESS","THÀNH CÔNG"),
+        ERROR("ERROR","CÓ LỖI");
+
+        private String code;
+        private String title;
+
+        TYPE_RESULT(String code, String title) {
+            this.code = code;
+            this.title = title;
+        }
+
+        public static TYPE_RESULT findNameBy(String code) {
+            for (TYPE_RESULT v : values()) {
+                if (v.getCode().equals(code)) {
+                    return v;
+                }
+            }
+            return null;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+
+    public enum TYPE_SESSION {
+        DOWNLOAD("DOWNLOAD", "Thông tin tìm kiếm"),
+        UPLOAD("UPLOAD", "Số thiết bị gửi kiểm định");
+
+        private String code;
+        private String title;
+
+        TYPE_SESSION(String code, String title) {
+            this.code = code;
+            this.title = title;
+        }
+
+        public static TYPE_SESSION findNameBy(String code) {
+            for (TYPE_SESSION v : values()) {
+                if (v.getCode().equals(code)) {
+                    return v;
+                }
+            }
+            return null;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+    public enum TYPE_TBL_CTO {
+        PB("PB"),
+        KD("KD");
+
+        private String code;
+
+        TYPE_TBL_CTO(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+
     public enum MESSAGE {
         ex01("ex01", "File dữ liệu không tồn tại trong bộ nhớ sdcard."),
         ex02("ex02", "Gặp vấn đề khi lấy dữ liệu trong máy tính bảng."),
@@ -337,7 +419,7 @@ public class Common {
 
     public static String getDateTimeNow(Common.DATE_TIME_TYPE formatDate) {
         SimpleDateFormat df = new SimpleDateFormat(formatDate.toString());
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+//        df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return df.format(Calendar.getInstance().getTime());
     }
 
@@ -358,9 +440,16 @@ public class Common {
         return dateByDefaultType;
     }
 
+    public static Date convertDateUIToDateSQL(String dateUI, DATE_TIME_TYPE typeDefault) throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat(typeDefault.toString());
+//        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date dateParse = (Date) formatter.parse(dateUI);
+        return dateParse;
+    }
+
     public static long convertDateToLong(String date, DATE_TIME_TYPE typeDefault) {
         SimpleDateFormat formatter = new SimpleDateFormat(typeDefault.toString());
-        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+//        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date dateParse;
         try {
             dateParse = (Date) formatter.parse(date);
@@ -379,7 +468,7 @@ public class Common {
             return null;
 
         SimpleDateFormat df2 = new SimpleDateFormat(format.toString());
-        df2.setTimeZone(TimeZone.getTimeZone("GMT"));
+//        df2.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date(time);
         return df2.format(date);
     }
@@ -407,6 +496,27 @@ public class Common {
         String d = time.substring(0, 2);
 
         return y + m + d;
+    }
+
+
+    public static Date getEndOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
+    }
+
+    public static Date getStartOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 
 

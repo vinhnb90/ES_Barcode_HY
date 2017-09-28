@@ -1,6 +1,7 @@
 package esolutions.com.barcodehungyenpc.model;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import esolutions.com.barcodehungyenpc.R;
+import esolutions.com.barcodehungyenpc.database.SqlConnect;
+import esolutions.com.barcodehungyenpc.database.SqlDAO;
 import esolutions.com.barcodehungyenpc.entity.CongToProxy;
 import esolutions.com.barcodehungyenpc.utils.Common;
 
@@ -24,13 +27,13 @@ import esolutions.com.barcodehungyenpc.utils.Common;
  */
 
 public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoViewHolder> {
-
     private Context mContext;
     private List<CongToProxy> mListCongToProxies;
     private OnDsCtoAdapterIteraction mListener;
     private static Drawable sDrawableUnGhim, sDrawableGhim, sDrawableChon, sDrawableUnChon;
     private static int sWhiteColor, sLightColor, sBlackColor;
     private Common.MENU_BOTTOM_KD menuBottomKD;
+    private boolean isHistoryAdapter;
     //phân biệt adapter đang sử dụng các công tơ được ghim = true
     // hoặc đang sử dụng tất cả các công tơ = false
 //    private boolean isDsCtoGhim = false;
@@ -38,6 +41,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
     public DsCongToAdapter(Context mContext, List<CongToProxy> mListCto
 //            ,boolean isDsCtoGhim
     ) throws Exception {
+
+
         this.mContext = mContext;
         this.mListCongToProxies = new ArrayList<>();
         this.mListCongToProxies.addAll(mListCto);
@@ -72,6 +77,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         this.menuBottomKD = menuBottomKD;
     }
 
+    public void setHistoryAdapter(boolean historyAdapter) {
+        isHistoryAdapter = historyAdapter;
+    }
+
     @Override
     public DsCtoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(this.mContext).inflate(R.layout.row_rv_ds_cto, parent, false);
@@ -93,11 +102,11 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
         holder.tvNamSx.setText(mListCongToProxies.get(position).getNAM_SX());
         holder.tvMaDvi.setText(mListCongToProxies.get(position).getMA_DVIQLY());
-        holder.tvNgayNhap.setText(Common.convertDateSQLToDateUI(mListCongToProxies.get(position).getNGAY_NHAP_MTB()));
+        if (!isHistoryAdapter)
+            holder.tvNgayNhap.setText(Common.convertDateSQLToDateUI(mListCongToProxies.get(position).getNGAY_NHAP_MTB()));
 
 
         //xử lý nút ghim
-        holder.btnGhim.setText("GHIM");
         holder.btnGhim.setText("GHIM");
         holder.btnGhim.setClickable(true);
         holder.btnChon.setClickable(true);
@@ -225,24 +234,13 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
             }
 
+            //nếu là history thì disable click các nút
+            if (isHistoryAdapter) {
+                holder.btnChon.setClickable(false);
+                holder.btnGhim.setClickable(false);
+                holder.btnXoa.setClickable(false);
+            }
 
-//                       if (CHON == Common.CHON.GUI_THAT_BAI.getCode() || CHON == Common.CHON.GUI_THANH_CONG.getCode()) {
-//                //đổi màu đen khi thao tác với server
-//                color = sBlackColor;
-//                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//                holder.btnGhim.setPadding(0, 0, 0, 0);
-//                holder.btnGhim.setClickable(false);
-//                holder.btnGhim.setCompoundDrawables(null, null, null, null);
-//                holder.btnGhim.setText(Common.CHON.findNameBy(CHON).getName());
-//                holder.btnGhim.setLayoutParams(paramsGhim);
-//                if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
-//
-//                }
-//
-//                if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
-//                    holder.btnChon.setVisibility(View.GONE);
-//                }
-//            }
         }
 
 
