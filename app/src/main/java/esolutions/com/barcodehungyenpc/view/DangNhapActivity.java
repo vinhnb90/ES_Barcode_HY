@@ -474,7 +474,7 @@ public class DangNhapActivity extends BaseActivity implements
 
                     }
 
-                    //refresh data spin dien luc
+                    //refreshListKD data spin dien luc
                     setSpinDienLuc();
 
                 } catch (Exception e) {

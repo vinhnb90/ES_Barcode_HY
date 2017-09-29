@@ -1,113 +1,65 @@
 package esolutions.com.barcodehungyenpc.entity;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 /**
- * Created by VinhNB on 8/31/2017.
+ * Created by VinhNB on 8/8/2017.
  */
 
-public class CToResponse extends ResponseSoap {
-    @SerializedName("CHON")
-    @Expose
+public class CongToPB {
     private int CHON;
-    @SerializedName("STT")
-    @Expose
     private int STT;
-    @SerializedName("MA_CTO")
-    @Expose
+    private int ID_TBL_CTO_PB;
     private String MA_CTO;
-    @SerializedName("SO_CTO")
-    @Expose
     private String SO_CTO;
-    @SerializedName("MA_DVIQLY")
-    @Expose
     private String MA_DVIQLY;
-    @SerializedName("MA_CLOAI")
-    @Expose
     private String MA_CLOAI;
-    @SerializedName("NGAY_NHAP_HT")
-    @Expose
     private String NGAY_NHAP_HT;
-    @SerializedName("NAM_SX")
-    @Expose
     private String NAM_SX;
-    @SerializedName("LOAI_SOHUU")
-    @Expose
     private String LOAI_SOHUU;
-    @SerializedName("TEN_SOHUU")
-    @Expose
     private String TEN_SOHUU;
-    @SerializedName("MA_BDONG")
-    @Expose
     private String MA_BDONG;
-    @SerializedName("NGAY_BDONG")
-    @Expose
     private String NGAY_BDONG;
-    @SerializedName("NGAY_BDONG_HTAI")
-    @Expose
     private String NGAY_BDONG_HTAI;
-    @SerializedName("SO_PHA")
-    @Expose
     private String SO_PHA;
-    @SerializedName("SO_DAY")
-    @Expose
     private String SO_DAY;
-    @SerializedName("DONG_DIEN")
-    @Expose
     private String DONG_DIEN;
-    @SerializedName("VH_CONG")
-    @Expose
     private String VH_CONG;
-    @SerializedName("DIEN_AP")
-    @Expose
     private String DIEN_AP;
-    @SerializedName("HS_NHAN")
-    @Expose
     private String HS_NHAN;
-    @SerializedName("NGAY_KDINH")
-    @Expose
     private String NGAY_KDINH;
-    @SerializedName("CHISO_THAO")
-    @Expose
     private String CHISO_THAO;
-    @SerializedName("HSN")
-    @Expose
     private String HSN;
-
-    @SerializedName("NGAY_NHAP")
-    @Expose
     private String NGAY_NHAP;
-    public int getCHON() {
-        return CHON;
+//    private int mGhimCto;
+//    private String mTaiKhoan;
+
+    private String NGAY_NHAP_MTB;
+    private int TRANG_THAI_GHIM;
+    private int TRANG_THAI_CHON;
+    //Session đánh dấu phiên tải xuống và up lên của các công tơ
+
+    public CongToPB() {
+        ID_TBL_CTO_PB = -1;
+        STT = -1;
+        TRANG_THAI_GHIM = -1;
+        TRANG_THAI_CHON = -1;
+        CHON = -1;
     }
 
-    public void setCHON(int CHON) {
-        this.CHON = CHON;
+
+    public int getID_TBL_CTO_PB() {
+        return ID_TBL_CTO_PB;
     }
 
-    public int getSTT() {
-        return STT;
+    public void setID_TBL_CTO_PB(int ID_TBL_CTO_PB) {
+        this.ID_TBL_CTO_PB = ID_TBL_CTO_PB;
     }
 
     public void setSTT(int STT) {
         this.STT = STT;
     }
 
-    public String getMA_CTO() {
-        return MA_CTO;
-    }
-
-    public void setMA_CTO(String MA_CTO) {
-        this.MA_CTO = MA_CTO;
-    }
-
-    public String getSO_CTO() {
-        return SO_CTO;
-    }
-
-    public void setSO_CTO(String SO_CTO) {
-        this.SO_CTO = SO_CTO;
+    public int getSTT() {
+        return STT;
     }
 
     public String getMA_DVIQLY() {
@@ -126,20 +78,76 @@ public class CToResponse extends ResponseSoap {
         this.MA_CLOAI = MA_CLOAI;
     }
 
-    public String getNGAY_NHAP_HT() {
-        return NGAY_NHAP_HT;
-    }
-
-    public void setNGAY_NHAP_HT(String NGAY_NHAP_HT) {
-        this.NGAY_NHAP_HT = NGAY_NHAP_HT;
-    }
-
     public String getNAM_SX() {
         return NAM_SX;
     }
 
     public void setNAM_SX(String NAM_SX) {
         this.NAM_SX = NAM_SX;
+    }
+
+    public String getSO_CTO() {
+        return SO_CTO;
+    }
+
+    public void setSO_CTO(String SO_CTO) {
+        this.SO_CTO = SO_CTO;
+    }
+
+    public String getMA_CTO() {
+        return MA_CTO;
+    }
+
+    public void setMA_CTO(String MA_CTO) {
+        this.MA_CTO = MA_CTO;
+    }
+
+    public String getCHISO_THAO() {
+        return CHISO_THAO;
+    }
+
+    public void setCHISO_THAO(String CHISO_THAO) {
+        this.CHISO_THAO = CHISO_THAO;
+    }
+
+    public int getTRANG_THAI_GHIM() {
+        return TRANG_THAI_GHIM;
+    }
+
+    public void setTRANG_THAI_GHIM(int TRANG_THAI_GHIM) {
+        this.TRANG_THAI_GHIM = TRANG_THAI_GHIM;
+    }
+
+    public String getNGAY_NHAP_MTB() {
+        return NGAY_NHAP_MTB;
+    }
+
+    public void setNGAY_NHAP_MTB(String NGAY_NHAP_MTB) {
+        this.NGAY_NHAP_MTB = NGAY_NHAP_MTB;
+    }
+
+    public int getTRANG_THAI_CHON() {
+        return TRANG_THAI_CHON;
+    }
+
+    public void setTRANG_THAI_CHON(int TRANG_THAI_CHON) {
+        this.TRANG_THAI_CHON = TRANG_THAI_CHON;
+    }
+
+    public int getCHON() {
+        return CHON;
+    }
+
+    public void setCHON(int CHON) {
+        this.CHON = CHON;
+    }
+
+    public String getNGAY_NHAP_HT() {
+        return NGAY_NHAP_HT;
+    }
+
+    public void setNGAY_NHAP_HT(String NGAY_NHAP_HT) {
+        this.NGAY_NHAP_HT = NGAY_NHAP_HT;
     }
 
     public String getLOAI_SOHUU() {
@@ -236,14 +244,6 @@ public class CToResponse extends ResponseSoap {
 
     public void setNGAY_KDINH(String NGAY_KDINH) {
         this.NGAY_KDINH = NGAY_KDINH;
-    }
-
-    public String getCHISO_THAO() {
-        return CHISO_THAO;
-    }
-
-    public void setCHISO_THAO(String CHISO_THAO) {
-        this.CHISO_THAO = CHISO_THAO;
     }
 
     public String getHSN() {

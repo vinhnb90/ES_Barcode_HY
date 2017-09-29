@@ -29,32 +29,16 @@
             android:orientation="horizontal">
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/_1sdp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <!--  android:nextFocusForward="@+id/et_forcus"-->
-                <EditText
-                    android:id="@+id/et_search_type"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/tv_title_url"
-                    android:layout_weight="1"
-                    android:background="@drawable/xml_border_full_type4_left"
-                    android:hint="Tìm kiếm trên máy chủ"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingLeft="@dimen/_8sdp"
-                    android:paddingRight="@dimen/_8sdp"
-                    android:scrollHorizontally="true"
-                    android:scrollbars="horizontal"
-                    android:singleLine="true"
-                    android:textSize="@dimen/_10sdp" />
-
 
                 <ImageButton
+
                     android:id="@+id/ibtn_clear_search_type"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="match_parent"
@@ -63,7 +47,57 @@
                     android:background="@drawable/xml_border_full_type4_right"
                     android:scaleType="centerInside"
                     android:src="@mipmap/ic_clear" />
-            </LinearLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/ibtn_clear_search_type"
+                    android:background="@drawable/xml_border_full_type4_left">
+
+
+
+                    <CheckBox
+                        android:button="@drawable/xml_checkbox"
+                        android:id="@+id/cb_search_by_id_bban"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/xml_border_full_type4_left_orange"
+                        android:buttonTint="@color/white"
+                        android:paddingRight="@dimen/_5sdp"
+                        android:text="Theo biên bản"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="visible" />
+
+                    <EditText
+
+                        android:id="@+id/et_search_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/tv_title_url"
+                        android:layout_toRightOf="@+id/cb_search_by_id_bban"
+                        android:layout_weight="1"
+                        android:background="@null"
+
+                        android:hint="Tìm kiếm trên máy chủ"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_8sdp"
+                        android:scrollHorizontally="true"
+                        android:scrollbars="horizontal"
+                        android:singleLine="true"
+                        android:textSize="@dimen/_10sdp" />
+
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
 
             <ProgressBar
                 android:id="@+id/pbar_search_online"
@@ -261,10 +295,10 @@
                     android:visibility="visible" />
 
                 <TextView
-                    android:layout_marginRight="@dimen/_5sdp"
                     android:id="@+id/et_thongKe"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:layout_weight="1"
                     android:background="@drawable/xml_border_full_type3"
                     android:gravity="center_vertical|center_horizontal"
@@ -289,8 +323,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/btn_ghim"
-                    android:background="@color/accent"
                     android:layout_toStartOf="@+id/btn_ghim"
+                    android:background="@color/accent"
                     android:drawableRight="@mipmap/ic_delete"
                     android:paddingLeft="@dimen/_5sdp"
                     android:text="Xóa tất cả"
@@ -393,13 +427,13 @@
             tools:visibility="visible">
 
             <RelativeLayout
-                android:layout_margin="@dimen/_5sdp"
-                android:background="@drawable/xml_border_full"
-                android:padding="@dimen/activity_horizontal_margin"
                 android:id="@+id/rl_upload_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/xml_border_full"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_horizontal_margin">
 
                 <ImageView
                     android:id="@+id/iv_logo_4"

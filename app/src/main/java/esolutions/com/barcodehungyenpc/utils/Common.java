@@ -292,9 +292,39 @@ public class Common {
         }
     }
 
+    public enum CHECK {
+        SEARCH_THEO_CONG_TO("0", "Search theo công tơ"),
+        SEARCH_THEO_BBAN("1", "Search theo biên bản");
+
+        private String code;
+        private String string;
+
+        CHECK(String code, String string) {
+            this.code = code;
+            this.string = string;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getString() {
+            return string;
+        }
+
+        public static CHECK findNameBy(int code) {
+            for (CHECK v : values()) {
+                if (v.getCode().equals(code)) {
+                    return v;
+                }
+            }
+            return null;
+        }
+    }
+
     public enum TYPE_RESULT {
-        SUCCESS("SUCCESS","THÀNH CÔNG"),
-        ERROR("ERROR","CÓ LỖI");
+        SUCCESS("SUCCESS", "THÀNH CÔNG"),
+        ERROR("ERROR", "CÓ LỖI");
 
         private String code;
         private String title;

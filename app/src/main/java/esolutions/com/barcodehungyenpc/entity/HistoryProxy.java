@@ -16,7 +16,7 @@ public class HistoryProxy extends CursorItemProxy {
     private History mHistory;
     private Common.KIEU_CHUONG_TRINH mKieuChuongTrinh;
 
-    //cờ đánh dấu nếu = true thì cần refresh lại dữ liệu
+    //cờ đánh dấu nếu = true thì cần refreshListKD lại dữ liệu
 
     public HistoryProxy(@NonNull Cursor mCursor, int mIndex, Common.KIEU_CHUONG_TRINH mKieuChuongTrinh) {
         super(mCursor, mIndex);

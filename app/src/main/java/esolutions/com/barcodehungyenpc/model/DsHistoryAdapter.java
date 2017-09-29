@@ -35,11 +35,12 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
     private static Drawable sDrawableDownload, sDrawableUpload;
     private static int sWhiteColor, sLightColor;
     private Common.MENU_BOTTOM_KD menuBottomKD;
+    private Common.KIEU_CHUONG_TRINH mKieuChuongTrinh;
     //phân biệt adapter đang sử dụng các công tơ được ghim = true
     // hoặc đang sử dụng tất cả các công tơ = false
 //    private boolean isDsCtoGhim = false;
 
-    public DsHistoryAdapter(Context mContext, List<HistoryProxy> mListCto
+    public DsHistoryAdapter(Context mContext, List<HistoryProxy> mListCto, Common.KIEU_CHUONG_TRINH mKieuChuongTrinh
 //            ,boolean isDsCtoGhim
     ) throws Exception {
         mDatabase = SqlConnect.getInstance(mContext).open();
@@ -47,6 +48,7 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
         this.mContext = mContext;
         this.mListHistoryProxies = new ArrayList<>();
         this.mListHistoryProxies.addAll(mListCto);
+        this.mKieuChuongTrinh = mKieuChuongTrinh;
 
         if (sDrawableDownload == null) {
             sDrawableDownload = ContextCompat.getDrawable(mContext, R.mipmap.ic_download_blue);
@@ -86,33 +88,34 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
         Common.TYPE_SESSION typeSession = Common.TYPE_SESSION.findNameBy(TYPE_SESSION);
         String INFO_SEARCH = mListHistoryProxies.get(position).getINFO_SEARCH();
 
-        if(TYPE_SESSION.equals(Common.TYPE_SESSION.DOWNLOAD.getCode()))
-        {
+        if (TYPE_SESSION.equals(Common.TYPE_SESSION.DOWNLOAD.getCode())) {
             holder.ibtnLogo.setImageDrawable(sDrawableDownload);
             //nếu download thì quan tâm tới info search
             holder.tvInfo.setText(INFO_SEARCH);
-        }else {
+        } else {
             holder.ibtnLogo.setImageDrawable(sDrawableUpload);
 
             //nếu upload thì quan tâm tới số lượng bản upload
 
+
+            Common.TYPE_TBL_CTO typeTblCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? Common.TYPE_TBL_CTO.KD : Common.TYPE_TBL_CTO.PB;
+
             int countSuccess = 0;
             try {
-                countSuccess = mSqlDAO.countByDateSessionHistoryCtoByRESULT(DATE_SESSION, Common.TYPE_TBL_CTO.KD, typeSession, Common.TYPE_RESULT.SUCCESS);
+                countSuccess = mSqlDAO.countByDateSessionHistoryCtoByRESULT(DATE_SESSION, typeTblCto, typeSession, Common.TYPE_RESULT.SUCCESS);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             int countError = 0;
             try {
-                countError = mSqlDAO.countByDateSessionHistoryCtoByRESULT(DATE_SESSION, Common.TYPE_TBL_CTO.KD, typeSession, Common.TYPE_RESULT.ERROR);
+                countError = mSqlDAO.countByDateSessionHistoryCtoByRESULT(DATE_SESSION, typeTblCto, typeSession, Common.TYPE_RESULT.ERROR);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(countError==0)
-            {
-                holder.tvInfo.setText(countSuccess+"/" +countSuccess);
-            }else {
-                holder.tvInfo.setText(countSuccess+"/"+(countError+countSuccess));
+            if (countError == 0) {
+                holder.tvInfo.setText(countSuccess + "/" + countSuccess);
+            } else {
+                holder.tvInfo.setText(countSuccess + "/" + (countError + countSuccess));
             }
         }
 
@@ -120,7 +123,7 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
 
         String TYPE_RESULT = mListHistoryProxies.get(position).getTYPE_RESULT();
 
-        Common.TYPE_RESULT sTYPE= Common.TYPE_RESULT.findNameBy(TYPE_RESULT);
+        Common.TYPE_RESULT sTYPE = Common.TYPE_RESULT.findNameBy(TYPE_RESULT);
         holder.tvMessageSession.setText(sTYPE.getTitle());
 
     }
@@ -169,8 +172,6 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
     public interface OnDsHistoryAdapterIteraction {
 
         void clickBtnHistoryChiTiet(int pos);
-
-        int getCountCtoByDateByRESULT(String date_session, Common.TYPE_TBL_CTO typeTblCto, Common.TYPE_SESSION typeSession, Common.TYPE_RESULT typeResult);
     }
 
     public void refresh(List<HistoryProxy> historyProxies

@@ -13,7 +13,7 @@ import esolutions.com.barcodehungyenpc.database.SqlQuery;
 public class DienLucProxy extends CursorItemProxy {
     private DienLuc mDienLuc;
 
-    //cờ đánh dấu nếu = true thì cần refresh lại dữ liệu
+    //cờ đánh dấu nếu = true thì cần refreshListKD lại dữ liệu
 
     public DienLucProxy(@NonNull Cursor mCursor, int mIndex) {
         super(mCursor, mIndex);

@@ -68,7 +68,7 @@ public class SoapXML {
     public static int TIME_OUT = 30000;
 
     public enum METHOD {
-        CTO_PB("Select_Info_PBCT", new String[]{"strMaDViQLy", "strMaCTo"}),
+        CTO_PB("Select_Info_PBCT", new String[]{"strMaDViQLy", "strMaCTo", "Check"}),
         CTO_KD("Select_Info_Send_KDCT_MTB", new String[]{"strDVi", "strMaCTo"}),
 
         Select_MADVIQLY("Select_MADVIQLY", new String[]{}),
@@ -163,7 +163,7 @@ public class SoapXML {
                 envelope.dotNet = true;
                 envelope.implicitTypes = true;
                 envelope.setAddAdornments(false);
-//                envelope.addMapping(NAMESPACE, "CTO1", new CToResponse().getClass());
+//                envelope.addMapping(NAMESPACE, "CTO1", new CToKDResponse().getClass());
 
                 HttpTransportSE ht;
                 try {
@@ -1301,7 +1301,7 @@ public class SoapXML {
 //                envelope.dotNet = true;
 //                envelope.implicitTypes = true;
 //                envelope.setAddAdornments(false);
-////                envelope.addMapping(NAMESPACE, "CTO1", new CToResponse().getClass());
+////                envelope.addMapping(NAMESPACE, "CTO1", new CToKDResponse().getClass());
 //
 //                HttpTransportSE ht;
 //                try {
