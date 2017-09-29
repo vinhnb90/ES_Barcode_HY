@@ -23,6 +23,7 @@
         android:theme="@style/BaseTheme">
         <activity
             android:name=".view.MainKiemDinhActivity"
+            android:launchMode = "singleInstance"
             android:windowSoftInputMode="stateHidden">
 
         </activity>

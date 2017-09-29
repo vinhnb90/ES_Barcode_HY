@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import org.ksoap2.serialization.PropertyInfo;
@@ -125,7 +126,7 @@ public class MainKiemDinhActivity
     private boolean isSearchOnline;
     private String mMatKhau;
     private String time;
-
+    private boolean triggerListeners = true;
     private List<CongToGuiKDProxy> mListCtoKD = new ArrayList<>();
     private List<CongToGuiKDProxy> mListUploadCtoKD = new ArrayList<>();
     private List<Update_GuiKD_CTO> mListDataUploadGKD = new ArrayList<>();
@@ -135,6 +136,8 @@ public class MainKiemDinhActivity
     private List<HistoryProxy> mListHistory = new ArrayList<>();
 
     private int mCountUploadFinish = 0, mCountUploadSuccess = 0;
+
+
     private Handler mHandlerUploadKD = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -897,37 +900,34 @@ public class MainKiemDinhActivity
             mNavigation.setOnTabSelectListener(new OnTabSelectListener() {
                 @Override
                 public void onTabSelected(@IdRes int tabId) {
-                    //clear textSearch
-
-
-                    mEtSearchOnline.setText("");
-
                     try {
-                        switch (tabId) {
+                        //clear textSearch
+                        mEtSearchOnline.setText("");
 
+                        switch (tabId) {
                             case R.id.nav_bottom_ds_thietbi:
-                                    //show ll search
-                                    if (mLLSearchOnline.getVisibility() == View.GONE)
-                                        mLLSearchOnline.setVisibility(View.VISIBLE);
+                                //show ll search
+                                if (mLLSearchOnline.getVisibility() == View.GONE)
+                                    mLLSearchOnline.setVisibility(View.VISIBLE);
 
 //                                //init Data
-                                    menuBottom = Common.MENU_BOTTOM_KD.ALL;
-                                    if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
-                                        mListCtoKD.clear();
-                                        mListCtoKD = mSqlDAO.getByDateAllCongToKD(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
-                                    }
+                                menuBottom = Common.MENU_BOTTOM_KD.ALL;
+                                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+                                    mListCtoKD.clear();
+                                    mListCtoKD = mSqlDAO.getByDateAllCongToKD(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+                                }
 
-                                    if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
-                                        mListCtoPB.clear();
-                                        mListCtoPB = mSqlDAO.getByDateAllCongToPB(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
-                                    }
+                                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+                                    mListCtoPB.clear();
+                                    mListCtoPB = mSqlDAO.getByDateAllCongToPB(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+                                }
 
-                                    //hide fab
-                                    if (mFab.getVisibility() == View.VISIBLE) {
-                                        mFab.hide(true);
-                                        mFab.setVisibility(View.GONE);
-                                    }
-                                    fillDataReyclerFull();
+                                //hide fab
+                                if (mFab.getVisibility() == View.VISIBLE) {
+                                    mFab.hide(true);
+                                    mFab.setVisibility(View.GONE);
+                                }
+                                fillDataReyclerFull();
                                 break;
 
                             case R.id.nav_bottom_ds_chon:
@@ -954,8 +954,8 @@ public class MainKiemDinhActivity
                                 menuBottom = Common.MENU_BOTTOM_KD.LICH_SU;
 
                                 //show fab
-                                if (mFab.getVisibility() == View.GONE) {
-                                    mFab.setVisibility(View.INVISIBLE);
+                                if (mFab.getVisibility() == View.VISIBLE) {
+                                    mFab.setVisibility(View.GONE);
                                 }
                                 mFab.setImageResource(R.mipmap.ic_upload_white);
                                 mFab.show(true);
@@ -1105,6 +1105,7 @@ public class MainKiemDinhActivity
             e.printStackTrace();
         }
     }
+
 
     private void fillDataRecylerHistory() throws Exception {
 //        mRvCto.removeAllViews();
