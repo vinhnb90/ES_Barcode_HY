@@ -22,7 +22,6 @@ import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
 import esolutions.com.barcodehungyenpc.utils.Common;
 
 import static android.content.ContentValues.TAG;
-import static esolutions.com.barcodehungyenpc.database.SqlQuery.TBL_HISTORY.DATE_SESSION;
 
 /**
  * Created by VinhNB on 8/8/2017.
@@ -199,35 +198,47 @@ public class SqlDAO {
 
         String[] args = SqlDAO.build(
                 Common.CHON.CHUA_GUI.getCode(),
-                congToPB.getSTT(),
                 congToPB.getMA_CTO(),
                 congToPB.getSO_CTO(),
                 congToPB.getMA_DVIQLY(),
-
                 congToPB.getMA_CLOAI(),
-                Common.convertDateUIToDateSQL(congToPB.getNGAY_NHAP_HT()),
+
+                Common.convertDateUIToDateSQL(congToPB.getNGAY_NHAP_HTHONG()),
                 congToPB.getNAM_SX(),
                 congToPB.getLOAI_SOHUU(),
-                congToPB.getTEN_SOHUU(),
-
                 congToPB.getMA_BDONG(),
                 Common.convertDateUIToDateSQL(congToPB.getNGAY_BDONG()),
-                Common.convertDateUIToDateSQL(congToPB.getNGAY_BDONG_HTAI()),
+
                 congToPB.getSO_PHA(),
                 congToPB.getSO_DAY(),
-
                 congToPB.getDONG_DIEN(),
                 congToPB.getVH_CONG(),
                 congToPB.getDIEN_AP(),
+
                 congToPB.getHS_NHAN(),
                 congToPB.getNGAY_KDINH(),
-
-                congToPB.getCHISO_THAO(),
-                congToPB.getHSN(),
                 Common.convertDateUIToDateSQL(congToPB.getNGAY_NHAP()),
                 congToPB.getNGAY_NHAP_MTB(),
                 congToPB.getTRANG_THAI_GHIM(),
-                congToPB.getTRANG_THAI_CHON()
+
+                congToPB.getTRANG_THAI_CHON(),
+
+                //mới
+                congToPB.getID_BBAN_KHO(),
+                congToPB.getNGAY_NHAP_HTHONG(),
+                congToPB.getMA_NVIEN(),
+                congToPB.getSO_BBAN(),
+                congToPB.getID_BBAN_KDINH(),
+
+                congToPB.getNGAY_GUIKD(),
+                congToPB.getNGAY_KDINH_TH(),
+                congToPB.getLOAI_CTO(),
+                congToPB.getSO_CSO(),
+                congToPB.getMA_HANG(),
+
+                congToPB.getCAP_CXAC(),
+                congToPB.getMA_NUOC(),
+                congToPB.getACTION()
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_CTO_PB(), args);
@@ -565,6 +576,34 @@ public class SqlDAO {
             closeCursor(cursor);
         return listCongToProxies;
     }
+
+    public List<CongToPBProxy> getByDateAllCongToGhimAndChonPB(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+        List<CongToPBProxy> listCongToProxies = new ArrayList<>();
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllCongToGhimAndChonPB(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToPBProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
+    }
+
 
     public void deleteByDateAllCongToKD(String dateSQL) throws Exception {
         if (!Common.isExistDB())

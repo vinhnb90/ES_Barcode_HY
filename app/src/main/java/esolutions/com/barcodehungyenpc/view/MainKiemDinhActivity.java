@@ -51,10 +51,10 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +73,8 @@ import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
 import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO_MTBResponse;
+import esolutions.com.barcodehungyenpc.entity.Update_GuiPB_CTO;
+import esolutions.com.barcodehungyenpc.entity.Update_GuiPB_CTO_MTBResponse;
 import esolutions.com.barcodehungyenpc.model.DsCongToAdapter;
 import esolutions.com.barcodehungyenpc.model.DsHistoryAdapter;
 import esolutions.com.barcodehungyenpc.utils.Common;
@@ -132,13 +134,15 @@ public class MainKiemDinhActivity
     private List<Update_GuiKD_CTO> mListDataUploadGKD = new ArrayList<>();
 
     private List<CongToPBProxy> mListCtoPB = new ArrayList<>();
+    private List<CongToPBProxy> mListUploadCtoPB = new ArrayList<>();
+    private List<Update_GuiPB_CTO> mListDataUploadPB = new ArrayList<>();
 
     private List<HistoryProxy> mListHistory = new ArrayList<>();
 
     private int mCountUploadFinish = 0, mCountUploadSuccess = 0;
 
 
-    private Handler mHandlerUploadKD = new Handler() {
+    private Handler mHandlerUpload = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -157,7 +161,99 @@ public class MainKiemDinhActivity
                 return;
             }
 
-            SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiKD_CTO_MTBResponse>, ThongBaoResponse> callBackUpload = new SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiKD_CTO_MTBResponse>, ThongBaoResponse>() {
+
+            SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiPB_CTO_MTBResponse>, ThongBaoResponse> callBackUploadGuiPB = new SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiPB_CTO_MTBResponse>, ThongBaoResponse>() {
+                @Override
+                public void onPre(SoapXML.AsyncSoapUpload soap) {
+                    mBtnUpload.setVisibility(View.GONE);
+                    mPbarUpload.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onUpdate(String message) {
+                    mBtnUpload.setVisibility(View.VISIBLE);
+                    mPbarUpload.setVisibility(View.GONE);
+                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    if (mCountUploadFinish > 0) {
+                        mCountUploadFinish--;
+                    }
+
+                    Message msg = mHandlerUpload.obtainMessage();
+                    msg.obj = mCountUploadFinish;
+                    mHandlerUpload.sendMessage(msg);
+
+                    try {
+                        //insert history
+                        History history = new History();
+                        history.setID_TBL_CTO(0);
+                        history.setTYPE_RESULT(Common.TYPE_RESULT.ERROR.getCode());
+                        history.setTYPE_SESSION(Common.TYPE_SESSION.UPLOAD.getCode());
+                        history.setTYPE_TBL_CTO(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH ? Common.TYPE_TBL_CTO.KD.getCode() : Common.TYPE_TBL_CTO.PB.getCode());
+                        //convert time to date SQL
+                        long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                        history.setDATE_SESSION(String.valueOf(dateSql));
+                        history.setINFO_SEARCH("");
+                        mSqlDAO.insertTBL_HISTORY(history);
+                    } catch (Exception e) {
+                        snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }
+
+                @Override
+                public void onPostData(List<Update_GuiPB_CTO_MTBResponse> dataResponse) {
+                    if (dataResponse == null)
+                        return;
+
+                    try {
+                        doProcessAfterUploadGuiPB(dataResponse);
+                        if (mCountUploadFinish > 0) {
+                            mCountUploadFinish--;
+                        }
+
+                    } catch (Exception e) {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                        snackbar.show();
+                        e.printStackTrace();
+                    } finally {
+                        Message msg = mHandlerUpload.obtainMessage();
+                        msg.obj = mCountUploadFinish;
+                        mHandlerUpload.sendMessage(msg);
+                    }
+                }
+
+                @Override
+                public void onPostMessageSever(ThongBaoResponse errorResponse) {
+                    if (mCountUploadFinish > 0)
+                        mCountUploadFinish--;
+                    onUpdate(errorResponse.getThongbao());
+                }
+
+                @Override
+                public PropertyInfo setupProInfo(METHOD method) {
+                    SoapObject request = new SoapObject("", method.getNameMethod());
+                    for (Update_GuiPB_CTO ctoGPB : mListDataUploadPB) {
+                        PropertyInfo pi = new PropertyInfo();
+                        pi.setName(method.getNameParams()[0]);
+                        pi.setValue(ctoGPB);
+                        pi.setType(Update_GuiPB_CTO.class);
+
+                        request.addProperty(method.getNameParams()[0], pi);
+                    }
+
+
+                    PropertyInfo propertyInfo = new PropertyInfo();
+                    propertyInfo.setName(method.getNameParams()[0]);
+                    propertyInfo.setType(SoapObject.class);
+                    propertyInfo.setValue(request);
+
+                    return propertyInfo;
+                }
+            };
+
+            SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiKD_CTO_MTBResponse>, ThongBaoResponse> callBackUploadGuiKD = new SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiKD_CTO_MTBResponse>, ThongBaoResponse>() {
 
                 @Override
                 public void onPre(SoapXML.AsyncSoapUpload soap) {
@@ -175,9 +271,9 @@ public class MainKiemDinhActivity
                         mCountUploadFinish--;
                     }
 
-                    Message msg = mHandlerUploadKD.obtainMessage();
+                    Message msg = mHandlerUpload.obtainMessage();
                     msg.obj = mCountUploadFinish;
-                    mHandlerUploadKD.sendMessage(msg);
+                    mHandlerUpload.sendMessage(msg);
 
                     try {
                         //insert history
@@ -215,9 +311,9 @@ public class MainKiemDinhActivity
                         snackbar.show();
                         e.printStackTrace();
                     } finally {
-                        Message msg = mHandlerUploadKD.obtainMessage();
+                        Message msg = mHandlerUpload.obtainMessage();
                         msg.obj = mCountUploadFinish;
-                        mHandlerUploadKD.sendMessage(msg);
+                        mHandlerUpload.sendMessage(msg);
                     }
                 }
 
@@ -231,30 +327,99 @@ public class MainKiemDinhActivity
                 @Override
                 public PropertyInfo setupProInfo(METHOD method) {
 
-                    PropertyInfo pi = new PropertyInfo();
-                    pi.setName(method.getNameParams()[0]);
-                    pi.setValue(mListDataUploadGKD.get(mCountUploadFinish - 1));
-                    pi.setType(Update_GuiKD_CTO.class);
-                    return pi;
+                    SoapObject request = new SoapObject("", method.getNameMethod());
+                    for (Update_GuiKD_CTO ctoGKD : mListDataUploadGKD) {
+                        PropertyInfo pi = new PropertyInfo();
+                        pi.setName(method.getNameParams()[0]);
+                        pi.setValue(ctoGKD);
+                        pi.setType(Update_GuiKD_CTO.class);
+
+                        request.addProperty(method.getNameParams()[0], pi);
+                    }
+
+
+                    PropertyInfo propertyInfo = new PropertyInfo();
+                    propertyInfo.setName(method.getNameParams()[0]);
+                    propertyInfo.setType(SoapObject.class);
+                    propertyInfo.setValue(request);
+
+                    return propertyInfo;
                 }
             };
 
             try {
-                soapUpload = new SoapXML.AsyncSoapUpload(
-                        Update_GuiKD_CTO_MTBResponse.class,
-                        ThongBaoResponse.class,
-                        "thongbao",
-                        callBackUpload,
-                        METHOD.Update_GuiKD_CTO_MTB,
-                        SoapXML.getURL(mURL)
-                );
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
+                    soapUpload = new SoapXML.AsyncSoapUpload(
+                            Update_GuiKD_CTO_MTBResponse.class,
+                            ThongBaoResponse.class,
+                            "thongbao",
+                            callBackUploadGuiKD,
+                            METHOD.Update_GuiKD_CTO_MTB,
+                            SoapXML.getURL(mURL)
+                    );
+
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
+                    soapUpload = new SoapXML.AsyncSoapUpload(
+                            Update_GuiPB_CTO_MTBResponse.class,
+                            ThongBaoResponse.class,
+                            "thongbao",
+                            callBackUploadGuiPB,
+                            METHOD.Update_PBCT_MTB,
+                            SoapXML.getURL(mURL)
+                    );
+
+                soapUpload.execute();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            soapUpload.execute();
+
         }
     };
+
+    private void doProcessAfterUploadGuiPB(List<Update_GuiPB_CTO_MTBResponse> dataResponse) throws Exception {
+        //lấy trường chọn
+        for (Update_GuiPB_CTO_MTBResponse response :
+                dataResponse) {
+
+            int CHON = response.getCHON();
+            //update CHON
+            mSqlDAO.updateChonCtoPB(mListUploadCtoPB.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), CHON);
+
+            //nếu CHON == 1 thì bỏ ghim, nếu CHON == 2 hoặc 0 thì giữ nguyên ghim
+//            if(CHON == Common.CHON.GUI_THANH_CONG.getCode())
+//            {
+//                mSqlDAO.updateGhimCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+//            }
+
+//            mSqlDAO.updateTRANG_THAI_CHONCto(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+            if (menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM) {
+                mListCtoPB.clear();
+                mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(Common.convertDateUIToDateSQL(mDate));
+            }
+
+            //insert history
+            int id = mListUploadCtoPB.get(mCountUploadFinish - 1).getID_TBL_CTO_PB();
+            if (id != 0) {
+                History history = new History();
+                history.setID_TBL_CTO(id);
+                history.setTYPE_RESULT(Common.TYPE_RESULT.SUCCESS.getCode());
+                history.setTYPE_SESSION(Common.TYPE_SESSION.UPLOAD.getCode());
+                history.setTYPE_TBL_CTO(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH ? Common.TYPE_TBL_CTO.KD.getCode() : Common.TYPE_TBL_CTO.PB.getCode());
+
+                //convert time to date SQL
+                long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                history.setDATE_SESSION(String.valueOf(dateSql));
+                mSqlDAO.insertTBL_HISTORY(history);
+            }
+
+            fillDataReyclerFull();
+            mRvCto.invalidate();
+        }
+
+        if (mCountUploadSuccess < mListDataUploadGKD.size())
+            mCountUploadSuccess++;
+    }
 
     private void doProcessAfterUploadGuiKD(List<Update_GuiKD_CTO_MTBResponse> dataResponse) throws Exception {
         //lấy trường chọn
@@ -268,10 +433,10 @@ public class MainKiemDinhActivity
             //nếu CHON == 1 thì bỏ ghim, nếu CHON == 2 hoặc 0 thì giữ nguyên ghim
 //            if(CHON == Common.CHON.GUI_THANH_CONG.getCode())
 //            {
-//                mSqlDAO.updateGhimCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID(), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+//                mSqlDAO.updateGhimCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
 //            }
 
-//            mSqlDAO.updateTRANG_THAI_CHONCto(mListUploadCtoKD.get(mCountUploadFinish - 1).getID(), Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+//            mSqlDAO.updateTRANG_THAI_CHONCto(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
             if (menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM) {
                 mListCtoKD.clear();
                 mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(Common.convertDateUIToDateSQL(mDate));
@@ -1162,44 +1327,37 @@ public class MainKiemDinhActivity
             throw new Exception(Common.MESSAGE.ex09.getContent());
         }
 
-//        String[] requestParams = new String[]{"entity"};
+        String[] requestParams = new String[]{"entity"};
 
 
         if (!Common.isNetworkConnected(this)) {
             throw new Exception(Common.MESSAGE.ex07.getContent());
         }
 
-        mListDataUploadGKD.clear();
-        mListDataUploadGKD = setupDataCtoGuiKDUpload();
-        mCountUploadFinish = mListDataUploadGKD.size();
+        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+            mListDataUploadGKD.clear();
+            mListDataUploadGKD = setupDataCtoGuiKDUpload();
+            mCountUploadFinish = mListDataUploadGKD.size();
+        }
+
+
+        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+            mListDataUploadPB.clear();
+            mListDataUploadPB = setupDataCtoGuiPBUpload();
+            mCountUploadFinish = mListDataUploadPB.size();
+        }
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-//                while (mCountUploadFinish != 0) {
-                Message msg = mHandlerUploadKD.obtainMessage();
+                Message msg = mHandlerUpload.obtainMessage();
                 msg.obj = mCountUploadFinish;
-                mHandlerUploadKD.sendMessage(msg);
-//                }
+                mHandlerUpload.sendMessage(msg);
             }
         });
 
         thread.start();
 
-
-//        MainKiemDinhActivity.this.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(5000);
-//                    mPbarUpload.setVisibility(View.GONE);
-//                    mBtnUpload.setVisibility(View.VISIBLE);
-//                    mTvStatusUpload.setText("CÓ LỖI");
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
     }
 
     private List<Update_GuiKD_CTO> setupDataCtoGuiKDUpload() {
@@ -1237,6 +1395,51 @@ public class MainKiemDinhActivity
         return listUpload;
     }
 
+    private List<Update_GuiPB_CTO> setupDataCtoGuiPBUpload() {
+        ArrayList<Update_GuiPB_CTO> listUpload = new ArrayList<>();
+        if (mListUploadCtoPB.size() == 0)
+            return listUpload;
+        for (CongToPBProxy congToPBProxy : mListUploadCtoPB) {
+            Update_GuiPB_CTO congToUpload = new Update_GuiPB_CTO(
+                    congToPBProxy.getID_BBAN_KHO(),
+                    congToPBProxy.getNGAY_NHAP_HTHONG(),//
+                    congToPBProxy.getMA_NVIEN(),
+                    congToPBProxy.getSO_BBAN(),
+                    congToPBProxy.getID_BBAN_KDINH(),
+                    congToPBProxy.getNGAY_GUIKD(),
+                    congToPBProxy.getNGAY_KDINH_TH(),
+                    congToPBProxy.getLOAI_CTO(),
+                    congToPBProxy.getSO_CSO(),
+                    congToPBProxy.getMA_HANG(),
+                    congToPBProxy.getCAP_CXAC(),
+                    congToPBProxy.getMA_NUOC(),
+                    congToPBProxy.getACTION(),
+
+                    Common.CHON.CHUA_GUI.getCode(),
+                    congToPBProxy.getHS_NHAN(),
+                    congToPBProxy.getMA_DVIQLY(),
+                    congToPBProxy.getNAM_SX(),
+                    congToPBProxy.getMA_CTO(),
+                    congToPBProxy.getSO_CTO(),
+                    congToPBProxy.getLOAI_SOHUU(),
+                    congToPBProxy.getMA_CLOAI(),
+                    congToPBProxy.getNGAY_BDONG(),
+                    congToPBProxy.getMA_BDONG(),
+                    congToPBProxy.getNGAY_NHAP(),
+                    congToPBProxy.getNGAY_KDINH(),
+                    congToPBProxy.getSO_DAY(),
+                    congToPBProxy.getVH_CONG(),
+                    congToPBProxy.getSO_PHA(),
+                    congToPBProxy.getDIEN_AP(),
+                    congToPBProxy.getDONG_DIEN(),
+                    Common.convertDateSQLToDateUI(congToPBProxy.getNGAY_NHAP_MTB()));
+            listUpload.add(congToUpload);
+
+        }
+        return listUpload;
+    }
+
+
     private void getBundle() {
         Bundle bundle = getIntent().getExtras();
 
@@ -1255,7 +1458,6 @@ public class MainKiemDinhActivity
         }
     }
 
-    //TODO mark 4
     private void searchOnline(String searchText) throws Exception {
         //check thread hiện tại
         if (soapSearchCto != null) {
@@ -1482,33 +1684,40 @@ public class MainKiemDinhActivity
 
             CongToPB congToPB = new CongToPB();
             congToPB.setCHON(cToPBResponse.getCHON());
-//            congToPB.setSTT(cToPBResponse.getSTT());
+            congToPB.setHS_NHAN(cToPBResponse.getHS_NHAN());
+            congToPB.setMA_DVIQLY(cToPBResponse.getMA_DVIQLY());
+            congToPB.setNAM_SX(cToPBResponse.getNAM_SX());
             congToPB.setMA_CTO(cToPBResponse.getMA_CTO());
             congToPB.setSO_CTO(cToPBResponse.getSO_CTO());
-            congToPB.setMA_DVIQLY(cToPBResponse.getMA_DVIQLY());
-            congToPB.setMA_CLOAI(cToPBResponse.getMA_CLOAI());
-            congToPB.setNGAY_NHAP_HT(cToPBResponse.getNGAY_NHAP_HTHONG());
-            congToPB.setNAM_SX(cToPBResponse.getNAM_SX());
             congToPB.setLOAI_SOHUU(cToPBResponse.getLOAI_SOHUU());
-//            congToPB.setTEN_SOHUU(cToPBResponse.getTEN_SOHUU());
-
-            congToPB.setMA_BDONG(cToPBResponse.getMA_BDONG());
+            congToPB.setMA_CLOAI(cToPBResponse.getMA_CLOAI());
             congToPB.setNGAY_BDONG(cToPBResponse.getNGAY_BDONG());
-//            congToPB.setNGAY_BDONG_HTAI(cToPBResponse.getNGAY_BDONG_HTAI());
-            congToPB.setSO_PHA(cToPBResponse.getSO_PHA());
-            congToPB.setSO_DAY(cToPBResponse.getSO_DAY());
-            congToPB.setDONG_DIEN(cToPBResponse.getDONG_DIEN());
-            congToPB.setVH_CONG(cToPBResponse.getVH_CONG());
-
-            congToPB.setDIEN_AP(cToPBResponse.getDIEN_AP());
-            congToPB.setHS_NHAN(cToPBResponse.getHS_NHAN());
-            congToPB.setNGAY_KDINH(cToPBResponse.getNGAY_KDINH());
-//            congToPB.setCHISO_THAO(cToPBResponse.getCHISO_THAO());
-//            congToPB.setHSN(cToPBResponse.getHSN());
+            congToPB.setMA_BDONG(cToPBResponse.getMA_BDONG());
             congToPB.setNGAY_NHAP(Common.convertDateToDate(cToPBResponse.getNGAY_NHAP(), Common.DATE_TIME_TYPE.yyyyMMddHHmmssSSZ, Common.DATE_TIME_TYPE.ddMMyyyy));
+            congToPB.setNGAY_KDINH(cToPBResponse.getNGAY_KDINH());
+            congToPB.setSO_DAY(cToPBResponse.getSO_DAY());
+            congToPB.setVH_CONG(cToPBResponse.getVH_CONG());
+            congToPB.setSO_PHA(cToPBResponse.getSO_PHA());
+            congToPB.setDIEN_AP(cToPBResponse.getDIEN_AP());
+            congToPB.setDONG_DIEN(cToPBResponse.getDONG_DIEN());
             congToPB.setNGAY_NHAP_MTB(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
             congToPB.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
             congToPB.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+
+            congToPB.setID_BBAN_KHO(cToPBResponse.getID_BBAN_KHO());
+            congToPB.setNGAY_NHAP_HTHONG(cToPBResponse.getNGAY_NHAP_HTHONG());
+            congToPB.setMA_NVIEN(cToPBResponse.getMA_NVIEN());
+            congToPB.setSO_BBAN(cToPBResponse.getSO_BBAN());
+            congToPB.setID_BBAN_KDINH(cToPBResponse.getID_BBAN_KDINH());
+            congToPB.setNGAY_GUIKD(cToPBResponse.getNGAY_GUIKD());
+
+            congToPB.setNGAY_KDINH_TH(cToPBResponse.getNGAY_KDINH_TH());
+            congToPB.setLOAI_CTO(cToPBResponse.getLOAI_CTO());
+            congToPB.setSO_CTO(cToPBResponse.getSO_CTO());
+            congToPB.setMA_HANG(cToPBResponse.getMA_HANG());
+            congToPB.setCAP_CXAC(cToPBResponse.getCAP_CXAC());
+            congToPB.setMA_NUOC(cToPBResponse.getMA_NUOC());
+            congToPB.setACTION(cToPBResponse.getACTION());
 
             int idIfHasExistCto = 0;
             //check data local với text search và date
@@ -1615,34 +1824,42 @@ public class MainKiemDinhActivity
                 id = mSqlDAO.insertTBL_CTO_GUI_KD(congToGuiKD);
             } else {
                 CongToPB congToPB = new CongToPB();
+
                 congToPB.setCHON(cToKDResponse.getCHON());
-                congToPB.setSTT(cToKDResponse.getSTT());
+                congToPB.setHS_NHAN(cToKDResponse.getHS_NHAN());
+                congToPB.setMA_DVIQLY(cToKDResponse.getMA_DVIQLY());
+                congToPB.setNAM_SX(cToKDResponse.getNAM_SX());
                 congToPB.setMA_CTO(cToKDResponse.getMA_CTO());
                 congToPB.setSO_CTO(cToKDResponse.getSO_CTO());
-                congToPB.setMA_DVIQLY(mStringDvi);
-                congToPB.setMA_CLOAI(cToKDResponse.getMA_CLOAI());
-                congToPB.setNGAY_NHAP_HT(cToKDResponse.getNGAY_NHAP_HT());
-                congToPB.setNAM_SX(cToKDResponse.getNAM_SX());
                 congToPB.setLOAI_SOHUU(cToKDResponse.getLOAI_SOHUU());
-                congToPB.setTEN_SOHUU(cToKDResponse.getTEN_SOHUU());
-
-                congToPB.setMA_BDONG(cToKDResponse.getMA_BDONG());
+                congToPB.setMA_CLOAI(cToKDResponse.getMA_CLOAI());
                 congToPB.setNGAY_BDONG(cToKDResponse.getNGAY_BDONG());
-                congToPB.setNGAY_BDONG_HTAI(cToKDResponse.getNGAY_BDONG_HTAI());
-                congToPB.setSO_PHA(cToKDResponse.getSO_PHA());
-                congToPB.setSO_DAY(cToKDResponse.getSO_DAY());
-                congToPB.setDONG_DIEN(cToKDResponse.getDONG_DIEN());
-                congToPB.setVH_CONG(cToKDResponse.getVH_CONG());
-
-                congToPB.setDIEN_AP(cToKDResponse.getDIEN_AP());
-                congToPB.setHS_NHAN(cToKDResponse.getHS_NHAN());
-                congToPB.setNGAY_KDINH(cToKDResponse.getNGAY_KDINH());
-                congToPB.setCHISO_THAO(cToKDResponse.getCHISO_THAO());
-                congToPB.setHSN(cToKDResponse.getHSN());
+                congToPB.setMA_BDONG(cToKDResponse.getMA_BDONG());
                 congToPB.setNGAY_NHAP(Common.convertDateToDate(cToKDResponse.getNGAY_NHAP(), Common.DATE_TIME_TYPE.yyyyMMddHHmmssSSZ, Common.DATE_TIME_TYPE.ddMMyyyy));
+                congToPB.setNGAY_KDINH(cToKDResponse.getNGAY_KDINH());
+                congToPB.setSO_DAY(cToKDResponse.getSO_DAY());
+                congToPB.setVH_CONG(cToKDResponse.getVH_CONG());
+                congToPB.setSO_PHA(cToKDResponse.getSO_PHA());
+                congToPB.setDIEN_AP(cToKDResponse.getDIEN_AP());
+                congToPB.setDONG_DIEN(cToKDResponse.getDONG_DIEN());
                 congToPB.setNGAY_NHAP_MTB(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
                 congToPB.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
                 congToPB.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+                congToPB.setID_BBAN_KHO("");
+                congToPB.setNGAY_NHAP_HTHONG(cToKDResponse.getNGAY_NHAP_HT());
+                congToPB.setMA_NVIEN("");//cToKDResponse.getMA_NVIEN()
+                congToPB.setSO_BBAN("");//
+                congToPB.setID_BBAN_KDINH("");
+                congToPB.setNGAY_GUIKD("");
+
+                congToPB.setNGAY_KDINH_TH("");
+                congToPB.setLOAI_CTO("");
+                congToPB.setSO_CTO(cToKDResponse.getSO_CTO());
+                congToPB.setMA_HANG("");
+                congToPB.setCAP_CXAC("");
+                congToPB.setMA_NUOC("");
+                congToPB.setACTION("");
+
 
                 int idIfHasExistCto = 0;
                 //check data local với text search và date
@@ -1710,7 +1927,7 @@ public class MainKiemDinhActivity
 
         try {
             //set filterDataReal GhimCto đồng thời đánh dấu cần refersh lại giá trị công tơ đó
-            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID() : mListCtoPB.get(pos).getID();
+            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
 
             int statusGhimCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getTRANG_THAI_GHIM() : mListCtoPB.get(pos).getTRANG_THAI_GHIM();
 
@@ -1752,9 +1969,17 @@ public class MainKiemDinhActivity
 
     private void prepareDataUpload() throws Exception {
         String dateSQL = Common.convertDateUIToDateSQL(mDate);
-        mListUploadCtoKD.clear();
-        mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
-        mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
+        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+            mListUploadCtoKD.clear();
+            mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
+            mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
+        }
+
+        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+            mListCtoPB.clear();
+            mListCtoPB = mSqlDAO.getByDateAllCongToGhimAndChonPB(dateSQL);
+            mTvCountCtoUpload.setText(mListCtoPB.size() + "");
+        }
 
     }
 
@@ -1778,7 +2003,7 @@ public class MainKiemDinhActivity
                         idRowDelete = mSqlDAO.deleteCongToKD(congToGuiKDProxy.getID());
                     } else {
                         CongToPBProxy congToGuiPBProxy = mListCtoPB.get(pos);
-                        idRowDelete = mSqlDAO.deleteCongToPB(congToGuiPBProxy.getID());
+                        idRowDelete = mSqlDAO.deleteCongToPB(congToGuiPBProxy.getID_TBL_CTO_PB());
                     }
 
 
@@ -1835,7 +2060,7 @@ public class MainKiemDinhActivity
 
         try {
             //set filterDataReal GhimCto đồng thời đánh dấu cần refersh lại giá trị công tơ đó
-            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID() : mListCtoPB.get(pos).getID();
+            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
 
             int statusChonCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getTRANG_THAI_CHON() : mListCtoPB.get(pos).getTRANG_THAI_CHON();
             if (statusChonCto == Common.TRANG_THAI_CHON.CHUA_CHON.getCode())

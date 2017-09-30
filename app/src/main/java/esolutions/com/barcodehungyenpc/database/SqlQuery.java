@@ -68,37 +68,45 @@ public class SqlQuery {
 
     public enum TBL_CTO_PB {
         CHON("CHON"),
-        ID_TBL_CTO_PB("ID_TBL_CTO_PB"),
-        STT("STT"),
+        HS_NHAN("HS_NHAN"),
+        MA_DVIQLY("MA_DVIQLY"),
+        NAM_SX("NAM_SX"),
         MA_CTO("MA_CTO"),
         SO_CTO("SO_CTO"),
-        MA_DVIQLY("MA_DVIQLY"),
-        MA_CLOAI("MA_CLOAI"),
-        NGAY_NHAP_HT("NGAY_NHAP_HT"),
-        NAM_SX("NAM_SX"),
-
         LOAI_SOHUU("LOAI_SOHUU"),
-        TEN_SOHUU("TEN_SOHUU"),
-        MA_BDONG("MA_BDONG"),
+        MA_CLOAI("MA_CLOAI"),
         NGAY_BDONG("NGAY_BDONG"),
-        NGAY_BDONG_HTAI("NGAY_BDONG_HTAI"),
-        SO_PHA("SO_PHA"),
-        SO_DAY("SO_DAY"),
-        DONG_DIEN("DONG_DIEN"),
-        VH_CONG("VH_CONG"),
-        DIEN_AP("DIEN_AP"),
-        HS_NHAN("HS_NHAN"),
-        NGAY_KDINH("NGAY_KDINH"),
-        CHISO_THAO("CHISO_THAO"),
-        HSN("HSN"),
+        MA_BDONG("MA_BDONG"),
         NGAY_NHAP("NGAY_NHAP"),
-        //        GhimCto("GhimCongTo"),
-//        TaiKhoan("TaiKhoan"),
+        NGAY_KDINH("NGAY_KDINH"),
+        SO_DAY("SO_DAY"),
+        VH_CONG("VH_CONG"),
+        SO_PHA("SO_PHA"),
+        DIEN_AP("DIEN_AP"),
+        DONG_DIEN("DONG_DIEN"),
+        ID_TBL_CTO_PB("ID_TBL_CTO_PB"),
         NGAY_NHAP_MTB("NGAY_NHAP_MTB"),
         //Trạng thái chưa ghim = 0, đã ghim = 1
         TRANG_THAI_GHIM("TRANG_THAI_GHIM"),
         //Trạng thái chưa chọn = 0, đã chọn = 1
-        TRANG_THAI_CHON("TRANG_THAI_CHON");
+        TRANG_THAI_CHON("TRANG_THAI_CHON"),
+
+
+        ID_BBAN_KHO("ID_BBAN_KHO"),
+        NGAY_NHAP_HTHONG("NGAY_NHAP_HTHONG"),
+        MA_NVIEN("MA_NVIEN"),
+        SO_BBAN("SO_BBAN"),
+        ID_BBAN_KDINH("ID_BBAN_KDINH"),
+        NGAY_GUIKD("NGAY_GUIKD"),
+        NGAY_KDINH_TH("NGAY_KDINH_TH"),
+        LOAI_CTO("LOAI_CTO"),
+        SO_CSO("SO_CSO"),
+        MA_HANG("MA_HANG"),
+        CAP_CXAC("CAP_CXAC"),
+        MA_NUOC("MA_NUOC"),
+        ACTION("ACTION")
+        ;
+
 
         private String mNameCollumn;
 
@@ -197,18 +205,15 @@ public class SqlQuery {
         return "CREATE TABLE IF NOT EXISTS " + TBL_CTO_PB.getNameTable() + " (" +
                 TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn() + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TBL_CTO_PB.CHON.getNameCollumn() + " INTEGER, " +
-                TBL_CTO_PB.STT.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_CTO.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.SO_CTO.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_CLOAI.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.NGAY_NHAP_HT.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.NGAY_NHAP_HTHONG.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NAM_SX.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.LOAI_SOHUU.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.TEN_SOHUU.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_BDONG.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NGAY_BDONG.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.NGAY_BDONG_HTAI.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.SO_PHA.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.SO_DAY.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.DONG_DIEN.getNameCollumn() + " TEXT, " +
@@ -216,13 +221,25 @@ public class SqlQuery {
                 TBL_CTO_PB.DIEN_AP.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.HS_NHAN.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NGAY_KDINH.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.HSN.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NGAY_NHAP.getNameCollumn() + " TEXT, " +
-//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NGAY_NHAP_MTB.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.TRANG_THAI_GHIM.getNameCollumn() + " INTEGER DEFAULT 0, " +
-                TBL_CTO_PB.TRANG_THAI_CHON.getNameCollumn() + " INTEGER DEFAULT 0" +
+                TBL_CTO_PB.TRANG_THAI_CHON.getNameCollumn() + " INTEGER DEFAULT 0, " +
+
+
+                TBL_CTO_PB.ID_BBAN_KHO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.NGAY_NHAP_HTHONG.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.MA_NVIEN.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.SO_BBAN.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.ID_BBAN_KDINH.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.NGAY_GUIKD.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.NGAY_KDINH_TH.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.LOAI_CTO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.SO_CSO.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.MA_HANG.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.CAP_CXAC.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.MA_NUOC.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.ACTION.getNameCollumn() + " TEXT " +
                 ");";
     }
 
@@ -264,37 +281,56 @@ public class SqlQuery {
     public static String getInsertTBL_CTO_PB() {
         return "INSERT INTO " + TBL_CTO_PB.getNameTable() + " (" +
                 TBL_CTO_PB.CHON.getNameCollumn() + ", " +
-                TBL_CTO_PB.STT.getNameCollumn() + ", " +
                 TBL_CTO_PB.MA_CTO.getNameCollumn() + ", " +
                 TBL_CTO_PB.SO_CTO.getNameCollumn() + ", " +
                 TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + ", " +
-
                 TBL_CTO_PB.MA_CLOAI.getNameCollumn() + ", " +
-                TBL_CTO_PB.NGAY_NHAP_HT.getNameCollumn() + ", " +
+
+                TBL_CTO_PB.NGAY_NHAP_HTHONG.getNameCollumn() + ", " +
                 TBL_CTO_PB.NAM_SX.getNameCollumn() + ", " +
                 TBL_CTO_PB.LOAI_SOHUU.getNameCollumn() + ", " +
-                TBL_CTO_PB.TEN_SOHUU.getNameCollumn() + ", " +
-
                 TBL_CTO_PB.MA_BDONG.getNameCollumn() + ", " +
                 TBL_CTO_PB.NGAY_BDONG.getNameCollumn() + ", " +
-                TBL_CTO_PB.NGAY_BDONG_HTAI.getNameCollumn() + ", " +
+
                 TBL_CTO_PB.SO_PHA.getNameCollumn() + ", " +
                 TBL_CTO_PB.SO_DAY.getNameCollumn() + ", " +
-
                 TBL_CTO_PB.DONG_DIEN.getNameCollumn() + ", " +
                 TBL_CTO_PB.VH_CONG.getNameCollumn() + ", " +
                 TBL_CTO_PB.DIEN_AP.getNameCollumn() + ", " +
+
                 TBL_CTO_PB.HS_NHAN.getNameCollumn() + ", " +
                 TBL_CTO_PB.NGAY_KDINH.getNameCollumn() + ", " +
-
-                TBL_CTO_PB.CHISO_THAO.getNameCollumn() + ", " +
-                TBL_CTO_PB.HSN.getNameCollumn() + ", " +
                 TBL_CTO_PB.NGAY_NHAP.getNameCollumn() + ", " +
-//                TBL_CTO_PB.TaiKhoan.getNameCollumn() + ", " +
                 TBL_CTO_PB.NGAY_NHAP_MTB.getNameCollumn() + ", " +
                 TBL_CTO_PB.TRANG_THAI_GHIM.getNameCollumn() + ", " +
-                TBL_CTO_PB.TRANG_THAI_CHON.getNameCollumn() +
-                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+
+                TBL_CTO_PB.TRANG_THAI_CHON.getNameCollumn() + ", " +
+
+                //mới
+                TBL_CTO_PB.ID_BBAN_KHO.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_NHAP_HTHONG.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_NVIEN.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_BBAN.getNameCollumn() + ", " +
+                TBL_CTO_PB.ID_BBAN_KDINH.getNameCollumn() + ", " +
+
+                TBL_CTO_PB.NGAY_GUIKD.getNameCollumn() + ", " +
+                TBL_CTO_PB.NGAY_KDINH_TH.getNameCollumn() + ", " +
+                TBL_CTO_PB.LOAI_CTO.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_CSO.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_HANG.getNameCollumn() + ", " +
+
+                TBL_CTO_PB.CAP_CXAC.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_NUOC.getNameCollumn() + ", " +
+                TBL_CTO_PB.ACTION.getNameCollumn() +
+
+                ") " + "VALUES (" +
+                "?, ?, ?, ?, ?," +
+                "?, ?, ?, ?, ?," +
+                "?, ?, ?, ?, ?," +
+                "?, ?, ?, ?, ?," +
+                "?, ?, ?, ?, ?," +
+                "?, ?, ?, ?, ?," +
+                "?, ?, ?, ?" +
                 ");"
                 ;
     }
@@ -421,6 +457,27 @@ public class SqlQuery {
                 TBL_CTO_GUI_KD.CHON +
                 " = " + Common.CHON.CHUA_GUI.getCode();
     }
+
+
+    public static String getByDateAllCongToGhimAndChonPB() {
+        return "SELECT *" +
+                " FROM " +
+                TBL_CTO_PB.getNameTable() +
+                " WHERE " +
+                TBL_CTO_PB.NGAY_NHAP_MTB.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_CTO_PB.TRANG_THAI_GHIM +
+                " = " + Common.TRANG_THAI_GHIM.DA_GHIM.getCode() +
+                " AND " +
+                TBL_CTO_PB.TRANG_THAI_CHON +
+                " = " + Common.TRANG_THAI_CHON.DA_CHON.getCode() +
+                " AND " +
+                TBL_CTO_PB.CHON +
+                " = " + Common.CHON.CHUA_GUI.getCode();
+    }
+
+
 
     public static String getBydateALLHistoryCto() {
         return "SELECT DISTINCT *" +

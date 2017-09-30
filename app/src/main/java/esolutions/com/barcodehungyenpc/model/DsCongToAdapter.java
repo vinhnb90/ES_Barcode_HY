@@ -107,11 +107,11 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         String MA_CLOAI = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getMA_CLOAI() : mListPB.get(position).getMA_CLOAI();
         holder.tvMaCLoai.setText(MA_CLOAI);
 
-        String CHISO_THAO = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHISO_THAO() : mListPB.get(position).getCHISO_THAO();
-        holder.tvCSThao.setText(CHISO_THAO);
-
-        //hiện tại không cần hiển thị chỉ số tháo
-        holder.tvCSThao.setVisibility(View.INVISIBLE);
+//        String CHISO_THAO = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHISO_THAO() : mListPB.get(position).get();
+//        holder.tvCSThao.setText(CHISO_THAO);
+//
+//        //hiện tại không cần hiển thị chỉ số tháo
+//        holder.tvCSThao.setVisibility(View.INVISIBLE);
 
         String NAM_SX = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getNAM_SX() : mListPB.get(position).getNAM_SX();
         holder.tvNamSx.setText(NAM_SX);

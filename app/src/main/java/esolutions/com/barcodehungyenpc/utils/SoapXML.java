@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,11 +41,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import esolutions.com.barcodehungyenpc.entity.CongToKDUploadRequest;
-import esolutions.com.barcodehungyenpc.entity.DataRow;
-import esolutions.com.barcodehungyenpc.entity.DataSet;
 import esolutions.com.barcodehungyenpc.entity.ListUpdate_GuiKD_CTO;
-import esolutions.com.barcodehungyenpc.entity.DataTable;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 
 /**
@@ -74,7 +69,7 @@ public class SoapXML {
         Select_MADVIQLY("Select_MADVIQLY", new String[]{}),
         Select_DangNhap("Select_DangNhap", new String[]{"user", "pass", "Ma_DViQLy"}),
         Update_GuiKD_CTO_MTB("Update_GuiKD_CTO_MTB", new String[]{"entity"}),
-        Update_PBCT_MTB("Update_PBCT_MTB", new String[]{});
+        Update_PBCT_MTB("Update_PBCT_MTB",new String[]{"entity"});
 
 
         private String nameMethod;
@@ -619,17 +614,9 @@ public class SoapXML {
             try {
 
                 //truyền đủ các tham số tương ứng
-//
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
-
-//                SoapObject entity = new SoapObject(NAMESPACE, "Update_GuiKD_CTO");
-
-//                for (PropertyInfo pi : propertyInfos) {
-//                    entity.addProperty(pi);
-//                }
-//                request.addSoapObject(entity);
 
                 PropertyInfo pi = callBack.setupProInfo(method);
                 request.addProperty(pi);
@@ -720,113 +707,6 @@ public class SoapXML {
 //            ProgramList programList = MyXMLHandler.programList;
 
 
-        }
-
-        private SoapSerializationEnvelope envelope1() {
-            DataRow row = new DataRow("CHON", "CHON");
-            DataRow row1 = new DataRow("CHON1", "CHON");
-            DataRow row2 = new DataRow("CHON2", "CHON");
-
-
-            Vector<DataRow> dataRows = new Vector<>();
-            dataRows.add(row);
-            dataRows.add(row1);
-            dataRows.add(row2);
-
-            DataTable dataTable = new DataTable("Table1", dataRows);
-            Vector<DataTable> dataTables = new Vector<>();
-            dataTables.add(dataTable);
-
-            DataSet dataSet = new DataSet(dataTables);
-
-            PropertyInfo pi = new PropertyInfo();
-            pi.setName("DataSet");
-            pi.setValue(dataSet);
-            pi.setType(DataSet.class);
-
-
-            SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
-            SoapObject a = new SoapObject("", "a");
-            a.addProperty(pi);
-            request.addSoapObject(a);
-
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-            envelope.setOutputSoapObject(request);
-            envelope.dotNet = true;
-            envelope.implicitTypes = true;
-            envelope.addMapping(NAMESPACE, "Update_GuiKD_CTO_MTB", ListUpdate_GuiKD_CTO.class);
-
-            return envelope;
-        }
-
-        private SoapSerializationEnvelope envelope2() {
-            SoapObject diffgr = new SoapObject("xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\"\n" +
-                    "xmlns:diffgr=\"urn:schemas-microsoft-com:xml-diffgram-v1\"", "diffgr:diffgram");
-
-
-            SoapObject NewDataSet = new SoapObject("", "NewDataSet");
-
-            SoapObject Table1 = new SoapObject("diffgr:id=\"Table11\"", "Table1");
-
-//            SoapObject Row1 = new SoapObject("CHON", "CHON");
-//            SoapObject Row2 = new SoapObject("CHON2", "CHON2");
-//            SoapObject Row3 = new SoapObject("CHON3", "CHON3");
-
-            PropertyInfo row1 = new PropertyInfo();
-            row1.setName("CHON1");
-            row1.setValue("CHON");
-            row1.setType(PropertyInfo.STRING_CLASS);
-
-            PropertyInfo row2 = new PropertyInfo();
-            row2.setName("CHON2");
-            row2.setValue("CHON");
-            row2.setType(PropertyInfo.STRING_CLASS);
-
-            PropertyInfo row3 = new PropertyInfo();
-            row3.setName("CHON3");
-            row3.setValue("CHON");
-            row3.setType(PropertyInfo.STRING_CLASS);
-
-
-            Table1.addProperty(row1);
-            Table1.addProperty(row2);
-            Table1.addProperty(row3);
-
-            NewDataSet.addSoapObject(Table1);
-            diffgr.addSoapObject(NewDataSet);
-
-
-//
-//            SoapObject diffgram = (SoapObject) result.getProperty("diffgram");
-//            SoapObject dataset = (SoapObject) diffgram.getProperty("NewDataSet");
-//            for (int j = 0; j < dataset.getPropertyCount(); j++) {
-//                SoapObject finalObject = (SoapObject) dataset.getProperty(j);
-//                for (int i = 0; i < finalObject.getPropertyCount(); i++) {
-//                    Object object = finalObject.getProperty(i);
-//                    PropertyInfo propertyInfo = new PropertyInfo();
-//                    finalObject.getPropertyInfo(i, propertyInfo);
-//                    if (object instanceof SoapPrimitive) {
-//                        hashMap.put(propertyInfo.name, object.toString());
-//                    }
-//                }
-//                dataList.add(hashMap);
-//            }
-
-            SoapObject a = new SoapObject("", "a");
-            a.addSoapObject(diffgr);
-
-            SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
-            request.addSoapObject(a);
-
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-            envelope.setOutputSoapObject(request);
-            envelope.dotNet = true;
-            envelope.implicitTypes = true;
-//            envelope.addMapping(NAMESPACE, "Update_GuiKD_CTO_MTB", ListUpdate_GuiKD_CTO.class);
-
-            return envelope;
         }
 
 //        private PropertyInfo testDataset2() {
