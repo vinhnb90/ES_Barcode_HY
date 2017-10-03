@@ -329,11 +329,13 @@ public class MainKiemDinhActivity
                 public PropertyInfo setupProInfo(METHOD method) {
 
                     SoapObject request = new SoapObject("", method.getNameMethod());
+//                    SoapObject request = new SoapObject("", method.getNameParams()[0]);
                     for (Update_GuiKD_CTO ctoGKD : mListDataUploadGKD) {
                         PropertyInfo pi = new PropertyInfo();
                         pi.setName(method.getNameParams()[0]);
+//                        pi.setName("Update_GuiKD_CTO");
                         pi.setValue(ctoGKD);
-                        pi.setType(Update_GuiKD_CTO.class);
+                        pi.setType(SoapObject.class);
 
                         request.addProperty(method.getNameParams()[0], pi);
                     }

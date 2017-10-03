@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -42,7 +43,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import esolutions.com.barcodehungyenpc.entity.ListUpdate_GuiKD_CTO;
+import esolutions.com.barcodehungyenpc.entity.Test;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
+import esolutions.com.barcodehungyenpc.entity.Update_GuiPB_CTO;
 
 /**
  * Created by VinhNB on 8/31/2017.
@@ -599,7 +602,7 @@ public class SoapXML {
 //            objectTypeError = classTypeError.newInstance();
             this.method = method;
             this.URL_LINK = URL_LINK;
-            this.URL_LINK = "192.168.68.103:9999";
+//            this.URL_LINK = "192.168.68.103:9999";
             this.SOAP_ACTION = NAMESPACE + this.method.getNameMethod();
         }
 
@@ -617,17 +620,18 @@ public class SoapXML {
             try {
 
                 //truyền đủ các tham số tương ứng
-
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
-
-                PropertyInfo pi = callBack.setupProInfo(method);
-                request.addProperty(pi);
-
-                envelope.setOutputSoapObject(request);
-                envelope.dotNet = true;
-                envelope.implicitTypes = true;
-                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
+                SoapSerializationEnvelope envelope = getEnvelope2();
+//                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+//
+//                SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
+//
+//                PropertyInfo pi = callBack.setupProInfo(method);
+//                request.addProperty(pi);
+//
+//                envelope.setOutputSoapObject(request);
+//                envelope.dotNet = true;
+//                envelope.implicitTypes = true;
+//                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
 
                 HttpTransportSE ht;
                 try {
@@ -685,6 +689,72 @@ public class SoapXML {
 
             return jsonResponse;
         }
+
+        private SoapSerializationEnvelope getEnvelope2() {
+            List<Test> tests = new ArrayList<Test>();
+
+            Test log1 = new Test();
+            log1.setA(1 + "A");
+            log1.setB(1 + "B");
+
+            Test log2 = new Test();
+            log2.setA(2 + "A");
+            log2.setB(2 + "B");
+
+            tests.add(log1);
+            tests.add(log2);
+
+            SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
+
+            SoapObject entity = new SoapObject(NAMESPACE, "entity");
+
+            for (Test i : tests) {
+
+                PropertyInfo pi = new PropertyInfo();
+                pi.setName("Test");
+                pi.setValue(i);
+                pi.setType(SoapObject.class);
+                entity.addProperty("Test", i);
+            }
+
+            request.addProperty("entity", entity);
+
+            String xml = "\n" +
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
+                    "  <soap12:Header>\n" +
+                    "    <AuthenticateHeader xmlns=\"http://tempuri.org/\">\n" +
+                    "      <Username>string</Username>\n" +
+                    "      <Password>string</Password>\n" +
+                    "      <strKeyAuthenticate>string</strKeyAuthenticate>\n" +
+                    "    </AuthenticateHeader>\n" +
+                    "  </soap12:Header>\n" +
+                    "  <soap12:Body>\n" +
+                    "    <Update_GuiKD_CTO_2 xmlns=\"http://tempuri.org/\">\n" +
+                    "      <entity>\n" +
+                    "        <Test>\n" +
+                    "          <a>string1</a>\n" +
+                    "          <b>string2</b>\n" +
+                    "        </Test>\n" +
+                    "        <Test>\n" +
+                    "          <a>string1</a>\n" +
+                    "          <b>string2</b>\n" +
+                    "        </Test>\n" +
+                    "      </entity>\n" +
+                    "    </Update_GuiKD_CTO_2>\n" +
+                    "  </soap12:Body>\n" +
+                    "</soap12:Envelope>";
+
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.dotNet = true;
+            envelope.bodyOut = request;
+            envelope.setOutputSoapObject(request);
+            envelope.addMapping(NAMESPACE, "Test", Test.class);
+
+
+            return envelope;
+        }
+
 
         private void test3() {
 //            try {
