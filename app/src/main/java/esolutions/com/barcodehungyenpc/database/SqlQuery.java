@@ -3,6 +3,7 @@ package esolutions.com.barcodehungyenpc.database;
 import esolutions.com.barcodehungyenpc.utils.Common;
 
 import static esolutions.com.barcodehungyenpc.database.SqlQuery.TBL_HISTORY.ID_TBL_CTO;
+import static esolutions.com.barcodehungyenpc.database.SqlQuery.TBL_HISTORY.TYPE_RESULT;
 
 /**
  * Created by VinhNB on 8/8/2017.
@@ -44,10 +45,7 @@ public class SqlQuery {
         //Trạng thái chưa ghim = 0, đã ghim = 1
         TRANG_THAI_GHIM("TRANG_THAI_GHIM"),
         //Trạng thái chưa chọn = 0, đã chọn = 1
-        TRANG_THAI_CHON("TRANG_THAI_CHON"),
-        //Phiên tải xuống
-        SESSION_GET("SESSION_GET");
-
+        TRANG_THAI_CHON("TRANG_THAI_CHON");
 
 //        KieuCongToPhanBo("KieuCongToPhanBo");
 
@@ -72,22 +70,26 @@ public class SqlQuery {
         MA_DVIQLY("MA_DVIQLY"),
         NAM_SX("NAM_SX"),
         MA_CTO("MA_CTO"),
+
         SO_CTO("SO_CTO"),
         LOAI_SOHUU("LOAI_SOHUU"),
         MA_CLOAI("MA_CLOAI"),
         NGAY_BDONG("NGAY_BDONG"),
         MA_BDONG("MA_BDONG"),
+
         NGAY_NHAP("NGAY_NHAP"),
         NGAY_KDINH("NGAY_KDINH"),
         SO_DAY("SO_DAY"),
         VH_CONG("VH_CONG"),
         SO_PHA("SO_PHA"),
+
         DIEN_AP("DIEN_AP"),
         DONG_DIEN("DONG_DIEN"),
         ID_TBL_CTO_PB("ID_TBL_CTO_PB"),
         NGAY_NHAP_MTB("NGAY_NHAP_MTB"),
         //Trạng thái chưa ghim = 0, đã ghim = 1
         TRANG_THAI_GHIM("TRANG_THAI_GHIM"),
+
         //Trạng thái chưa chọn = 0, đã chọn = 1
         TRANG_THAI_CHON("TRANG_THAI_CHON"),
 
@@ -97,15 +99,16 @@ public class SqlQuery {
         MA_NVIEN("MA_NVIEN"),
         SO_BBAN("SO_BBAN"),
         ID_BBAN_KDINH("ID_BBAN_KDINH"),
+
         NGAY_GUIKD("NGAY_GUIKD"),
         NGAY_KDINH_TH("NGAY_KDINH_TH"),
         LOAI_CTO("LOAI_CTO"),
         SO_CSO("SO_CSO"),
         MA_HANG("MA_HANG"),
+
         CAP_CXAC("CAP_CXAC"),
         MA_NUOC("MA_NUOC"),
-        ACTION("ACTION")
-        ;
+        ACTION("ACTION");
 
 
         private String mNameCollumn;
@@ -196,8 +199,7 @@ public class SqlQuery {
 //                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + " TEXT, " +
                 TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() + " TEXT, " +
                 TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() + " INTEGER DEFAULT 0, " +
-                TBL_CTO_GUI_KD.TRANG_THAI_CHON.getNameCollumn() + " INTEGER DEFAULT 0, " +
-                TBL_CTO_GUI_KD.SESSION_GET.getNameCollumn() + " TEXT" +
+                TBL_CTO_GUI_KD.TRANG_THAI_CHON.getNameCollumn() + " INTEGER DEFAULT 0" +
                 ");";
     }
 
@@ -209,7 +211,6 @@ public class SqlQuery {
                 TBL_CTO_PB.SO_CTO.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_DVIQLY.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_CLOAI.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.NGAY_NHAP_HTHONG.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NAM_SX.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.LOAI_SOHUU.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_BDONG.getNameCollumn() + " TEXT, " +
@@ -419,6 +420,19 @@ public class SqlQuery {
                 ;
     }
 
+    public static String getByDateAllCongToPBNoSuccess() {
+        return "SELECT * " +
+                " FROM " +
+                TBL_CTO_PB.getNameTable() +
+                " WHERE " +
+                TBL_CTO_PB.NGAY_NHAP_MTB.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_CTO_PB.CHON.getNameCollumn() +
+                " != " + Common.CHON.GUI_THANH_CONG.getCode()
+                ;
+    }
+
 
 //    public static String getSelectTBL_CTO_GUI_KD() {
 //        return "SELECT " +
@@ -478,7 +492,6 @@ public class SqlQuery {
     }
 
 
-
     public static String getBydateALLHistoryCto() {
         return "SELECT DISTINCT *" +
                 " FROM " +
@@ -486,6 +499,27 @@ public class SqlQuery {
                 " WHERE " +
                 TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
                 " = ? " +
+                " AND " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " BETWEEN ? AND ? " +
+                " GROUP BY " +
+                TBL_HISTORY.DATE_SESSION +
+                " ORDER BY " +
+                TBL_HISTORY.DATE_SESSION +
+                " DESC";
+    }
+
+
+    public static String getBydateALLHistoryCtoNoSuccess() {
+        return "SELECT DISTINCT *" +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.TYPE_RESULT.getNameCollumn() +
+                " != " + Common.TYPE_RESULT.SUCCESS.getCode() +
                 " AND " +
                 TBL_HISTORY.DATE_SESSION.getNameCollumn() +
                 " BETWEEN ? AND ? " +
@@ -517,6 +551,19 @@ public class SqlQuery {
                 " WHERE " +
                 TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() +
                 " = ? "
+                ;
+    }
+
+    public static String getAllCongToByDateKDNoSuccess() {
+        return "SELECT * " +
+                " FROM " +
+                TBL_CTO_GUI_KD.getNameTable() +
+                " WHERE " +
+                TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_CTO_GUI_KD.CHON.getNameCollumn() +
+                " != " + Common.CHON.GUI_THANH_CONG.getCode()
                 ;
     }
 
@@ -659,6 +706,24 @@ public class SqlQuery {
                 ;
     }
 
+    public static String getByDateAllCongToGhimPBNoSuccess() {
+        return "SELECT *" +
+                " FROM " +
+                TBL_CTO_PB.getNameTable()
+                +
+                " WHERE " +
+                TBL_CTO_PB.TRANG_THAI_GHIM.getNameCollumn() +
+                " = " + Common.TRANG_THAI_GHIM.DA_GHIM.getCode() +
+                " AND " +
+                TBL_CTO_PB.NGAY_NHAP_MTB.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_CTO_PB.CHON.getNameCollumn() +
+                " != " + Common.CHON.GUI_THANH_CONG.getCode()
+                ;
+    }
+
+
     public static String getByDateSelectCongToGhimKD() {
         return "SELECT *" +
                 " FROM " +
@@ -670,6 +735,23 @@ public class SqlQuery {
                 " AND " +
                 TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() +
                 " = ? "
+                ;
+    }
+
+    public static String getByDateSelectCongToGhimKDNoSuccess() {
+        return "SELECT *" +
+                " FROM " +
+                TBL_CTO_GUI_KD.getNameTable()
+                +
+                " WHERE " +
+                TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() +
+                " = " + Common.TRANG_THAI_GHIM.DA_GHIM.getCode() +
+                " AND " +
+                TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_CTO_GUI_KD.CHON.getNameCollumn() +
+                " != " + Common.CHON.GUI_THANH_CONG.getCode()
                 ;
     }
 
@@ -772,15 +854,15 @@ public class SqlQuery {
     public static String getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT() {
         return "SELECT B.* FROM " +
                 "( " +
-                "(SELECT " + TBL_HISTORY.getNameTable() + "."+ TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +" " +
-                "FROM "+ TBL_HISTORY.getNameTable()+" " +
-                "WHERE "+TBL_HISTORY.DATE_SESSION.getNameCollumn()+ " = ? AND "+TBL_HISTORY.TYPE_SESSION.getNameCollumn()+ " = ? AND "+TBL_HISTORY.TYPE_RESULT.getNameCollumn()+ " = ? AND  "+TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn()+ " = ? " +
+                "(SELECT " + TBL_HISTORY.getNameTable() + "." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " " +
+                "FROM " + TBL_HISTORY.getNameTable() + " " +
+                "WHERE " + TBL_HISTORY.DATE_SESSION.getNameCollumn() + " = ? AND " + TBL_HISTORY.TYPE_SESSION.getNameCollumn() + " = ? AND " + TBL_HISTORY.TYPE_RESULT.getNameCollumn() + " = ? AND  " + TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() + " = ? " +
                 ") " +
                 "AS A " +
                 "INNER JOIN  " +
-                " "+TBL_CTO_PB.getNameTable()+" " +
+                " " + TBL_CTO_PB.getNameTable() + " " +
                 "AS B " +
-                "ON A."+TBL_HISTORY.ID_TBL_CTO.getNameCollumn()+" = B."+TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn()+" " +
+                "ON A." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " = B." + TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn() + " " +
                 ")";
     }
 
@@ -788,15 +870,15 @@ public class SqlQuery {
     public static String getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT() {
         return "SELECT B.* FROM " +
                 "( " +
-                "(SELECT " + TBL_HISTORY.getNameTable() + "."+ TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +" " +
-                "FROM "+ TBL_HISTORY.getNameTable()+" " +
-                "WHERE "+TBL_HISTORY.DATE_SESSION.getNameCollumn()+ " = ? AND "+TBL_HISTORY.TYPE_SESSION.getNameCollumn()+ " = ? AND "+TBL_HISTORY.TYPE_RESULT.getNameCollumn()+ " = ? AND  "+TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn()+ " = ? " +
+                "(SELECT " + TBL_HISTORY.getNameTable() + "." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " " +
+                "FROM " + TBL_HISTORY.getNameTable() + " " +
+                "WHERE " + TBL_HISTORY.DATE_SESSION.getNameCollumn() + " = ? AND " + TBL_HISTORY.TYPE_SESSION.getNameCollumn() + " = ? AND " + TBL_HISTORY.TYPE_RESULT.getNameCollumn() + " = ? AND  " + TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() + " = ? " +
                 ") " +
                 "AS A " +
                 "INNER JOIN  " +
-                " "+TBL_CTO_GUI_KD.getNameTable()+" " +
+                " " + TBL_CTO_GUI_KD.getNameTable() + " " +
                 "AS B " +
-                "ON A."+TBL_HISTORY.ID_TBL_CTO.getNameCollumn()+" = B."+TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn()+" " +
+                "ON A." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " = B." + TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn() + " " +
                 ")";
     }
 

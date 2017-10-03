@@ -13,7 +13,6 @@ public class Update_GuiKD_CTO implements KvmSerializable {
     private int CHON;
     private int STT;
     private String MA_CTO;
-
     private String SO_CTO;
     private String MA_CLOAI;
     private String NGAY_NHAP_HT;

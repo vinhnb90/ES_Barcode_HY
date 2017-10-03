@@ -163,7 +163,6 @@
 
                     android:scaleType="centerCrop"
                     android:src="@mipmap/ic_download_2"
-                    tools:visibility=""
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -261,6 +260,7 @@
                     android:src="@mipmap/ic_visible" />
 
             </RelativeLayout>
+
 
             <EditText
                 android:id="@+id/et_pass"

@@ -18,6 +18,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -233,18 +234,33 @@ public class DangNhapActivity extends BaseActivity implements
                 }
             });
 
-            mIbtnVisibePass.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mEtPass.getInputType() != InputType.TYPE_CLASS_TEXT) {
-                        mEtPass.setInputType(InputType.TYPE_CLASS_TEXT);
-                        mIbtnVisibePass.setImageResource(R.mipmap.ic_visibe_off);
-                    } else {
-                        mEtPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        mIbtnVisibePass.setImageResource(R.mipmap.ic_visible);
+            mIbtnVisibePass.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch ( event.getAction() ) {
+                        case MotionEvent.ACTION_DOWN:
+                            mEtPass.setInputType(InputType.TYPE_CLASS_TEXT);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            mEtPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            break;
                     }
+                    return true;
                 }
             });
+
+//            mIbtnVisibePass.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (mEtPass.getInputType() != InputType.TYPE_CLASS_TEXT) {
+//                        mEtPass.setInputType(InputType.TYPE_CLASS_TEXT);
+//                        mIbtnVisibePass.setImageResource(R.mipmap.ic_visibe_off);
+//                    } else {
+//                        mEtPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//                        mIbtnVisibePass.setImageResource(R.mipmap.ic_visible);
+//                    }
+//                }
+//            });
 
             //btnLogin
             mBtnLogin.setOnClickListener(new View.OnClickListener() {

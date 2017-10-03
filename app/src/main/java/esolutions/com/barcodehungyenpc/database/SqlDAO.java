@@ -1,5 +1,6 @@
 package esolutions.com.barcodehungyenpc.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -112,6 +113,36 @@ public class SqlDAO {
         return listCongToProxies;
     }
 
+    public List<CongToPBProxy> getByDateAllCongToPBNoSuccess(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        List<CongToPBProxy> listCongToProxies = new ArrayList<>();
+
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllCongToPBNoSuccess(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToPBProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
+    }
+
+
+
     public List<CongToGuiKDProxy> getByDateAllCongToKD(String dateSQL) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -123,6 +154,34 @@ public class SqlDAO {
 
         Cursor cursor = null;
         cursor = mSqLiteDatabase.rawQuery(SqlQuery.getAllCongToByDateKD(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToGuiKDProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
+    }
+
+    public List<CongToGuiKDProxy> getByDateAllCongToKDNoSuccess(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        List<CongToGuiKDProxy> listCongToProxies = new ArrayList<>();
+
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getAllCongToByDateKDNoSuccess(), args);
 
         if (cursor == null) {
             Log.d(TAG, "getAllCongTo: null cursor");
@@ -176,6 +235,45 @@ public class SqlDAO {
                 congToGuiKD.getTRANG_THAI_GHIM(),
                 congToGuiKD.getTRANG_THAI_CHON()
         );
+
+//        ContentValues initialValues = new ContentValues();
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.CHON.getNameCollumn(), Common.CHON.CHUA_GUI.getCode());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_CTO.getNameCollumn(), congToGuiKD.getMA_CTO());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.SO_CTO.getNameCollumn(), congToGuiKD.getSO_CTO());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn(), congToGuiKD.getMA_DVIQLY());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_CLOAI.getNameCollumn(), congToGuiKD.getMA_CLOAI());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NGAY_NHAP_HT.getNameCollumn(), congToGuiKD.getNGAY_NHAP_HT());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NAM_SX.getNameCollumn(), congToGuiKD.getNAM_SX());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.LOAI_SOHUU.getNameCollumn(), congToGuiKD.getLOAI_SOHUU());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.TEN_SOHUU.getNameCollumn(), congToGuiKD.getTEN_SOHUU());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_BDONG.getNameCollumn(), congToGuiKD.getMA_BDONG());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NGAY_BDONG.getNameCollumn(), congToGuiKD.getNGAY_BDONG());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NGAY_BDONG_HTAI.getNameCollumn(), congToGuiKD.getNGAY_BDONG_HTAI());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.SO_PHA.getNameCollumn(), congToGuiKD.getSO_PHA());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.SO_DAY.getNameCollumn(), congToGuiKD.getSO_DAY());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.DONG_DIEN.getNameCollumn(), congToGuiKD.getDONG_DIEN());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.VH_CONG.getNameCollumn(), congToGuiKD.getVH_CONG());
+//
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.DIEN_AP.getNameCollumn(), congToGuiKD.getDIEN_AP());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.HS_NHAN.getNameCollumn(), congToGuiKD.getHS_NHAN());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NGAY_KDINH.getNameCollumn(), congToGuiKD.getNGAY_KDINH());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn(), congToGuiKD.getCHISO_THAO());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.HSN.getNameCollumn(), congToGuiKD.getHSN());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn(), congToGuiKD.getNGAY_NHAP());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn(), congToGuiKD.getNGAY_NHAP_MTB());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn(), congToGuiKD.getTRANG_THAI_GHIM());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.TRANG_THAI_CHON.getNameCollumn(), congToGuiKD.getTRANG_THAI_CHON());
+//
+//
+//        int rowAffect = -1;
+//        try {
+//            rowAffect = (int) mSqLiteDatabase.insertOrThrow(SqlQuery.TBL_CTO_GUI_KD.getNameTable(), null, initialValues);
+//        } catch (Exception e) {
+//            Log.w(TAG, "insertTBL_CTO_GUI_KD: " + " has row not insert because same id" );
+//        }
+//
+//        if(rowAffect == -1)
+//            return 0;
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_CTO_GUI_KD(), args);
         return this.getIDLastRow(SqlQuery.TBL_CTO_GUI_KD.getNameTable(), SqlQuery.TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn());
@@ -244,8 +342,6 @@ public class SqlDAO {
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_CTO_PB(), args);
         return this.getIDLastRow(SqlQuery.TBL_CTO_PB.getNameTable(), SqlQuery.TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn());
     }
-
-
 
 
     public void insertTBL_HISTORY(History history) throws Exception {
@@ -343,7 +439,7 @@ public class SqlDAO {
                 idCto
         );
 
-        mSqLiteDatabase.execSQL((kieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)?SqlQuery.getUpdateTRANG_THAI_CHONCtoKD():SqlQuery.getUpdateTRANG_THAI_CHONCtoPB(), args);
+        mSqLiteDatabase.execSQL((kieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? SqlQuery.getUpdateTRANG_THAI_CHONCtoKD() : SqlQuery.getUpdateTRANG_THAI_CHONCtoPB(), args);
     }
 
     public String selectDienLuc(String maDienLuc) throws Exception {
@@ -382,6 +478,33 @@ public class SqlDAO {
         return listCongToProxies;
     }
 
+    public List<CongToPBProxy> getByDateAllCongToGhimPBNoSuccess(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        List<CongToPBProxy> listCongToProxies = new ArrayList<>();
+        Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllCongToGhimPBNoSuccess(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToPBProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
+    }
+
+
     public List<CongToGuiKDProxy> getByDateAllCongToGhimKD(String dateSQL) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -408,6 +531,34 @@ public class SqlDAO {
         return listCongToProxies;
     }
 
+    public List<CongToGuiKDProxy> getByDateAllCongToGhimKDNoSuccess(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        List<CongToGuiKDProxy> listCongToProxies = new ArrayList<>();
+        Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateSelectCongToGhimKDNoSuccess(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToGuiKDProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
+    }
+
+
+
     public int deleteCongToPB(int idCongTo) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -429,7 +580,7 @@ public class SqlDAO {
                 idCongTo
         );
 
-        mSqLiteDatabase.execSQL(SqlQuery.getDeletePB(), args);
+        mSqLiteDatabase.execSQL(SqlQuery.getDeleteKD(), args);
 
         return getIDLastRow(SqlQuery.TBL_CTO_GUI_KD.getNameTable(), SqlQuery.TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn());
     }
@@ -464,7 +615,7 @@ public class SqlDAO {
         Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.getCheckExistByDateTBL_CTO_GUI_KD(), args);
 
         if (cursor != null) {
-            if(cursor.getCount() == 0)
+            if (cursor.getCount() == 0)
                 return 0;
             else {
                 cursor.moveToFirst();
@@ -616,6 +767,7 @@ public class SqlDAO {
         mSqLiteDatabase.execSQL(SqlQuery.deleteByDateAllCongToKD(), args);
     }
 
+
     public List<HistoryProxy> getBydateALLHistoryCto(String dateSQL, String TYPE_TBL_CTO, Common.DATE_TIME_TYPE typeDefault, Common.KIEU_CHUONG_TRINH kieuChuongTrinh) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -655,6 +807,48 @@ public class SqlDAO {
             closeCursor(cursor);
         return historyProxyList;
     }
+
+    public List<HistoryProxy> getBydateALLHistoryCtoNoSuccess(String dateSQL, String TYPE_TBL_CTO, Common.DATE_TIME_TYPE typeDefault, Common.KIEU_CHUONG_TRINH kieuChuongTrinh) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        dateSQL = Common.convertDateToDate(dateSQL, Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+        Date date = Common.convertDateUIToDateSQL(dateSQL, typeDefault);
+        Date beginDay = Common.getStartOfDay(date);
+        Date endDay = Common.getEndOfDay(date);
+
+        long beginDayTime = beginDay.getTime();
+        long endDayTime = endDay.getTime();
+
+        List<HistoryProxy> historyProxyList = new ArrayList<>();
+
+        String[] args = SqlDAO.build(
+                TYPE_TBL_CTO,
+                beginDayTime,
+                endDayTime
+
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getBydateALLHistoryCtoNoSuccess(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return historyProxyList;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            historyProxyList.add(new HistoryProxy(cursor, cursor.getPosition(), kieuChuongTrinh));
+            cursor.moveToNext();
+        }
+
+        if (historyProxyList.isEmpty())
+            closeCursor(cursor);
+        return historyProxyList;
+    }
+
+
 
     public void getByDateDeleteHistory(int idRowDelete) throws Exception {
         if (!Common.isExistDB())
@@ -801,7 +995,7 @@ public class SqlDAO {
 
         Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.getCheckExistByDateTBL_CTO_PB(), args);
         if (cursor != null) {
-            if(cursor.getCount() == 0)
+            if (cursor.getCount() == 0)
                 return 0;
             else {
                 cursor.moveToFirst();
@@ -811,7 +1005,7 @@ public class SqlDAO {
         return 0;
     }
 
-    public List<CongToGuiKDProxy> getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(String DATE_SESSION, Common.TYPE_SESSION type_session, Common.TYPE_RESULT type_result) throws Exception{
+    public List<CongToGuiKDProxy> getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(String DATE_SESSION, Common.TYPE_SESSION type_session, Common.TYPE_RESULT type_result) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
@@ -842,7 +1036,7 @@ public class SqlDAO {
         return listCongToProxies;
     }
 
-    public List<CongToPBProxy> getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(String DATE_SESSION, Common.TYPE_SESSION type_session, Common.TYPE_RESULT type_result) throws Exception{
+    public List<CongToPBProxy> getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(String DATE_SESSION, Common.TYPE_SESSION type_session, Common.TYPE_RESULT type_result) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 

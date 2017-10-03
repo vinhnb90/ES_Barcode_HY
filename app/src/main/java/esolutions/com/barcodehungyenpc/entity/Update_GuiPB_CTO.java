@@ -151,7 +151,7 @@ public class Update_GuiPB_CTO implements KvmSerializable {
 
     @Override
     public int getPropertyCount() {
-        return 23;
+        return 31;
     }
 
     @Override

@@ -57,7 +57,9 @@ public class SoapXML {
 //        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
 
 //                "http://" + address + "/servicedodem28.8/ServiceTienIch_DoDem.asmx";
-        return "http://" + address + "/ServiceTienIch_DoDem.asmx";
+        return "http://" + address + "/serTienIch_DoDem/ServiceTienIch_DoDem.asmx";
+//        return "http://" + address + "/WebService1.asmx";
+//        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
     }
 
     public static int TIME_OUT = 30000;
@@ -597,6 +599,7 @@ public class SoapXML {
 //            objectTypeError = classTypeError.newInstance();
             this.method = method;
             this.URL_LINK = URL_LINK;
+            this.URL_LINK = "192.168.68.103:9999";
             this.SOAP_ACTION = NAMESPACE + this.method.getNameMethod();
         }
 
@@ -624,7 +627,7 @@ public class SoapXML {
                 envelope.setOutputSoapObject(request);
                 envelope.dotNet = true;
                 envelope.implicitTypes = true;
-                envelope.addMapping(NAMESPACE, method.getNameMethod(), Update_GuiKD_CTO.class);
+                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
 
                 HttpTransportSE ht;
                 try {

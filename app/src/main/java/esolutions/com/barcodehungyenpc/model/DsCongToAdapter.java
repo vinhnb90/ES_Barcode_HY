@@ -84,6 +84,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     public void setHistoryAdapter(boolean historyAdapter) {
         isHistoryAdapter = historyAdapter;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -207,7 +208,6 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
         }
 
-
         if (menuBottomKD == Common.MENU_BOTTOM_KD.DS_GHIM) {
             //ẩn và hiện nút
             holder.btnXoa.setVisibility(View.GONE);
@@ -253,17 +253,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 holder.btnChon.setCompoundDrawables(null, null, null, null);
                 holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
             }
-
-            //nếu là history thì disable click các nút
-            if (isHistoryAdapter) {
-                holder.btnChon.setClickable(false);
-                holder.btnGhim.setClickable(false);
-                holder.btnXoa.setClickable(false);
-            }
-
         }
-
-
         //set Background row ghim
         holder.btnChon.setLayoutParams(paramsChon);
         holder.btnGhim.setLayoutParams(paramsGhim);
@@ -277,6 +267,13 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 //            holder.fabGhim.setBackground(mContext.getApplicationContext().getResources().getDrawable((getTRANG_THAI_GHIM == 0) ? R.drawable.ic_unmark : R.drawable.ic_chon));
 //        } else
 //            holder.fabGhim.setBackgroundDrawable(mContext.getApplicationContext().getResources().getDrawable((getTRANG_THAI_GHIM == 0) ? R.drawable.ic_unmark : R.drawable.ic_chon));
+
+        //nếu là history thì disable click các nút
+        if (isHistoryAdapter) {
+            holder.btnChon.setVisibility(View.GONE);
+            holder.btnGhim.setVisibility(View.GONE);
+            holder.btnXoa.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -320,15 +317,6 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 //                }
 //            });
 
-            relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //gửi ra ngoài vị trí  list đó để xử lý
-                    int pos = getAdapterPosition();
-                    mListener.clickBtnChiTiet(pos);
-                }
-            });
-
             btnGhim.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -359,8 +347,6 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     public interface OnDsCtoAdapterIteraction {
         void clickBtnGhimRowCto(int pos);
-
-        void clickBtnChiTiet(int pos);
 
         void clickBtnXoa(int pos);
 
