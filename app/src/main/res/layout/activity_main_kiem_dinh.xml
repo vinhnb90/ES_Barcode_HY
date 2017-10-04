@@ -78,7 +78,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/tv_title_url"
                         android:layout_toRightOf="@+id/cb_search_by_id_bban"
                         android:layout_weight="1"
                         android:background="@null"

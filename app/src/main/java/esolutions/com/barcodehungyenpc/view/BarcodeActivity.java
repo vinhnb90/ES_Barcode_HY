@@ -101,7 +101,7 @@ public class BarcodeActivity extends BaseActivity implements ZXingScannerView.Re
                     return;
 
                 tvTextBarcode.setText("");
-                mScannerView.setResultHandler(BarcodeActivity.this); // Register ourselves as a handler for scan results.
+                mScannerView.setResultHandler(BarcodeActivity.this); // Register ourselves as MA_CTO handler for scan results.
                 mScannerView.startCamera();
                 mScannerView.resumeCameraPreview(BarcodeActivity.this);
             }

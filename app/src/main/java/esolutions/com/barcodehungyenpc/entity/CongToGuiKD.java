@@ -35,7 +35,6 @@ public class CongToGuiKD {
     private String NGAY_NHAP_MTB;
     private int TRANG_THAI_GHIM;
     private int TRANG_THAI_CHON;
-    //Session đánh dấu phiên tải xuống và up lên của các công tơ
 
     public CongToGuiKD() {
         ID_TBL_CTO_GUI_KD = -1;

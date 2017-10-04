@@ -1,6 +1,7 @@
 package esolutions.com.barcodehungyenpc.utils;
 
 import android.os.AsyncTask;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,17 +22,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,10 +44,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import esolutions.com.barcodehungyenpc.entity.ListUpdate_GuiKD_CTO;
+import static android.text.Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
+import static android.text.Html.escapeHtml;
+import static android.text.Html.toHtml;
 import esolutions.com.barcodehungyenpc.entity.Test;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
-import esolutions.com.barcodehungyenpc.entity.Update_GuiPB_CTO;
 
 /**
  * Created by VinhNB on 8/31/2017.
@@ -60,9 +63,10 @@ public class SoapXML {
 //        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
 
 //                "http://" + address + "/servicedodem28.8/ServiceTienIch_DoDem.asmx";
-        return "http://" + address + "/serTienIch_DoDem/ServiceTienIch_DoDem.asmx";
 //        return "http://" + address + "/WebService1.asmx";
 //        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
+        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
+//        return "http://192.168.68.103:9999/serTienIch_DoDem/ServiceTienIch_DoDem.asmx";
     }
 
     public static int TIME_OUT = 30000;
@@ -73,8 +77,8 @@ public class SoapXML {
 
         Select_MADVIQLY("Select_MADVIQLY", new String[]{}),
         Select_DangNhap("Select_DangNhap", new String[]{"user", "pass", "Ma_DViQLy"}),
-        Update_GuiKD_CTO_MTB("Update_GuiKD_CTO_MTB", new String[]{"entity"}),
-        Update_PBCT_MTB("Update_PBCT_MTB",new String[]{"entity"});
+        Update_GuiKD_CTO_MTB("Update_GuiKD_CTO", new String[]{"a"}),
+        Update_PBCT_MTB("Update_PBCT_MTB", new String[]{"entity"});
 
 
         private String nameMethod;
@@ -263,7 +267,6 @@ public class SoapXML {
                 //kiểm tra nếu có property 'CTO' thì lấy dữ liệu dataset
                 //ngược lại nếu là 'Table1" thì lấy dữ liệu thông báo
                 //2 giá trị này được cung cấp bởi server, nên debug các giá trị cây của soapObject để nắm rõ
-
 
 
                 ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
@@ -475,7 +478,7 @@ public class SoapXML {
 
         public static <T> List<T> stringToArray(String s, Class<T[]> clazz) {
             T[] arr = new Gson().fromJson(s, clazz);
-            return Arrays.asList(arr); //or return Arrays.asList(new Gson().fromJson(s, clazz)); for a one-liner
+            return Arrays.asList(arr); //or return Arrays.asList(new Gson().fromJson(s, clazz)); for MA_CTO one-liner
         }
 
 
@@ -616,22 +619,31 @@ public class SoapXML {
         protected String doInBackground(Object... objects) {
             //check size argParams with nameParams
             String jsonResponse = "";
-
             try {
 
                 //truyền đủ các tham số tương ứng
-                SoapSerializationEnvelope envelope = getEnvelope2();
+//                SoapSerializationEnvelope envelope = getEnvelope2();
 //                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 //
 //                SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
 //
-//                PropertyInfo pi = callBack.setupProInfo(method);
+//                PropertyInfo pi = callBack.setupRequest(method);
 //                request.addProperty(pi);
 //
 //                envelope.setOutputSoapObject(request);
 //                envelope.dotNet = true;
 //                envelope.implicitTypes = true;
 //                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
+
+                SoapSerializationEnvelope envelope = callBack.setupRequest(NAMESPACE, method);
+
+//                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+//                envelope.setOutputSoapObject(request);
+//                envelope.dotNet = true;
+//                envelope.implicitTypes = true;
+//                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
+
+//                envelope.addMapping(NAMESPACE, "Test", Test.class);
 
                 HttpTransportSE ht;
                 try {
@@ -733,11 +745,11 @@ public class SoapXML {
                     "    <Update_GuiKD_CTO_2 xmlns=\"http://tempuri.org/\">\n" +
                     "      <entity>\n" +
                     "        <Test>\n" +
-                    "          <a>string1</a>\n" +
+                    "          <MA_CTO>string1</MA_CTO>\n" +
                     "          <b>string2</b>\n" +
                     "        </Test>\n" +
                     "        <Test>\n" +
-                    "          <a>string1</a>\n" +
+                    "          <MA_CTO>string1</MA_CTO>\n" +
                     "          <b>string2</b>\n" +
                     "        </Test>\n" +
                     "      </entity>\n" +
@@ -869,7 +881,7 @@ public class SoapXML {
                     "<xs:complexType>\n" +
                     "<xs:sequence>\n" +
                     "<xs:element name=\"CHISO_THAO\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"CHON\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
+                    "<xs:element name=\"MA_CTO\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
                     "<xs:element name=\"DIEN_AP\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
                     "<xs:element name=\"DONG_DIEN\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
                     "<xs:element name=\"HS_NHAN\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
@@ -903,7 +915,7 @@ public class SoapXML {
                     "<DataTable1 xmlns=\"\">\n" +
                     "<Table1 diffgr:id=\"Table11\" msdata:rowOrder=\"0\" diffgr:hasChanges=\"inserted\">\n" +
                     "<CHISO_THAO>23232</CHISO_THAO>\n" +
-                    "<CHON>1</CHON>\n" +
+                    "<MA_CTO>1</MA_CTO>\n" +
                     "<DIEN_AP>220V</DIEN_AP>\n" +
                     "<DONG_DIEN>1 CHIỀU</DONG_DIEN>\n" +
                     "<HS_NHAN>10</HS_NHAN>\n" +
@@ -927,7 +939,7 @@ public class SoapXML {
                     "</Table1>\n" +
                     "<Table1 diffgr:id=\"Table12\" msdata:rowOrder=\"1\" diffgr:hasChanges=\"inserted\">\n" +
                     "<CHISO_THAO>23232</CHISO_THAO>\n" +
-                    "<CHON>1</CHON>\n" +
+                    "<MA_CTO>1</MA_CTO>\n" +
                     "<DIEN_AP>220V</DIEN_AP>\n" +
                     "<DONG_DIEN>1 CHIỀU</DONG_DIEN>\n" +
                     "<HS_NHAN>10</HS_NHAN>\n" +
@@ -1200,7 +1212,7 @@ public class SoapXML {
 
             public abstract void onPostMessageSever(V errorResponse);
 
-            public abstract PropertyInfo setupProInfo(METHOD METHOD_PARAM);
+            public abstract SoapSerializationEnvelope setupRequest(String NAMESPACE, METHOD method);
         }
     }
 

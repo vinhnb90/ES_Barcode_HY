@@ -108,6 +108,19 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         String MA_CLOAI = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getMA_CLOAI() : mListPB.get(position).getMA_CLOAI();
         holder.tvMaCLoai.setText(MA_CLOAI);
 
+        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+            holder.tvTitleSoIDBBan.setVisibility(View.GONE);
+            holder.tvSoIDBBan.setVisibility(View.GONE);
+        }
+
+        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+            holder.tvTitleSoIDBBan.setVisibility(View.VISIBLE);
+            holder.tvSoIDBBan.setVisibility(View.VISIBLE);
+
+            String ID_BBAN_KDINH = mListPB.get(position).getID_BBAN_KDINH();
+            holder.tvSoIDBBan.setText(ID_BBAN_KDINH);
+        }
+
 //        String CHISO_THAO = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHISO_THAO() : mListPB.get(position).get();
 //        holder.tvCSThao.setText(CHISO_THAO);
 //
@@ -278,7 +291,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     @Override
     public int getItemCount() {
-        int size = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)? mListKD.size(): mListPB.size();
+        int size = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.size() : mListPB.size();
         return size;
     }
 
@@ -288,7 +301,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     public class DsCtoViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout relativeLayout;
-        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap;
+        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoIDBBan, tvTitleSoIDBBan;
+
         public Button btnXoa, btnGhim, btnChon;
 
         public DsCtoViewHolder(View itemView) {
@@ -302,7 +316,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             tvMaDvi = (TextView) itemView.findViewById(R.id.tv_ma_dvi);
             tvNamSx = (TextView) itemView.findViewById(R.id.tv_nam_sx);
             tvNgayNhap = (TextView) itemView.findViewById(R.id.tv_ngay_nhap);
-
+            tvSoIDBBan = (TextView) itemView.findViewById(R.id.tv_id_bban_kdinh);
+            tvTitleSoIDBBan = (TextView) itemView.findViewById(R.id.tv_title_id_bban_kiemdinh);
             btnXoa = (Button) itemView.findViewById(R.id.btn_delete);
             btnGhim = (Button) itemView.findViewById(R.id.btn_ghim);
             btnChon = (Button) itemView.findViewById(R.id.btn_chon);

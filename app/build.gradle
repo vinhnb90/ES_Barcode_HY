@@ -37,4 +37,5 @@ dependencies {
     compile 'me.dm7.barcodescanner:zxing:1.9.8'
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     testCompile 'junit:junit:4.12'
+    compile files('libs/commons-lang3-3.6.jar')
 }

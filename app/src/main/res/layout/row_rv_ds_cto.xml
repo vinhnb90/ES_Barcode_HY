@@ -54,7 +54,7 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_toRightOf="@+id/tv_STT"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -87,31 +87,78 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_title_ma_cto"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:text="Mã công tơ"
-                        android:textColor="@color/black_less"
-                        android:textSize="@dimen/_7sdp" />
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/ll_a"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_title_id_bban_kiemdinh"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:editable="false"
+                                android:gravity="right"
+                                android:text="Số biên bản"
+                                android:textColor="@color/black_less"
+                                android:textSize="@dimen/_7sdp" />
 
 
-                    <TextView
-                        android:id="@+id/tv_ma_cto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_title_so_cto"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/_10sdp"
-                        tools:text="Mã Cto" />
+                            <TextView
+                                android:id="@+id/tv_id_bban_kdinh"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tv_title_so_cto"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="right"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/_10sdp"
+                                tools:text="Số biên bản" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_alignParentLeft="true"
+                            android:layout_toRightOf="@+id/ll_a"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tv_title_ma_cto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:editable="false"
+                                android:text="Mã công tơ"
+                                android:textColor="@color/black_less"
+                                android:textSize="@dimen/_7sdp" />
+
+
+                            <TextView
+                                android:id="@+id/tv_ma_cto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tv_title_so_cto"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/_10sdp"
+                                tools:text="Mã Cto" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
 
@@ -184,14 +231,56 @@
                         tools:text="Mã chủng loại" />
                 </LinearLayout>
 
+        <LinearLayout
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/ll_a1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:text="Năm Sản xuất"
+                        android:textColor="@color/black_less"
+                        android:textSize="@dimen/_7sdp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_nam_sx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_title_so_cto"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/_9sdp"
+                        tools:text="2017" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_alignParentLeft="true"
+                    android:layout_toRightOf="@+id/ll_a1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+
+                    android:orientation="vertical">
+                    <TextView
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
@@ -213,33 +302,8 @@
                         tools:text="PD 0121" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:text="Năm Sản xuất"
-                        android:textColor="@color/black_less"
-                        android:textSize="@dimen/_7sdp" />
-
-
-                    <TextView
-                        android:id="@+id/tv_nam_sx"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_title_so_cto"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/_9sdp"
-                        tools:text="2017" />
-                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
 
 
             </LinearLayout>
@@ -357,18 +421,17 @@
                     android:id="@+id/btn_ghim"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/xml_border_full_type2"
-                    android:drawableRight="@mipmap/ic_ghim"
-
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text="Ghim"
-                    android:textColor="@color/white"
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/btn_chon"
-                    android:layout_toStartOf="@+id/btn_chon" />
+
+                    android:layout_toStartOf="@+id/btn_chon"
+                    android:background="@drawable/xml_border_full_type2"
+                    android:drawableRight="@mipmap/ic_ghim"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="Ghim"
+                    android:textColor="@color/white" />
 
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/btn_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -379,7 +442,8 @@
                     android:drawableRight="@mipmap/ic_delete"
                     android:paddingLeft="@dimen/_5sdp"
                     android:text="Xóa thiết bị"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
 
                 <TextView

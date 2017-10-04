@@ -237,7 +237,7 @@ public class SqlDAO {
         );
 
 //        ContentValues initialValues = new ContentValues();
-//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.CHON.getNameCollumn(), Common.CHON.CHUA_GUI.getCode());
+//        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_CTO.getNameCollumn(), Common.MA_CTO.CHUA_GUI.getCode());
 //        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_CTO.getNameCollumn(), congToGuiKD.getMA_CTO());
 //        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.SO_CTO.getNameCollumn(), congToGuiKD.getSO_CTO());
 //        initialValues.put(SqlQuery.TBL_CTO_GUI_KD.MA_DVIQLY.getNameCollumn(), congToGuiKD.getMA_DVIQLY());
@@ -393,6 +393,19 @@ public class SqlDAO {
 
         mSqLiteDatabase.execSQL(SqlQuery.getUpdateGhimCtoKD(), args);
     }
+
+//    public void updateGhimCtoPB(int idCto, int statusGhimCto) throws Exception {
+//        if (!Common.isExistDB())
+//            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+//
+//        String[] args = SqlDAO.build(
+//                statusGhimCto,
+//                idCto
+//        );
+//
+//        mSqLiteDatabase.execSQL(SqlQuery.updateGhimCtoPB(), args);
+//    }
+
 
     public void updateGhimCtoKDUploadSuccess(int TRANG_THAI_GHIM) throws Exception {
         if (!Common.isExistDB())

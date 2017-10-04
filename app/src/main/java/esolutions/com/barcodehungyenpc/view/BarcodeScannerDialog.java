@@ -104,7 +104,7 @@ public class BarcodeScannerDialog extends Dialog implements OnClickListener, Res
                 return;
 
             tvTextBarcode.setText("");
-            mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+            mScannerView.setResultHandler(this); // Register ourselves as MA_CTO handler for scan results.
             mScannerView.startCamera();
             mScannerView.resumeCameraPreview(this);
             return;

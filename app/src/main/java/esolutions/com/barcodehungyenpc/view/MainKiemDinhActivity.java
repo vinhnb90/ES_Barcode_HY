@@ -53,8 +53,10 @@ import com.github.clans.fab.FloatingActionButton;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,7 @@ import esolutions.com.barcodehungyenpc.entity.CongToPB;
 import esolutions.com.barcodehungyenpc.entity.CongToPBProxy;
 import esolutions.com.barcodehungyenpc.entity.History;
 import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
+import esolutions.com.barcodehungyenpc.entity.Test;
 import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO_MTBResponse;
@@ -233,25 +236,49 @@ public class MainKiemDinhActivity
                 }
 
                 @Override
-                public PropertyInfo setupProInfo(METHOD method) {
-                    SoapObject request = new SoapObject("", method.getNameMethod());
-                    for (Update_GuiPB_CTO ctoGPB : mListDataUploadPB) {
-                        PropertyInfo pi = new PropertyInfo();
-                        pi.setName(method.getNameParams()[0]);
-                        pi.setValue(ctoGPB);
-                        pi.setType(Update_GuiPB_CTO.class);
+                public SoapSerializationEnvelope setupRequest(String NAMESPACE, METHOD method) {
+                    SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
+                    SoapObject entity = new SoapObject(NAMESPACE, method.getNameParams()[0]);
 
-                        request.addProperty(method.getNameParams()[0], pi);
+                    for (Update_GuiPB_CTO i : mListDataUploadPB) {
+
+                        PropertyInfo pi = new PropertyInfo();
+                        pi.setName(Update_GuiPB_CTO.class.getSimpleName());//name class
+                        pi.setValue(i);
+                        pi.setType(SoapObject.class);
+                        entity.addProperty(Update_GuiPB_CTO.class.getSimpleName(), i);//name class
                     }
 
+                    request.addProperty(method.getNameParams()[0], entity);
+                    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    envelope.dotNet = true;
+                    envelope.bodyOut = request;
+                    envelope.setOutputSoapObject(request);
+                    envelope.addMapping(NAMESPACE, Update_GuiPB_CTO.class.getSimpleName(), Update_GuiPB_CTO.class);//name class
 
-                    PropertyInfo propertyInfo = new PropertyInfo();
-                    propertyInfo.setName(method.getNameParams()[0]);
-                    propertyInfo.setType(SoapObject.class);
-                    propertyInfo.setValue(request);
-
-                    return propertyInfo;
+                    return envelope;
                 }
+
+//                @Override
+//                public PropertyInfo setupProInfo(METHOD method) {
+//                    SoapObject request = new SoapObject("", method.getNameMethod());
+//                    for (Update_GuiPB_CTO ctoGPB : mListDataUploadPB) {
+//                        PropertyInfo pi = new PropertyInfo();
+//                        pi.setName(method.getNameParams()[0]);
+//                        pi.setValue(ctoGPB);
+//                        pi.setType(Update_GuiPB_CTO.class);
+//
+//                        request.addProperty(method.getNameParams()[0], pi);
+//                    }
+//
+//
+//                    PropertyInfo propertyInfo = new PropertyInfo();
+//                    propertyInfo.setName(method.getNameParams()[0]);
+//                    propertyInfo.setType(SoapObject.class);
+//                    propertyInfo.setValue(request);
+//
+//                    return propertyInfo;
+//                }
             };
 
             SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiKD_CTO_MTBResponse>, ThongBaoResponse> callBackUploadGuiKD = new SoapXML.AsyncSoapUpload.AsyncSoapCallBackUpload<List<Update_GuiKD_CTO_MTBResponse>, ThongBaoResponse>() {
@@ -326,27 +353,50 @@ public class MainKiemDinhActivity
                 }
 
                 @Override
-                public PropertyInfo setupProInfo(METHOD method) {
+                public SoapSerializationEnvelope setupRequest(String NAMESPACE, METHOD method) {
 
-                    SoapObject request = new SoapObject("", method.getNameMethod());
-//                    SoapObject request = new SoapObject("", method.getNameParams()[0]);
-                    for (Update_GuiKD_CTO ctoGKD : mListDataUploadGKD) {
+                    SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
+                    SoapObject entity = new SoapObject(NAMESPACE, method.getNameParams()[0]);
+
+                    for (Update_GuiKD_CTO i : mListDataUploadGKD) {
+
                         PropertyInfo pi = new PropertyInfo();
-                        pi.setName(method.getNameParams()[0]);
-//                        pi.setName("Update_GuiKD_CTO");
-                        pi.setValue(ctoGKD);
+                        pi.setName(Update_GuiKD_CTO.class.getSimpleName());//name class
+                        pi.setValue(i);
                         pi.setType(SoapObject.class);
-
-                        request.addProperty(method.getNameParams()[0], pi);
+                        entity.addProperty(Update_GuiKD_CTO.class.getSimpleName(), i);//name class
                     }
 
+                    request.addProperty(method.getNameParams()[0], entity);
+                    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    envelope.dotNet = true;
+                    envelope.bodyOut = request;
+                    envelope.setOutputSoapObject(request);
+                    envelope.addMapping(NAMESPACE, Update_GuiKD_CTO.class.getSimpleName(), Update_GuiKD_CTO.class);//name class
 
-                    PropertyInfo propertyInfo = new PropertyInfo();
-                    propertyInfo.setName(method.getNameParams()[0]);
-                    propertyInfo.setType(SoapObject.class);
-                    propertyInfo.setValue(request);
 
-                    return propertyInfo;
+                    /*
+                    SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
+
+                    SoapObject entity = new SoapObject(NAMESPACE, "entity");
+
+                    for (Test i : tests) {
+
+                        PropertyInfo pi = new PropertyInfo();
+                        pi.setName("Test");
+                        pi.setValue(i);
+                        pi.setType(SoapObject.class);
+                        entity.addProperty("Test", i);
+                    }
+
+                    request.addProperty("entity", entity);
+                    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    envelope.dotNet = true;
+                    envelope.bodyOut = request;
+                    envelope.setOutputSoapObject(request);
+                    envelope.addMapping(NAMESPACE, "Test", Test.class);*/
+
+                    return envelope;
                 }
             };
 
@@ -355,7 +405,7 @@ public class MainKiemDinhActivity
                     soapUpload = new SoapXML.AsyncSoapUpload(
                             Update_GuiKD_CTO_MTBResponse.class,
                             ThongBaoResponse.class,
-                            "thongbao",
+                            "Thongbao",
                             callBackUploadGuiKD,
                             METHOD.Update_GuiKD_CTO_MTB,
                             SoapXML.getURL(mURL)
@@ -386,11 +436,11 @@ public class MainKiemDinhActivity
                 dataResponse) {
 
             int CHON = response.getCHON();
-            //update CHON
+            //update MA_CTO
             mSqlDAO.updateChonCtoPB(mListUploadCtoPB.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), CHON);
 
-            //nếu CHON == 1 thì bỏ ghim, nếu CHON == 2 hoặc 0 thì giữ nguyên ghim
-//            if(CHON == Common.CHON.GUI_THANH_CONG.getCode())
+            //nếu MA_CTO == 1 thì bỏ ghim, nếu MA_CTO == 2 hoặc 0 thì giữ nguyên ghim
+//            if(MA_CTO == Common.MA_CTO.GUI_THANH_CONG.getCode())
 //            {
 //                mSqlDAO.updateGhimCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
 //            }
@@ -430,11 +480,11 @@ public class MainKiemDinhActivity
                 dataResponse) {
 
             int CHON = response.getCHON();
-            //update CHON
+            //update MA_CTO
             mSqlDAO.updateChonCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID(), CHON);
 
-            //nếu CHON == 1 thì bỏ ghim, nếu CHON == 2 hoặc 0 thì giữ nguyên ghim
-//            if(CHON == Common.CHON.GUI_THANH_CONG.getCode())
+            //nếu MA_CTO == 1 thì bỏ ghim, nếu MA_CTO == 2 hoặc 0 thì giữ nguyên ghim
+//            if(MA_CTO == Common.MA_CTO.GUI_THANH_CONG.getCode())
 //            {
 //                mSqlDAO.updateGhimCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_PB(), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
 //            }
@@ -2013,20 +2063,36 @@ public class MainKiemDinhActivity
                 mSqlDAO.updateTRANG_THAI_CHONCto(ID, Common.TRANG_THAI_CHON.CHUA_CHON.getCode(), mKieuChuongTrinh);
             }
 
-            mSqlDAO.updateGhimCtoKD(ID, statusGhimCto);
-
+            if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
+                mSqlDAO.updateGhimCtoKD(ID, statusGhimCto);
+            if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
+                mSqlDAO.updateGhimCtoPB(ID, statusGhimCto);
 
             mListCtoKD.clear();
             String dateSQL = Common.convertDateUIToDateSQL(mDate);
 
             if (menuBottom == Common.MENU_BOTTOM_KD.ALL) {
-                mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+                    mListCtoKD.clear();
+                    mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
+                }
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
+                {
+                    mListCtoPB.clear();
+                    mListCtoPB = mSqlDAO.getByDateAllCongToPB(dateSQL);
+                }
             }
 
             if (menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM) {
-                mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+                    mListCtoKD.clear();
+                    mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
+                }
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
+                {
+                    mListCtoPB.clear();
+                    mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(dateSQL);
+                }
 
                 prepareDataUpload();
             }
