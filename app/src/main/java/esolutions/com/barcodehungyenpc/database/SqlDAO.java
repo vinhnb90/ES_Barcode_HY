@@ -63,7 +63,7 @@ public class SqlDAO {
 //            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 //
 //        String[] args = SqlDAO.build(
-//                MainKiemDinhActivity.sTaiKhoan
+//                MainActivity.sTaiKhoan
 //        );
 //        List<CongToGuiKDProxy> listCongToProxies = new ArrayList<>();
 //
@@ -365,7 +365,7 @@ public class SqlDAO {
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
         String[] args = SqlDAO.build(
-//                MainKiemDinhActivity.sTaiKhoan
+//                MainActivity.sTaiKhoan
         );
         mSqLiteDatabase.rawQuery(SqlQuery.getDeleteAllTBL_CTO_PB(), args);
     }

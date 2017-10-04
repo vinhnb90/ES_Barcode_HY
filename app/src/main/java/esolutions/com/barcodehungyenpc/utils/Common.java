@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,10 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import esolutions.com.barcodehungyenpc.R;
-import esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity;
+import esolutions.com.barcodehungyenpc.view.MainActivity;
 
 import static android.support.v4.app.ActivityCompat.requestPermissions;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -55,6 +55,8 @@ import static esolutions.com.barcodehungyenpc.database.SqlHelper.PATH_FOLDER_DB;
  */
 
 public class Common {
+    public static final String PATH_LOG = Environment.getExternalStorageDirectory() + File.separator + "BARCODE_HY" + File.separator;
+    public static final String NAME_FILE_LOG = "LogFile.txt";
 
     public static final int TIME_DELAY_ANIM = 150;
 
@@ -605,7 +607,7 @@ public class Common {
         return false;
     }
 
-    public static void showAlertDialog(Context context, final MainKiemDinhActivity.OnClickButtonAlertDialog onClickButtonAlertDialog, String title, String message) throws Exception {
+    public static void showAlertDialog(Context context, final MainActivity.OnClickButtonAlertDialog onClickButtonAlertDialog, String title, String message) throws Exception {
         try {
             final Dialog dialogConfig = new Dialog(context);
             dialogConfig.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -665,7 +667,8 @@ public class Common {
                 requestPermissions(activity, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_PHONE_STATE
+                        Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.CAMERA
                 }, REQUEST_CODE_PERMISSION);
                 return true;
             }

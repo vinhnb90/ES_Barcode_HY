@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/xml_background"
-    tools:context="esolutions.com.barcodehungyenpc.view.MainKiemDinhActivity">
+    tools:context="esolutions.com.barcodehungyenpc.view.MainActivity">
 
     <RelativeLayout
         android:gravity="center_vertical"

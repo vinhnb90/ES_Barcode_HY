@@ -72,7 +72,6 @@ import esolutions.com.barcodehungyenpc.entity.CongToPB;
 import esolutions.com.barcodehungyenpc.entity.CongToPBProxy;
 import esolutions.com.barcodehungyenpc.entity.History;
 import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
-import esolutions.com.barcodehungyenpc.entity.Test;
 import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO_MTBResponse;
@@ -88,6 +87,7 @@ import esolutions.com.barcodehungyenpc.utils.SoapXML.METHOD;
 import static esolutions.com.barcodehungyenpc.utils.Common.TIME_DELAY_ANIM;
 import static esolutions.com.barcodehungyenpc.utils.Common.convertDateSQLToDateUI;
 import static esolutions.com.barcodehungyenpc.utils.Common.getDateTimeNow;
+import static esolutions.com.barcodehungyenpc.utils.Log.getInstance;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.KEY_PREF_KEYBOARD;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_DVI;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_POS_PROGRAME;
@@ -95,7 +95,7 @@ import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_SERVER
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_USER;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PREF_CONFIG;
 
-public class MainKiemDinhActivity
+public class MainActivity
         extends BaseActivity
         implements
         DatePickerDialog.OnDateSetListener,
@@ -123,7 +123,7 @@ public class MainKiemDinhActivity
 
     private Handler mUiHandler = new Handler();
 
-    private static final String TAG = MainKiemDinhActivity.class.getName();
+    private static final String TAG = MainActivity.class.getName();
 
     private RelativeLayout mRlMain;
     private RecyclerView mRvCto;
@@ -200,8 +200,17 @@ public class MainKiemDinhActivity
                         history.setINFO_SEARCH("");
                         mSqlDAO.insertTBL_HISTORY(history);
                     } catch (Exception e) {
-                        snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
+                        try {
+                            snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
+
+
                     }
                 }
 
@@ -215,12 +224,16 @@ public class MainKiemDinhActivity
                         if (mCountUploadFinish > 0) {
                             mCountUploadFinish--;
                         }
-
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     } finally {
                         Message msg = mHandlerUpload.obtainMessage();
                         msg.obj = mCountUploadFinish;
@@ -316,8 +329,15 @@ public class MainKiemDinhActivity
                         history.setINFO_SEARCH("");
                         mSqlDAO.insertTBL_HISTORY(history);
                     } catch (Exception e) {
-                        snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
+                        try {
+                            snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
 
                 }
@@ -334,10 +354,15 @@ public class MainKiemDinhActivity
                         }
 
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     } finally {
                         Message msg = mHandlerUpload.obtainMessage();
                         msg.obj = mCountUploadFinish;
@@ -423,7 +448,15 @@ public class MainKiemDinhActivity
 
                 soapUpload.execute();
             } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    getInstance().loge(DangNhapActivity.class, e.getMessage());
+                    e.printStackTrace();
+                } catch (Exception e1) {
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e1.printStackTrace();
+                }
             }
 
 
@@ -553,7 +586,15 @@ public class MainKiemDinhActivity
             handleListener();
             setAction(savedInstanceState);
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -609,16 +650,9 @@ public class MainKiemDinhActivity
 
         final RecyclerView recyclerView = (RecyclerView) dialogConfig.findViewById(R.id.rv_history_detail);
         mListCtoKD.clear();
-        try {
-            mListCtoKD = mSqlDAO.getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
-        } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
-            return;
-        }
 
         try {
+            mListCtoKD = mSqlDAO.getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
             DsCongToAdapter dsCongToAdapter = new DsCongToAdapter(this, mListCtoKD, mListCtoPB, mKieuChuongTrinh);
             dsCongToAdapter.setHistoryAdapter(true);
             recyclerView.setHasFixedSize(true);
@@ -627,10 +661,15 @@ public class MainKiemDinhActivity
             recyclerView.invalidate();
 
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
-            return;
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
         dialogConfig.show();
 
@@ -669,7 +708,7 @@ public class MainKiemDinhActivity
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED
                         || grantResults[1] != PackageManager.PERMISSION_GRANTED
                         || grantResults[2] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainKiemDinhActivity.this, "Unable to show permission required", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Unable to show permission required", Toast.LENGTH_LONG).show();
                     Log.e(getClass().getName(), "Unable to show permission required");
                 } else {
                     try {
@@ -679,7 +718,15 @@ public class MainKiemDinhActivity
                         handleListener();
                         setAction(savedInstanceState);
                     } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 return;
@@ -696,36 +743,39 @@ public class MainKiemDinhActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_config:
-                try {
+        try {
+            switch (item.getItemId()) {
+                case R.id.menu_config:
                     showDialogConfig();
-                } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    e.printStackTrace();
-                }
-                break;
+                    break;
 
-            case R.id.menu_camera:
-                processCamera();
-                break;
+                case R.id.menu_camera:
+                    processCamera();
+                    break;
 
-            case R.id.menu_barcode_bluetooth:
-                processBluetooth();
-                break;
+                case R.id.menu_barcode_bluetooth:
+                    processBluetooth();
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+
+        } catch (Exception e) {
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void processCamera() {
-//        Intent intent = new Intent(MainKiemDinhActivity.this, BarcodeActivity.class);
-////        startActivityForResult(intent, BarcodeActivity.REQUEST_CODE);
-//        startActivity(intent);
-
         BarcodeScannerDialog dialog = new BarcodeScannerDialog(this, new BarcodeScannerDialog.OnResultListener() {
             @Override
             public void onResult(String text) {
@@ -789,22 +839,6 @@ public class MainKiemDinhActivity
                 try {
                     //true nếu ẩn bàn phím, nếu bật ẩn thì checked = true
                     Boolean isHideKeyboard = swtShowKeyboard.isChecked();
-//
-//                    String dvi = etDvi.getText().toString();
-//                    String url = etURL.getText().toString();
-//
-//                    //check
-//                    if (TextUtils.isEmpty(url)) {
-//                        etURL.setError(Common.MESSAGE.ex03.getContent());
-//                        etURL.setFocusable(true);
-//                        return;
-//                    }
-//
-//                    if (TextUtils.isEmpty(dvi)) {
-//                        etDvi.setError(Common.MESSAGE.ex03.getContent());
-//                        etDvi.setFocusable(true);
-//                        return;
-//                    }
 
                     mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE)
                             .edit()
@@ -813,33 +847,21 @@ public class MainKiemDinhActivity
 //                            .putString(KEY_PREF_SERVER_URL, url)
                             .commit();
 
-                    //check nếu dvi mơi thì thêm vào database và làm mới lại auto et dvi
-                    //lưu shared pref
-//                    boolean isHasDviExits = false;
-//
-//                    isHasDviExits = mSqlDAO.checkExistTBL_DIENLUC(dvi);
-//
-//                    if (!isHasDviExits) {
-//                        DienLuc dienLuc = new DienLuc();
-//                        dienLuc.setMA_DVIQLY(dvi);
-//
-//                        mSqlDAO.insertTBL_DIENLUC(dienLuc);
-//
-//                        //set Adapter autoComplex dvi
-//                        mAutoEtDvi.setThreshold(1);
-//                        mAutoEtDvi.setAdapter(initAdapterDvi());
-//                        mAutoEtDvi.invalidate();
-//                    }
                     Snackbar snackbar = Snackbar
                             .make(mCoordinatorLayout, Common.MESSAGE.ex12.getContent(), Snackbar.LENGTH_LONG);
 
                     snackbar.show();
                     dialogConfig.dismiss();
                 } catch (Exception e) {
-                    Snackbar snackbar = Snackbar
-                            .make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-
-                    snackbar.show();
+                    try {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                     dialogConfig.dismiss();
                 }
             }
@@ -979,7 +1001,15 @@ public class MainKiemDinhActivity
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -1040,11 +1070,15 @@ public class MainKiemDinhActivity
 
 
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar
-                                .make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
             });
@@ -1098,11 +1132,15 @@ public class MainKiemDinhActivity
                         //TODO mark 1
                         searchOnline(mEtSearchOnline.getText().toString());
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar
-                                .make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
             });
@@ -1202,10 +1240,15 @@ public class MainKiemDinhActivity
                         }
 
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex02.getContent(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-//                        Toast.makeText(MainKiemDinhActivity.this, Common.MESSAGE.ex02.getContent(), Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex02.getContent(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                         return;
                     }
                 }
@@ -1250,9 +1293,15 @@ public class MainKiemDinhActivity
                             mRvCto.setLayoutParams(params);
                         }
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
             });
@@ -1264,9 +1313,15 @@ public class MainKiemDinhActivity
                         //TODO mark3
                         upload();
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
             });
@@ -1318,8 +1373,15 @@ public class MainKiemDinhActivity
 
 
                     } catch (Exception e) {
-
-                        Toast.makeText(MainKiemDinhActivity.this, "click mBtnFilterOK", Toast.LENGTH_SHORT).show();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
             });
@@ -1374,17 +1436,29 @@ public class MainKiemDinhActivity
                         }
 
                     } catch (Exception e) {
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                        e.printStackTrace();
+                        try {
+                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
             });
 
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -1658,8 +1732,15 @@ public class MainKiemDinhActivity
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
                     mSqlDAO.insertTBL_HISTORY(history);
                 } catch (Exception e) {
-                    snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    try {
+                        snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                 }
             }
 
@@ -1673,9 +1754,15 @@ public class MainKiemDinhActivity
                 try {
                     doProcessAfterSearchOnlinePBWithIDBBan(dataResponse);
                 } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    e.printStackTrace();
+                    try {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                 }
             }
 
@@ -1718,8 +1805,15 @@ public class MainKiemDinhActivity
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
                     mSqlDAO.insertTBL_HISTORY(history);
                 } catch (Exception e) {
-                    snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    try {
+                        snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                 }
             }
 
@@ -1733,9 +1827,15 @@ public class MainKiemDinhActivity
                 try {
                     doProcessAfterSearchOnline(dataResponse);
                 } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    e.printStackTrace();
+                    try {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                 }
             }
 
@@ -1888,10 +1988,15 @@ public class MainKiemDinhActivity
 
             fillDataReyclerLocal(mListCtoKD, mListCtoPB);
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
-            Log.e(MainKiemDinhActivity.class.getName(), "interactionDataCongToSearch: " + e.getMessage());
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -2076,8 +2181,7 @@ public class MainKiemDinhActivity
                     mListCtoKD.clear();
                     mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
                 }
-                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
-                {
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
                     mListCtoPB.clear();
                     mListCtoPB = mSqlDAO.getByDateAllCongToPB(dateSQL);
                 }
@@ -2088,8 +2192,7 @@ public class MainKiemDinhActivity
                     mListCtoKD.clear();
                     mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
                 }
-                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
-                {
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
                     mListCtoPB.clear();
                     mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(dateSQL);
                 }
@@ -2102,9 +2205,15 @@ public class MainKiemDinhActivity
             mRvCto.invalidate();
 
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -2168,24 +2277,36 @@ public class MainKiemDinhActivity
 
 
                 } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    e.printStackTrace();
+                    try {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                 }
             }
 
             @Override
             public void doClickNo() {
-                Toast.makeText(MainKiemDinhActivity.this, "doClickNo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "doClickNo", Toast.LENGTH_SHORT).show();
             }
         };
 
         try {
             Common.showAlertDialog(this, onClickButtonAlertDialog, "Xóa dữ liệu công tơ", "Bạn có chắc muốn xóa công tơ này?");
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex10.getContent(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout,Common.MESSAGE.ex10.getContent(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
             return;
         }
     }
@@ -2241,7 +2362,15 @@ public class MainKiemDinhActivity
             mRvCto.invalidate();
 
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
     //endregion
@@ -2270,10 +2399,15 @@ public class MainKiemDinhActivity
 
             searchLocalOnDate(charSearch);
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
-            Log.e(MainKiemDinhActivity.class.getName(), "interactionDataCongToSearch: " + e.getMessage());
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -2313,10 +2447,15 @@ public class MainKiemDinhActivity
             }
 
         } catch (Exception e) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            e.printStackTrace();
-            Log.e(MainKiemDinhActivity.class.getName(), "interactionDataCongToSearch: " + e.getMessage());
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 

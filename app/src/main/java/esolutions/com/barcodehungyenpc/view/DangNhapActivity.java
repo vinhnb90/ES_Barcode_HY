@@ -3,7 +3,6 @@ package esolutions.com.barcodehungyenpc.view;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,10 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputType;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +39,10 @@ import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
 import esolutions.com.barcodehungyenpc.utils.SoapXML;
+
+import static esolutions.com.barcodehungyenpc.utils.Common.NAME_FILE_LOG;
+import static esolutions.com.barcodehungyenpc.utils.Common.PATH_LOG;
+import static esolutions.com.barcodehungyenpc.utils.Log.*;
 
 public class DangNhapActivity extends BaseActivity implements
         ActionBar.TabListener,
@@ -101,7 +101,6 @@ public class DangNhapActivity extends BaseActivity implements
     private Bundle savedInstanceState;
     public static final String PARAM_POS_PROGRAME = "PARAM_POS_PROGRAME";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,22 +108,22 @@ public class DangNhapActivity extends BaseActivity implements
         setContentView(R.layout.activity_dangnhap);
         super.hideBar();
 
-//        SpannableString s = new SpannableString("Tìm kiếm công tơ");
-//        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, "Tìm kiếm công tơ".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        getSupportActionBar().setTitle(s);
-//        getSupportActionBar().setElevation(0);
         if (Common.checkPermission(this)) {
             return;
         }
         try {
+            //setup file debug
+            getInstance().setupFile(this, PATH_LOG + NAME_FILE_LOG).setIsModeDebug(true);
             initView();
             handleListener();
             setAction(savedInstanceState);
         } catch (Exception e) {
-//            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-//            snackbar.show();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            try {
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+            } catch (Exception e1) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -134,11 +133,12 @@ public class DangNhapActivity extends BaseActivity implements
         try {
             fillInfoLogin();
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-//            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//            e.printStackTrace();
+            try {
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+            } catch (Exception e1) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -159,7 +159,12 @@ public class DangNhapActivity extends BaseActivity implements
                         handleListener();
                         setAction(savedInstanceState);
                     } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        try {
+                            getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        } catch (Exception e1) {
+                            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 return;
@@ -237,7 +242,7 @@ public class DangNhapActivity extends BaseActivity implements
             mIbtnVisibePass.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
 
-                    switch ( event.getAction() ) {
+                    switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             mEtPass.setInputType(InputType.TYPE_CLASS_TEXT);
                             break;
@@ -407,7 +412,7 @@ public class DangNhapActivity extends BaseActivity implements
                 String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
                 bundle.putString(PARAM_DVI, dvi);
                 bundle.putString(PARAM_USER, mEtUser.getText().toString());
-                Intent intent = new Intent(DangNhapActivity.this, MainKiemDinhActivity.class);
+                Intent intent = new Intent(DangNhapActivity.this, MainActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
 
@@ -494,11 +499,16 @@ public class DangNhapActivity extends BaseActivity implements
                     setSpinDienLuc();
 
                 } catch (Exception e) {
-                    Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    e.printStackTrace();
+                    try {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(DangNhapActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
                 }
-
             }
 
             @Override

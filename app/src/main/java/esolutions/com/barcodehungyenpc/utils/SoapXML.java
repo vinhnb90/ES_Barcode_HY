@@ -1444,9 +1444,9 @@ public class SoapXML {
 //        protected void onPostExecute(Boolean result) {
 //            try {
 //                super.onPostExecute(result);
-//                ((ListView) MainKiemDinhActivity.this.findViewById(R.id.lv_1)).setAdapter(new ArrayAdapter<String>(MainKiemDinhActivity.this, android.R.layout.simple_list_item_1, new String[]{result.toString()}));
+//                ((ListView) MainActivity.this.findViewById(R.id.lv_1)).setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, new String[]{result.toString()}));
 //            } catch (Exception e) {
-//                Toast.makeText(MainKiemDinhActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 //            }
 //        }
 //    }
