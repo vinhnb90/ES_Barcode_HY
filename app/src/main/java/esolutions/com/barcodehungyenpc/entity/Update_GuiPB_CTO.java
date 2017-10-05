@@ -43,7 +43,10 @@ public class Update_GuiPB_CTO implements KvmSerializable {
     private String DONG_DIEN;
     private String NGAY_NHAP_MTB;
 
-    public Update_GuiPB_CTO(String ID_BBAN_KHO, String NGAY_NHAP_HTHONG, String MA_NVIEN, String SO_BBAN, String ID_BBAN_KDINH, String NGAY_GUIKD, String NGAY_KDINH_TH, String LOAI_CTO, String SO_CSO, String MA_HANG, String CAP_CXAC, String MA_NUOC, String ACTION, int CHON, String HS_NHAN, String MA_DVIQLY, String NAM_SX, String MA_CTO, String SO_CTO, String LOAI_SOHUU, String MA_CLOAI, String NGAY_BDONG, String MA_BDONG, String NGAY_NHAP, String NGAY_KDINH, String SO_DAY, String VH_CONG, String SO_PHA, String DIEN_AP, String DONG_DIEN, String NGAY_NHAP_MTB) {
+    //thêm trường
+    private int ID_TBL_CTO_PB;
+
+    public Update_GuiPB_CTO(String ID_BBAN_KHO, String NGAY_NHAP_HTHONG, String MA_NVIEN, String SO_BBAN, String ID_BBAN_KDINH, String NGAY_GUIKD, String NGAY_KDINH_TH, String LOAI_CTO, String SO_CSO, String MA_HANG, String CAP_CXAC, String MA_NUOC, String ACTION, int CHON, String HS_NHAN, String MA_DVIQLY, String NAM_SX, String MA_CTO, String SO_CTO, String LOAI_SOHUU, String MA_CLOAI, String NGAY_BDONG, String MA_BDONG, String NGAY_NHAP, String NGAY_KDINH, String SO_DAY, String VH_CONG, String SO_PHA, String DIEN_AP, String DONG_DIEN, String NGAY_NHAP_MTB, int ID_TBL_CTO_PB) {
         this.ID_BBAN_KHO = ID_BBAN_KHO;
         this.NGAY_NHAP_HTHONG = NGAY_NHAP_HTHONG;
         this.MA_NVIEN = MA_NVIEN;
@@ -57,8 +60,6 @@ public class Update_GuiPB_CTO implements KvmSerializable {
         this.CAP_CXAC = CAP_CXAC;
         this.MA_NUOC = MA_NUOC;
         this.ACTION = ACTION;
-
-
         this.CHON = CHON;
         this.HS_NHAN = HS_NHAN;
         this.MA_DVIQLY = MA_DVIQLY;
@@ -77,6 +78,7 @@ public class Update_GuiPB_CTO implements KvmSerializable {
         this.DIEN_AP = DIEN_AP;
         this.DONG_DIEN = DONG_DIEN;
         this.NGAY_NHAP_MTB = NGAY_NHAP_MTB;
+        this.ID_TBL_CTO_PB = ID_TBL_CTO_PB;
     }
 
     @Override
@@ -604,5 +606,13 @@ public class Update_GuiPB_CTO implements KvmSerializable {
 
     public void setNGAY_NHAP_MTB(String NGAY_NHAP_MTB) {
         this.NGAY_NHAP_MTB = NGAY_NHAP_MTB;
+    }
+
+    public int getID_TBL_CTO_PB() {
+        return ID_TBL_CTO_PB;
+    }
+
+    public void setID_TBL_CTO_PB(int ID_TBL_CTO_PB) {
+        this.ID_TBL_CTO_PB = ID_TBL_CTO_PB;
     }
 }

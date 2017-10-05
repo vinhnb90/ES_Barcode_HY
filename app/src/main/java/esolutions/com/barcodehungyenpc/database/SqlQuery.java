@@ -65,6 +65,8 @@ public class SqlQuery {
     }
 
     public enum TBL_CTO_PB {
+        ID_TBL_CTO_PB("ID_TBL_CTO_PB"),
+
         CHON("CHON"),
         HS_NHAN("HS_NHAN"),
         MA_DVIQLY("MA_DVIQLY"),
@@ -85,7 +87,7 @@ public class SqlQuery {
 
         DIEN_AP("DIEN_AP"),
         DONG_DIEN("DONG_DIEN"),
-        ID_TBL_CTO_PB("ID_TBL_CTO_PB"),
+
         NGAY_NHAP_MTB("NGAY_NHAP_MTB"),
         //Trạng thái chưa ghim = 0, đã ghim = 1
         TRANG_THAI_GHIM("TRANG_THAI_GHIM"),
@@ -850,6 +852,29 @@ public class SqlQuery {
                 ;
     }
 
+    public static String getByDateAllCongToPBByDATE_SESSION() {
+        return "SELECT B.* FROM(SELECT " +
+                ID_TBL_CTO.getNameCollumn() +
+                " FROM " +
+                TBL_HISTORY.getNameTable()
+                +
+                " WHERE " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_SESSION.getNameCollumn()
+                + " = ?"
+                + " AND "
+                + TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn()
+                + " = '"
+                + Common.TYPE_TBL_CTO.PB.getCode()
+                + "' ) AS A INNER JOIN " +
+                TBL_CTO_PB.getNameTable() +
+                " AS B ON A." + ID_TBL_CTO.getNameCollumn() +
+                " = B." + TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn()
+                ;
+    }
+
 
     public static String getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT() {
         return "SELECT B.* FROM " +
@@ -881,6 +906,22 @@ public class SqlQuery {
                 "ON A." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " = B." + TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn() + " " +
                 ")";
     }
+
+//    public static String getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT() {
+//        return "SELECT B.* FROM " +
+//                "( " +
+//                "(SELECT " + TBL_HISTORY.getNameTable() + "." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " " +
+//                "FROM " + TBL_HISTORY.getNameTable() + " " +
+//                "WHERE " + TBL_HISTORY.DATE_SESSION.getNameCollumn() + " = ? AND " + TBL_HISTORY.TYPE_SESSION.getNameCollumn() + " = ? AND " + TBL_HISTORY.TYPE_RESULT.getNameCollumn() + " = ? AND  " + TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() + " = ? " +
+//                ") " +
+//                "AS A " +
+//                "INNER JOIN  " +
+//                " " + TBL_CTO_GUI_KD.getNameTable() + " " +
+//                "AS B " +
+//                "ON A." + TBL_HISTORY.ID_TBL_CTO.getNameCollumn() + " = B." + TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn() + " " +
+//                ")";
+//    }
+
 
     public static String updateGhimCtoPBUploadSuccess() {
         return "UPDATE " +

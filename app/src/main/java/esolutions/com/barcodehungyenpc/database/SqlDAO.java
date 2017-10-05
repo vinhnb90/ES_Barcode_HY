@@ -1049,6 +1049,35 @@ public class SqlDAO {
         return listCongToProxies;
     }
 
+    public List<CongToPBProxy> getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(String DATE_SESSION, Common.TYPE_SESSION typeSession) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                DATE_SESSION,
+                typeSession.getCode()
+        );
+        List<CongToPBProxy> listCongToProxies = new ArrayList<>();
+
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllCongToPBByDATE_SESSION(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return listCongToProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            listCongToProxies.add(new CongToPBProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (listCongToProxies.isEmpty())
+            closeCursor(cursor);
+        return listCongToProxies;
+    }
+
     public List<CongToPBProxy> getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(String DATE_SESSION, Common.TYPE_SESSION type_session, Common.TYPE_RESULT type_result) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());

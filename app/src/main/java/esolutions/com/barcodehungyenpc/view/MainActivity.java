@@ -179,6 +179,7 @@ public class MainActivity
                     mPbarUpload.setVisibility(View.GONE);
                     Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
                     snackbar.show();
+
                     if (mCountUploadFinish > 0) {
                         mCountUploadFinish--;
                     }
@@ -189,16 +190,20 @@ public class MainActivity
 
                     try {
                         //insert history
-                        History history = new History();
-                        history.setID_TBL_CTO(0);
-                        history.setTYPE_RESULT(Common.TYPE_RESULT.ERROR.getCode());
-                        history.setTYPE_SESSION(Common.TYPE_SESSION.UPLOAD.getCode());
-                        history.setTYPE_TBL_CTO(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH ? Common.TYPE_TBL_CTO.KD.getCode() : Common.TYPE_TBL_CTO.PB.getCode());
-                        //convert time to date SQL
-                        long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
-                        history.setDATE_SESSION(String.valueOf(dateSql));
-                        history.setINFO_SEARCH("");
-                        mSqlDAO.insertTBL_HISTORY(history);
+                        for (Update_GuiPB_CTO i : mListDataUploadPB) {
+                            //insert history
+                            int id = i.getID_TBL_CTO_PB();
+                            History history = new History();
+                            history.setID_TBL_CTO(id);
+                            history.setTYPE_RESULT(Common.TYPE_RESULT.ERROR.getCode());
+                            history.setTYPE_SESSION(Common.TYPE_SESSION.UPLOAD.getCode());
+                            history.setTYPE_TBL_CTO(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH ? Common.TYPE_TBL_CTO.KD.getCode() : Common.TYPE_TBL_CTO.PB.getCode());
+                            //convert time to date SQL
+                            long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                            history.setDATE_SESSION(String.valueOf(dateSql));
+                            history.setINFO_SEARCH("");
+                            mSqlDAO.insertTBL_HISTORY(history);
+                        }
                     } catch (Exception e) {
                         try {
                             snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
@@ -308,6 +313,8 @@ public class MainActivity
                     mPbarUpload.setVisibility(View.GONE);
                     Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
                     snackbar.show();
+
+
                     if (mCountUploadFinish > 0) {
                         mCountUploadFinish--;
                     }
@@ -317,17 +324,21 @@ public class MainActivity
                     mHandlerUpload.sendMessage(msg);
 
                     try {
-                        //insert history
-                        History history = new History();
-                        history.setID_TBL_CTO(0);
-                        history.setTYPE_RESULT(Common.TYPE_RESULT.ERROR.getCode());
-                        history.setTYPE_SESSION(Common.TYPE_SESSION.UPLOAD.getCode());
-                        history.setTYPE_TBL_CTO(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH ? Common.TYPE_TBL_CTO.KD.getCode() : Common.TYPE_TBL_CTO.PB.getCode());
-                        //convert time to date SQL
-                        long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
-                        history.setDATE_SESSION(String.valueOf(dateSql));
-                        history.setINFO_SEARCH("");
-                        mSqlDAO.insertTBL_HISTORY(history);
+                        for (Update_GuiKD_CTO i : mListDataUploadGKD) {
+                            //insert history
+                            int id = i.getID_TBL_CTO_GUI_KD();
+                            History history = new History();
+                            history.setID_TBL_CTO(id);
+                            history.setTYPE_RESULT(Common.TYPE_RESULT.ERROR.getCode());
+                            history.setTYPE_SESSION(Common.TYPE_SESSION.UPLOAD.getCode());
+                            history.setTYPE_TBL_CTO(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH ? Common.TYPE_TBL_CTO.KD.getCode() : Common.TYPE_TBL_CTO.PB.getCode());
+                            //convert time to date SQL
+                            long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                            history.setDATE_SESSION(String.valueOf(dateSql));
+                            history.setINFO_SEARCH("");
+                            mSqlDAO.insertTBL_HISTORY(history);
+
+                        }
                     } catch (Exception e) {
                         try {
                             snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
@@ -425,7 +436,9 @@ public class MainActivity
                 }
             };
 
-            try {
+            try
+
+            {
                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
                     soapUpload = new SoapXML.AsyncSoapUpload(
                             Update_GuiKD_CTO_MTBResponse.class,
@@ -447,7 +460,10 @@ public class MainActivity
                     );
 
                 soapUpload.execute();
-            } catch (Exception e) {
+            } catch (
+                    Exception e)
+
+            {
                 try {
                     Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -649,10 +665,17 @@ public class MainActivity
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
 
         final RecyclerView recyclerView = (RecyclerView) dialogConfig.findViewById(R.id.rv_history_detail);
-        mListCtoKD.clear();
 
         try {
-            mListCtoKD = mSqlDAO.getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
+            if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+                mListCtoKD.clear();
+                mListCtoKD = mSqlDAO.getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
+            }
+            if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+                mListCtoPB.clear();
+                mListCtoPB = mSqlDAO.getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
+            }
+
             DsCongToAdapter dsCongToAdapter = new DsCongToAdapter(this, mListCtoKD, mListCtoPB, mKieuChuongTrinh);
             dsCongToAdapter.setHistoryAdapter(true);
             recyclerView.setHasFixedSize(true);
@@ -1386,8 +1409,7 @@ public class MainActivity
                 }
             });
 
-            mBtnDeleteAll.setOnClickListener(new View.OnClickListener()
-            {
+            mBtnDeleteAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
@@ -1579,7 +1601,8 @@ public class MainActivity
                     congToGuiKDProxy.getNGAY_KDINH(),
                     congToGuiKDProxy.getCHISO_THAO(),
                     congToGuiKDProxy.getHSN(),
-                    Common.convertDateSQLToDateUI(congToGuiKDProxy.getNGAY_NHAP_MTB()));
+                    Common.convertDateSQLToDateUI(congToGuiKDProxy.getNGAY_NHAP_MTB()),
+                    congToGuiKDProxy.getID());
             listUpload.add(congToUpload);
 
         }
@@ -1623,7 +1646,8 @@ public class MainActivity
                     congToPBProxy.getSO_PHA(),
                     congToPBProxy.getDIEN_AP(),
                     congToPBProxy.getDONG_DIEN(),
-                    Common.convertDateSQLToDateUI(congToPBProxy.getNGAY_NHAP_MTB()));
+                    Common.convertDateSQLToDateUI(congToPBProxy.getNGAY_NHAP_MTB()),
+                    congToPBProxy.getID_TBL_CTO_PB());
             listUpload.add(congToUpload);
 
         }
@@ -2222,13 +2246,16 @@ public class MainActivity
             mListUploadCtoKD.clear();
             mListUploadCtoKD = mSqlDAO.getByDateAllCongToGhimAndChonKD(dateSQL);
             mTvCountCtoUpload.setText(mListUploadCtoKD.size() + "");
+            mTvStatusUpload.setText("0/" + mListUploadCtoKD.size());
         }
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
             mListCtoPB.clear();
             mListCtoPB = mSqlDAO.getByDateAllCongToGhimAndChonPB(dateSQL);
             mTvCountCtoUpload.setText(mListCtoPB.size() + "");
+            mTvStatusUpload.setText("0/" + mListUploadCtoPB.size());
         }
+
 
     }
 
@@ -2298,7 +2325,7 @@ public class MainActivity
             Common.showAlertDialog(this, onClickButtonAlertDialog, "Xóa dữ liệu công tơ", "Bạn có chắc muốn xóa công tơ này?");
         } catch (Exception e) {
             try {
-                Snackbar snackbar = Snackbar.make(mCoordinatorLayout,Common.MESSAGE.ex10.getContent(), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex10.getContent(), Snackbar.LENGTH_LONG);
                 snackbar.show();
                 getInstance().loge(DangNhapActivity.class, e.getMessage());
                 e.printStackTrace();
@@ -2465,9 +2492,10 @@ public class MainActivity
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mCtoAdapter, true);
+            mCtoAdapter = null;
         }
 
-        if (mRvCto.getAdapter() instanceof DsCongToAdapter && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
+        if (mRvCto.getAdapter() instanceof DsHistoryAdapter && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mHistoryAdapter, true);

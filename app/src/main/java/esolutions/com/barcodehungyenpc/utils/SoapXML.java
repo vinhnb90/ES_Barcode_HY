@@ -235,6 +235,12 @@ public class SoapXML {
             } catch (Exception e) {
                 publishProgress(e.getMessage());
                 e.printStackTrace();
+                try {
+                    getInstance().loge(SoapXML.class, "Xảy ra vấn đề khi thao tác server API " + METHOD_NAME +" \n has content \n" + e.getMessage());
+                } catch (Exception e1) {
+                    publishProgress(e1.getMessage());
+                    e1.printStackTrace();
+                }
             }
 
             return jsonResponse;
@@ -1016,12 +1022,22 @@ public class SoapXML {
                 //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
                 Field[] allFields = null;
 
-//                Field[] allFieldsFAKE = null;
-                if (proInfoLv1.hasProperty(keyDataSetServerError)) {
-                    isServerErrorResponse = true;
+                int countProInfoLv1 = proInfoLv1.getPropertyCount();
+
+                for (int i = 0; i < countProInfoLv1; i++) {
+                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
+
+                    if(proInfoLv2.hasProperty(keyDataSetServerError))
+                    {
+                        isServerErrorResponse = true;
+                        break;
+                    }
+
+                }
+
+                if (isServerErrorResponse) {
                     allFields = classTypeError.getDeclaredFields();
                 } else {
-                    isServerErrorResponse = false;
                     allFields = classTypeData.getDeclaredFields();
                 }
 
@@ -1029,7 +1045,7 @@ public class SoapXML {
                     return jsonReponse;
                 }
 
-                int countProInfoLv1 = proInfoLv1.getPropertyCount();
+                 countProInfoLv1 = proInfoLv1.getPropertyCount();
 
                 for (int i = 0; i < countProInfoLv1; i++) {
                     proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
