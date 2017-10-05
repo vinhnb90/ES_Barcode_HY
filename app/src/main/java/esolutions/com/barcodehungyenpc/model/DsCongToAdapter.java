@@ -178,8 +178,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         drawable.setBounds(0, 0, w, h);
         holder.btnChon.setCompoundDrawables(null, null, drawable, null);
 
-        RelativeLayout.LayoutParams paramsGhim = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
-        RelativeLayout.LayoutParams paramsChon = (RelativeLayout.LayoutParams) holder.btnChon.getLayoutParams();
+//        RelativeLayout.LayoutParams paramsGhim = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
+//        RelativeLayout.LayoutParams paramsChon = (RelativeLayout.LayoutParams) holder.btnChon.getLayoutParams();
         //một số khác biệt giữa ds ghim và ds tất cả
         if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
             //ẩn nút
@@ -187,11 +187,11 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             holder.btnGhim.setVisibility(View.VISIBLE);
             holder.btnChon.setVisibility(View.GONE);
 
-            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
-            paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            valueInPixels = (int) mContext.getResources().getDimension(R.dimen._5sdp);
-            paramsGhim.setMargins(valueInPixels, 0, 0, 0);
-            holder.btnGhim.setLayoutParams(paramsGhim);
+//            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
+//            paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//            valueInPixels = (int) mContext.getResources().getDimension(R.dimen._5sdp);
+//            paramsGhim.setMargins(valueInPixels, 0, 0, 0);
+//            holder.btnGhim.setLayoutParams(paramsGhim);
 
             //xử lý dữ liệu gửi
             int CHON = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHON() : mListPB.get(position).getCHON();
@@ -201,12 +201,12 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 //đổi màu đen khi thao tác với server
                 color = sBlackColor;
                 holder.btnGhim.setClickable(false);
-                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 holder.btnGhim.setPadding(0, 0, 0, 0);
                 holder.btnGhim.setClickable(false);
                 holder.btnGhim.setCompoundDrawables(null, null, null, null);
                 holder.btnGhim.setText(Common.CHON.findNameBy(CHON).getName());
-                holder.btnGhim.setLayoutParams(paramsGhim);
+//                holder.btnGhim.setLayoutParams(paramsGhim);
             }
 
             //nếu gửi thất bại
@@ -225,20 +225,20 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             //ẩn và hiện nút
             holder.btnXoa.setVisibility(View.GONE);
             holder.btnGhim.setVisibility(View.VISIBLE);
-            holder.btnGhim.setClickable(true);
-            holder.btnChon.setClickable(true);
+//            holder.btnGhim.setClickable(true);
+//            holder.btnChon.setClickable(true);
             holder.btnChon.setVisibility(View.VISIBLE);
 
             //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
-            paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.btnChon.setLayoutParams(paramsChon);
+//            paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//            holder.btnChon.setLayoutParams(paramsChon);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                paramsGhim.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            } else {
-                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-            }
-            paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_chon);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//                paramsGhim.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//            } else {
+//                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+//            }
+//            paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_chon);
 
 
             //xử lý dữ liệu gửi
@@ -248,8 +248,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 //đổi màu đen khi thao tác với server
                 color = sBlackColor;
                 holder.btnChon.setClickable(false);
-                paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_ghim);
+//                paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_ghim);
                 holder.btnChon.setPadding(0, 0, 0, 0);
                 holder.btnChon.setClickable(false);
                 holder.btnChon.setCompoundDrawables(null, null, null, null);
@@ -268,8 +268,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             }
         }
         //set Background row ghim
-        holder.btnChon.setLayoutParams(paramsChon);
-        holder.btnGhim.setLayoutParams(paramsGhim);
+//        holder.btnChon.setLayoutParams(paramsChon);
+//        holder.btnGhim.setLayoutParams(paramsGhim);
         holder.relativeLayout.setBackgroundColor(color);
 
 //        floatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_check_white_24dp);

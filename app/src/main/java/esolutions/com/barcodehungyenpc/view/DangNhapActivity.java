@@ -335,28 +335,40 @@ public class DangNhapActivity extends BaseActivity implements
         }
 
         String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
-        String[] requestParams = new String[]{mEtUser.getText().toString().trim(), mEtPass.getText().toString().trim(), dvi};
+        final String[] requestParams = new String[]{mEtUser.getText().toString().trim(), mEtPass.getText().toString().trim(), dvi};
 
         if (!Common.isNetworkConnected(this)) {
             throw new Exception(Common.MESSAGE.ex07.getContent());
         }
 
-        SoapXML.AsyncSoap.AsyncSoapCallBack<Boolean, ThongBaoResponse> callbackLogin = new SoapXML.AsyncSoap.AsyncSoapCallBack<Boolean, ThongBaoResponse>() {
+        final SoapXML.AsyncSoap.AsyncSoapCallBack<Boolean, ThongBaoResponse> callbackLogin = new SoapXML.AsyncSoap.AsyncSoapCallBack<Boolean, ThongBaoResponse>() {
             @Override
             public void onPre(SoapXML.AsyncSoap soap) {
                 //show progress Login
-                mBtnLogin.setVisibility(View.GONE);
-                mPbarLogin.setVisibility(View.VISIBLE);
+                DangNhapActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBtnLogin.setVisibility(View.GONE);
+                        mPbarLogin.setVisibility(View.VISIBLE);
+                    }
+                });
+
             }
 
             @Override
-            public void onUpdate(String message) {
-                //ẩn progress bar
-                mBtnLogin.setVisibility(View.VISIBLE);
-                mPbarLogin.setVisibility(View.GONE);
+            public void onUpdate(final String message) {
+                DangNhapActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //ẩn progress bar
+                        mBtnLogin.setVisibility(View.VISIBLE);
+                        mPbarLogin.setVisibility(View.GONE);
 
-                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
-                snackbar.show();
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                });
+
             }
 
 
@@ -425,17 +437,35 @@ public class DangNhapActivity extends BaseActivity implements
 
         };
 
-        soapLogin = new SoapXML.AsyncSoap(
-                Boolean.class,
-                ThongBaoResponse.class,
-                "thongbao",
-                callbackLogin,
-                SoapXML.METHOD.Select_DangNhap.getNameMethod(),
-                SoapXML.getURL(mEtURL.getText().toString()),
-                SoapXML.METHOD.Select_DangNhap.getNameParams()
-        );
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    soapLogin = new SoapXML.AsyncSoap(
+                            Boolean.class,
+                            ThongBaoResponse.class,
+                            "thongbao",
+                            callbackLogin,
+                            SoapXML.METHOD.Select_DangNhap.getNameMethod(),
+                            SoapXML.getURL(mEtURL.getText().toString()),
+                            SoapXML.METHOD.Select_DangNhap.getNameParams()
+                    );
+                } catch (Exception e) {
+                    try {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        getInstance().loge(DangNhapActivity.class, e.getMessage());
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        Toast.makeText(DangNhapActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e1.printStackTrace();
+                    }
+                }
 
-        soapLogin.execute(requestParams);
+                soapLogin.execute(requestParams);
+            }
+        }).start();
+
     }
 
     private void downloadDonVi() throws Exception {

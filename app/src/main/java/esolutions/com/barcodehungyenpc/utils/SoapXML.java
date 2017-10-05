@@ -47,6 +47,8 @@ import javax.xml.transform.stream.StreamResult;
 import static android.text.Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
 import static android.text.Html.escapeHtml;
 import static android.text.Html.toHtml;
+import static esolutions.com.barcodehungyenpc.utils.Log.*;
+
 import esolutions.com.barcodehungyenpc.entity.Test;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 
@@ -656,6 +658,7 @@ public class SoapXML {
 
                     String requestDump = ht.requestDump;
                     String responseDump = ht.responseDump;
+                    getInstance().logi(SoapXML.class, "Response server API " + method.getNameMethod() +" \n has content \n" + responseDump);
                     String response = envelope.getResponse() + "";
 
 
@@ -696,6 +699,12 @@ public class SoapXML {
             } catch (Exception e) {
                 publishProgress(e.getMessage());
                 e.printStackTrace();
+                try {
+                    getInstance().loge(SoapXML.class, "Xảy ra vấn đề khi thao tác server API " + method.getNameMethod() +" \n has content \n" + e.getMessage());
+                } catch (Exception e1) {
+                    publishProgress(e1.getMessage());
+                    e1.printStackTrace();
+                }
                 return jsonResponse;
             }
 

@@ -1387,7 +1387,6 @@ public class MainActivity
             });
 
             mBtnDeleteAll.setOnClickListener(new View.OnClickListener()
-
             {
                 @Override
                 public void onClick(View view) {

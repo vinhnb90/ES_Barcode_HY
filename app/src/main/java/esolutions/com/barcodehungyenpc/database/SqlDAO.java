@@ -970,7 +970,7 @@ public class SqlDAO {
                 endDayTime
 
         );
-        mSqLiteDatabase.rawQuery(SqlQuery.getByDateDeleteAllHistory(), args);
+        mSqLiteDatabase.execSQL(SqlQuery.getByDateDeleteAllHistory(), args);
     }
 
     public void deleteByDateAllCongToPB(String dateSQL) throws Exception {
