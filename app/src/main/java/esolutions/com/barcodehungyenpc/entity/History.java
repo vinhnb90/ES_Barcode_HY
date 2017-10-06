@@ -13,7 +13,7 @@ public class History {
     private String DATE_SESSION;
     private String TYPE_RESULT;
     private String INFO_SEARCH;
-
+    private String INFO_RESULT;
 
     public History() {
         ID_TBL_HISTORY = -1;
@@ -74,5 +74,13 @@ public class History {
 
     public void setTYPE_RESULT(String TYPE_RESULT) {
         this.TYPE_RESULT = TYPE_RESULT;
+    }
+
+    public String getINFO_RESULT() {
+        return INFO_RESULT;
+    }
+
+    public void setINFO_RESULT(String INFO_RESULT) {
+        this.INFO_RESULT = INFO_RESULT;
     }
 }

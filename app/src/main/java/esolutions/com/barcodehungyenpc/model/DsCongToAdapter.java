@@ -2,9 +2,9 @@ package esolutions.com.barcodehungyenpc.model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +33,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
     private static Drawable sDrawableUnGhim, sDrawableGhim, sDrawableChon, sDrawableUnChon;
     private static int sWhiteColor, sLightColor, sBlackColor;
     private Common.MENU_BOTTOM_KD menuBottomKD;
+
+    //history
+    private Common.TYPE_SESSION mTypeSessionHistory;
+    private String mDateSessionHistory = "";
     private boolean isHistoryAdapter;
     //phân biệt adapter đang sử dụng các công tơ được ghim = true
     // hoặc đang sử dụng tất cả các công tơ = false
@@ -82,8 +86,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         this.menuBottomKD = menuBottomKD;
     }
 
-    public void setHistoryAdapter(boolean historyAdapter) {
+    public void setHistoryAdapter(boolean historyAdapter, Common.TYPE_SESSION typeSessionHistory, String dateSessionHistory) {
         isHistoryAdapter = historyAdapter;
+        mTypeSessionHistory = typeSessionHistory;
+        mDateSessionHistory = dateSessionHistory;
         notifyDataSetChanged();
     }
 
@@ -178,20 +184,11 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         drawable.setBounds(0, 0, w, h);
         holder.btnChon.setCompoundDrawables(null, null, drawable, null);
 
-//        RelativeLayout.LayoutParams paramsGhim = (RelativeLayout.LayoutParams) holder.btnGhim.getLayoutParams();
-//        RelativeLayout.LayoutParams paramsChon = (RelativeLayout.LayoutParams) holder.btnChon.getLayoutParams();
-        //một số khác biệt giữa ds ghim và ds tất cả
         if (menuBottomKD == Common.MENU_BOTTOM_KD.ALL) {
             //ẩn nút
             holder.btnXoa.setVisibility(View.VISIBLE);
             holder.btnGhim.setVisibility(View.VISIBLE);
             holder.btnChon.setVisibility(View.GONE);
-
-//            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
-//            paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//            valueInPixels = (int) mContext.getResources().getDimension(R.dimen._5sdp);
-//            paramsGhim.setMargins(valueInPixels, 0, 0, 0);
-//            holder.btnGhim.setLayoutParams(paramsGhim);
 
             //xử lý dữ liệu gửi
             int CHON = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHON() : mListPB.get(position).getCHON();
@@ -201,12 +198,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 //đổi màu đen khi thao tác với server
                 color = sBlackColor;
                 holder.btnGhim.setClickable(false);
-//                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 holder.btnGhim.setPadding(0, 0, 0, 0);
                 holder.btnGhim.setClickable(false);
                 holder.btnGhim.setCompoundDrawables(null, null, null, null);
                 holder.btnGhim.setText(Common.CHON.findNameBy(CHON).getName());
-//                holder.btnGhim.setLayoutParams(paramsGhim);
             }
 
             //nếu gửi thất bại
@@ -225,20 +220,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             //ẩn và hiện nút
             holder.btnXoa.setVisibility(View.GONE);
             holder.btnGhim.setVisibility(View.VISIBLE);
-//            holder.btnGhim.setClickable(true);
-//            holder.btnChon.setClickable(true);
             holder.btnChon.setVisibility(View.VISIBLE);
-
-            //set ALIGN_PARENT_RIGHT do xml không set được phải set trong code
-//            paramsChon.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//            holder.btnChon.setLayoutParams(paramsChon);
-
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//                paramsGhim.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//            } else {
-//                paramsGhim.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-//            }
-//            paramsGhim.addRule(RelativeLayout.LEFT_OF, R.id.btn_chon);
 
 
             //xử lý dữ liệu gửi
@@ -267,25 +249,21 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
             }
         }
-        //set Background row ghim
-//        holder.btnChon.setLayoutParams(paramsChon);
-//        holder.btnGhim.setLayoutParams(paramsGhim);
         holder.relativeLayout.setBackgroundColor(color);
 
-//        floatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_check_white_24dp);
-
-//        holder.fabGhim.setImageDrawable(mContext.getApplicationContext().getResources().getDrawable((getTRANG_THAI_GHIM == 0) ? R.drawable.ic_book : R.drawable.ic_booked));
-//        holder.fabGhim.setImageDrawable(mContext.getApplicationContext().getResources().getDrawable((getTRANG_THAI_GHIM == 0) ? R.drawable.ic_unmark : R.drawable.ic_chon));
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            holder.fabGhim.setBackground(mContext.getApplicationContext().getResources().getDrawable((getTRANG_THAI_GHIM == 0) ? R.drawable.ic_unmark : R.drawable.ic_chon));
-//        } else
-//            holder.fabGhim.setBackgroundDrawable(mContext.getApplicationContext().getResources().getDrawable((getTRANG_THAI_GHIM == 0) ? R.drawable.ic_unmark : R.drawable.ic_chon));
-
         //nếu là history thì disable click các nút
+        holder.tvInfoResult.setVisibility(View.GONE);
         if (isHistoryAdapter) {
             holder.btnChon.setVisibility(View.GONE);
             holder.btnGhim.setVisibility(View.GONE);
             holder.btnXoa.setVisibility(View.GONE);
+
+            holder.tvInfoResult.setVisibility(View.VISIBLE);
+            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getID_TBL_CTO_GUI_KD() : mListPB.get(position).getID_TBL_CTO_PB();
+            //get infoResult
+            String infoResult = mListener.interactionDataINFO_RESULT(ID, mTypeSessionHistory, mDateSessionHistory);
+
+            holder.tvInfoResult.setText((TextUtils.isEmpty(infoResult)) ? "" : "Thông tin: " + infoResult);
         }
     }
 
@@ -301,7 +279,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     public class DsCtoViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout relativeLayout;
-        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoIDBBan, tvTitleSoIDBBan;
+        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoIDBBan, tvTitleSoIDBBan, tvInfoResult;
 
         public Button btnXoa, btnGhim, btnChon;
 
@@ -318,19 +296,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             tvNgayNhap = (TextView) itemView.findViewById(R.id.tv_ngay_nhap);
             tvSoIDBBan = (TextView) itemView.findViewById(R.id.tv_id_bban_kdinh);
             tvTitleSoIDBBan = (TextView) itemView.findViewById(R.id.tv_title_id_bban_kiemdinh);
+            tvInfoResult = (TextView) itemView.findViewById(R.id.tv_info_result);
             btnXoa = (Button) itemView.findViewById(R.id.btn_delete);
             btnGhim = (Button) itemView.findViewById(R.id.btn_ghim);
             btnChon = (Button) itemView.findViewById(R.id.btn_chon);
-
-//            fabGhim.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Common.runAnimationClickView(view, R.anim.scale_view_pull, Common.TIME_DELAY_ANIM);
-//                    //gửi ra ngoài vị trí  list đó để xử lý
-//                    int pos = getAdapterPosition();
-//                    mListener.clickBtnGhimRowCto(pos);
-//                }
-//            });
 
             btnGhim.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -353,8 +322,14 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 public void onClick(View view) {
                     //gửi ra ngoài vị trí  list đó để xử lý
                     int pos = getAdapterPosition();
-                    mListener.clickBtnXoa(pos
-                    );
+                    mListener.clickBtnXoa(pos);
+                }
+            });
+
+            tvInfoResult.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.clickTvInfoResult(tvInfoResult.getText().toString());
                 }
             });
         }
@@ -366,6 +341,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         void clickBtnXoa(int pos);
 
         void clickBtnChonRowCto(int pos);
+
+        String interactionDataINFO_RESULT(int id, Common.TYPE_SESSION mTypeSessionHistory, String mDateSessionHistory);
+
+        void clickTvInfoResult(String infoResult);
     }
 
     public void refreshListKD(List<CongToGuiKDProxy> congToProxies

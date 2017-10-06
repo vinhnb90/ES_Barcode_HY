@@ -1,6 +1,5 @@
 package esolutions.com.barcodehungyenpc.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import esolutions.com.barcodehungyenpc.entity.CongToGuiKDProxy;
 import esolutions.com.barcodehungyenpc.entity.CongToGuiKD;
+import esolutions.com.barcodehungyenpc.entity.CongToGuiKDProxy;
 import esolutions.com.barcodehungyenpc.entity.CongToPB;
 import esolutions.com.barcodehungyenpc.entity.CongToPBProxy;
 import esolutions.com.barcodehungyenpc.entity.DienLuc;
@@ -140,7 +139,6 @@ public class SqlDAO {
             closeCursor(cursor);
         return listCongToProxies;
     }
-
 
 
     public List<CongToGuiKDProxy> getByDateAllCongToKD(String dateSQL) throws Exception {
@@ -354,7 +352,8 @@ public class SqlDAO {
                 history.getTYPE_SESSION(),
                 history.getDATE_SESSION(),
                 history.getTYPE_RESULT(),
-                history.getINFO_SEARCH()
+                history.getINFO_SEARCH(),
+                history.getINFO_RESULT()
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_HISTORY(), args);
@@ -407,16 +406,16 @@ public class SqlDAO {
 //    }
 
 
-    public void updateGhimCtoKDUploadSuccess(int TRANG_THAI_GHIM) throws Exception {
+    public void getUpdateGhimCtoAllKD(String dateSQL, int TRANG_THAI_GHIM) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
         String[] args = SqlDAO.build(
                 TRANG_THAI_GHIM,
-                Common.CHON.GUI_THANH_CONG.getCode()
+                dateSQL
         );
 
-        mSqLiteDatabase.execSQL(SqlQuery.updateGhimCtoKDUploadSuccess(), args);
+        mSqLiteDatabase.execSQL(SqlQuery.updateGhimCtoAllKD(), args);
     }
 
     public void updateChonCtoPB(int idCto, int chon) throws Exception {
@@ -569,7 +568,6 @@ public class SqlDAO {
             closeCursor(cursor);
         return listCongToProxies;
     }
-
 
 
     public int deleteCongToPB(int idCongTo) throws Exception {
@@ -862,7 +860,6 @@ public class SqlDAO {
     }
 
 
-
     public void getByDateDeleteHistory(int idRowDelete) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -984,16 +981,16 @@ public class SqlDAO {
         mSqLiteDatabase.execSQL(SqlQuery.deleteByDateAllCongToPB(), args);
     }
 
-    public void updateGhimCtoPBUploadSuccess(int TRANG_THAI_GHIM) throws Exception {
+    public void getUpdateGhimCtoAllPB(String dateSQL, int TRANG_THAI_GHIM) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
         String[] args = SqlDAO.build(
                 TRANG_THAI_GHIM,
-                Common.CHON.GUI_THANH_CONG.getCode()
+                dateSQL
         );
 
-        mSqLiteDatabase.execSQL(SqlQuery.updateGhimCtoPBUploadSuccess(), args);
+        mSqLiteDatabase.execSQL(SqlQuery.updateGhimCtoAllPB(), args);
     }
 
 
@@ -1107,6 +1104,30 @@ public class SqlDAO {
         if (listCongToProxies.isEmpty())
             closeCursor(cursor);
         return listCongToProxies;
+    }
+
+    public String getByDateHistoryINFO_RESULT(int ID, Common.TYPE_TBL_CTO typeTblCto, Common.TYPE_SESSION mTypeSessionHistory, String mDateSessionHistory) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+        String INFO_RESULT = "";
+        String[] args = build(
+                typeTblCto.getCode(),
+                mDateSessionHistory,
+                mTypeSessionHistory.getCode(),
+                ID
+        );
+
+        Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.getBydateHistoryINFO_RESULT(), args);
+        if (cursor != null) {
+            if (cursor.getCount() == 0)
+                return INFO_RESULT;
+            else {
+                cursor.moveToFirst();
+
+                INFO_RESULT = cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_HISTORY.INFO_RESULT.getNameCollumn()));
+            }
+        }
+        return INFO_RESULT;
     }
 
     //endregion

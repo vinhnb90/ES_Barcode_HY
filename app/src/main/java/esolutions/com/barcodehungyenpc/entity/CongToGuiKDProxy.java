@@ -32,12 +32,12 @@ public class CongToGuiKDProxy extends CursorItemProxy {
         return mCongToGuiKD.getCHON();
     }
 
-    public int getID() {
+    public int getID_TBL_CTO_GUI_KD() {
         if (mCongToGuiKD.getID_TBL_CTO_GUI_KD() == -1) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
-            String ID = SqlQuery.TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn();
-            mCongToGuiKD.setID_TBL_CTO_GUI_KD(cursor.getInt(cursor.getColumnIndex(ID)));
+            String ID_TBL_CTO_GUI_KD = SqlQuery.TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn();
+            mCongToGuiKD.setID_TBL_CTO_GUI_KD(cursor.getInt(cursor.getColumnIndex(ID_TBL_CTO_GUI_KD)));
         }
         return mCongToGuiKD.getID_TBL_CTO_GUI_KD();
     }

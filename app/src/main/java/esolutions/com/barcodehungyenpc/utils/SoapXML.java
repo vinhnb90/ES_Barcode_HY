@@ -1,7 +1,6 @@
 package esolutions.com.barcodehungyenpc.utils;
 
 import android.os.AsyncTask;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,12 +21,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,13 +40,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import static android.text.Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
-import static android.text.Html.escapeHtml;
 import static android.text.Html.toHtml;
 import static esolutions.com.barcodehungyenpc.utils.Log.*;
 
 import esolutions.com.barcodehungyenpc.entity.Test;
-import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 
 /**
  * Created by VinhNB on 8/31/2017.
@@ -236,7 +229,7 @@ public class SoapXML {
                 publishProgress(e.getMessage());
                 e.printStackTrace();
                 try {
-                    getInstance().loge(SoapXML.class, "Xảy ra vấn đề khi thao tác server API " + METHOD_NAME +" \n has content \n" + e.getMessage());
+                    getInstance().loge(SoapXML.class, "Xảy ra vấn đề khi thao tác server API " + METHOD_NAME + " \n has content \n" + e.getMessage());
                 } catch (Exception e1) {
                     publishProgress(e1.getMessage());
                     e1.printStackTrace();
@@ -664,7 +657,7 @@ public class SoapXML {
 
                     String requestDump = ht.requestDump;
                     String responseDump = ht.responseDump;
-                    getInstance().logi(SoapXML.class, "Response server API " + method.getNameMethod() +" \n has content \n" + responseDump);
+                    getInstance().logi(SoapXML.class, "Response server API " + method.getNameMethod() + " \n has content \n" + responseDump);
                     String response = envelope.getResponse() + "";
 
 
@@ -706,7 +699,7 @@ public class SoapXML {
                 publishProgress(e.getMessage());
                 e.printStackTrace();
                 try {
-                    getInstance().loge(SoapXML.class, "Xảy ra vấn đề khi thao tác server API " + method.getNameMethod() +" \n has content \n" + e.getMessage());
+                    getInstance().loge(SoapXML.class, "Xảy ra vấn đề khi thao tác server API " + method.getNameMethod() + " \n has content \n" + e.getMessage());
                 } catch (Exception e1) {
                     publishProgress(e1.getMessage());
                     e1.printStackTrace();
@@ -1027,8 +1020,7 @@ public class SoapXML {
                 for (int i = 0; i < countProInfoLv1; i++) {
                     proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
 
-                    if(proInfoLv2.hasProperty(keyDataSetServerError))
-                    {
+                    if (proInfoLv2.hasProperty(keyDataSetServerError)) {
                         isServerErrorResponse = true;
                         break;
                     }
@@ -1045,7 +1037,7 @@ public class SoapXML {
                     return jsonReponse;
                 }
 
-                 countProInfoLv1 = proInfoLv1.getPropertyCount();
+                countProInfoLv1 = proInfoLv1.getPropertyCount();
 
                 for (int i = 0; i < countProInfoLv1; i++) {
                     proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
@@ -1083,39 +1075,30 @@ public class SoapXML {
             if (TextUtils.isEmpty(jsonResponse))
                 return;
             //Xử lý kết quả
-
             final GsonBuilder gsonBuilder = new GsonBuilder();
             final Gson gson = gsonBuilder.create();
             Type type = null;
             try {
-                List<V> objectTypeError = null;
-
                 if (isServerErrorResponse) {
                     if (isWrapperType(classTypeError)) {
                         V primitiveTypeData = setValueWrapperTypes(jsonResponse, classTypeError);
                         callBack.onPostData(primitiveTypeData);
                     } else {
-                        List<V> objectTypeData = null;
-                        objectTypeData = toList(jsonResponse, classTypeError);
-                        callBack.onPostData(objectTypeData);
+                        JSONArray response = new JSONArray(jsonResponse);
+                        JSONObject responseObject = response.getJSONObject(0);
+                        String messageServer = responseObject.getString(keyDataSetServerError);
+                        callBack.onPostMessageSever(messageServer);
                     }
-                    objectTypeError = toList(jsonResponse, classTypeError);
-                    callBack.onPostMessageSever(objectTypeError);
                 } else {
                     if (isWrapperType(classTypeData)) {
                         K primitiveTypeData = setValueWrapperTypes(jsonResponse, classTypeData);
-//                        K newT1 = (K)(Object)jsonResponse;
-//                        string newT2 = (string)(object)t;
-//                        K primitiveTypeData = (K)Convert.ChangeType(jsonResponse, typeof(K));
                         callBack.onPostData(primitiveTypeData);
                     } else {
                         List<K> objectTypeData = null;
                         objectTypeData = toList(jsonResponse, classTypeData);
                         callBack.onPostData(objectTypeData);
-
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
                 callBack.onUpdate(e.getMessage());
@@ -1123,18 +1106,12 @@ public class SoapXML {
 
         }
 
-        <T> List<T> toList(String json, Class<T> typeClass) {
+        <T> List<T> toList(String json, Class<T> typeClass) throws IllegalAccessException, InstantiationException {
             final GsonBuilder gsonBuilder = new GsonBuilder();
             final Gson gson = gsonBuilder.serializeNulls().create();
             List<T> t = null;
-//            Object o = null;
-//            if (t instanceof ArrayList<?>) {
+
             t = gson.fromJson(json, new ListOfJson<T>(typeClass));
-//            } else {
-//                o = gson.fromJson(json, new ObjectOfJson<T>(typeClass));
-//                List<T> list = gson.fromJson(json, new ListOfJson<T>(typeClass));
-//                o = list.get(0);
-//            }
             return t;
 
         }
@@ -1235,7 +1212,7 @@ public class SoapXML {
 
             public abstract void onPostData(K dataResponse);
 
-            public abstract void onPostMessageSever(V errorResponse);
+            public abstract void onPostMessageSever(String errorResponse);
 
             public abstract SoapSerializationEnvelope setupRequest(String NAMESPACE, METHOD method);
         }

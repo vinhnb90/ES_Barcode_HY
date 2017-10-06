@@ -155,7 +155,8 @@ public class SqlQuery {
         TYPE_SESSION("TYPE_SESSION"),
         DATE_SESSION("DATE_SESSION"),
         TYPE_RESULT("TYPE_RESULT"),
-        INFO_SEARCH("INFO_SEARCH");
+        INFO_SEARCH("INFO_SEARCH"),
+        INFO_RESULT("INFO_RESULT");
 
         private String mNameCollumn;
 
@@ -254,7 +255,8 @@ public class SqlQuery {
                 TBL_HISTORY.TYPE_SESSION.getNameCollumn() + " TEXT, " +
                 TBL_HISTORY.DATE_SESSION.getNameCollumn() + " TEXT, " +
                 TBL_HISTORY.TYPE_RESULT.getNameCollumn() + " TEXT, " +
-                TBL_HISTORY.INFO_SEARCH.getNameCollumn() + " TEXT" +
+                TBL_HISTORY.INFO_SEARCH.getNameCollumn() + " TEXT, " +
+                TBL_HISTORY.INFO_RESULT.getNameCollumn() + " TEXT" +
                 ");";
     }
 
@@ -384,9 +386,10 @@ public class SqlQuery {
                 TBL_HISTORY.TYPE_SESSION.getNameCollumn() + ", " +
                 TBL_HISTORY.DATE_SESSION.getNameCollumn() + ", " +
                 TBL_HISTORY.TYPE_RESULT.getNameCollumn() + ", " +
-                TBL_HISTORY.INFO_SEARCH.getNameCollumn() +
+                TBL_HISTORY.INFO_SEARCH.getNameCollumn() + ", " +
+                TBL_HISTORY.INFO_RESULT.getNameCollumn() +
 
-                ") " + "VALUES (?, ?, ?, ?, ?, ?" +
+                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?" +
                 ");"
                 ;
     }
@@ -511,6 +514,26 @@ public class SqlQuery {
                 " DESC";
     }
 
+    public static String getBydateHistoryINFO_RESULT() {
+        return "SELECT " +
+                TBL_HISTORY.INFO_RESULT.getNameCollumn() +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.TYPE_SESSION +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.ID_TBL_CTO +
+                " = ?"
+                ;
+    }
+
 
     public static String getBydateALLHistoryCtoNoSuccess() {
         return "SELECT DISTINCT *" +
@@ -521,7 +544,7 @@ public class SqlQuery {
                 " = ? " +
                 " AND " +
                 TBL_HISTORY.TYPE_RESULT.getNameCollumn() +
-                " != " + Common.TYPE_RESULT.SUCCESS.getCode() +
+                " != '" + Common.TYPE_RESULT.SUCCESS.getCode() + "'" +
                 " AND " +
                 TBL_HISTORY.DATE_SESSION.getNameCollumn() +
                 " BETWEEN ? AND ? " +
@@ -593,14 +616,17 @@ public class SqlQuery {
                 ;
     }
 
-    public static String updateGhimCtoKDUploadSuccess() {
+    public static String updateGhimCtoAllKD() {
         return "UPDATE " +
                 TBL_CTO_GUI_KD.getNameTable() +
                 " SET " +
                 TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() +
                 " = ? " +
                 " WHERE " +
-                TBL_CTO_GUI_KD.CHON.getNameCollumn() +
+                TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() +
+                " != '" + Common.TRANG_THAI_GHIM.DA_GHIM +
+                "' AND " +
+                TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() +
                 " = ? "
                 ;
     }
@@ -923,14 +949,17 @@ public class SqlQuery {
 //    }
 
 
-    public static String updateGhimCtoPBUploadSuccess() {
+    public static String updateGhimCtoAllPB() {
         return "UPDATE " +
                 TBL_CTO_PB.getNameTable() +
                 " SET " +
                 TBL_CTO_PB.TRANG_THAI_GHIM.getNameCollumn() +
                 " = ? " +
                 " WHERE " +
-                TBL_CTO_PB.CHON.getNameCollumn() +
+                TBL_CTO_PB.TRANG_THAI_GHIM.getNameCollumn() +
+                " != '" + Common.TRANG_THAI_GHIM.DA_GHIM +
+                "' AND " +
+                TBL_CTO_PB.NGAY_NHAP_MTB.getNameCollumn() +
                 " = ? "
                 ;
     }

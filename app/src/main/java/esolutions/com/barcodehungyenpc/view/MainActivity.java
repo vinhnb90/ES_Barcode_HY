@@ -202,6 +202,7 @@ public class MainActivity
                             long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
                             history.setDATE_SESSION(String.valueOf(dateSql));
                             history.setINFO_SEARCH("");
+                            history.setINFO_RESULT(message);
                             mSqlDAO.insertTBL_HISTORY(history);
                         }
                     } catch (Exception e) {
@@ -247,10 +248,10 @@ public class MainActivity
                 }
 
                 @Override
-                public void onPostMessageSever(ThongBaoResponse errorResponse) {
+                public void onPostMessageSever(String errorResponse) {
                     if (mCountUploadFinish > 0)
                         mCountUploadFinish--;
-                    onUpdate(errorResponse.getThongbao());
+                    onUpdate(errorResponse);
                 }
 
                 @Override
@@ -336,6 +337,7 @@ public class MainActivity
                             long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
                             history.setDATE_SESSION(String.valueOf(dateSql));
                             history.setINFO_SEARCH("");
+                            history.setINFO_RESULT(message);
                             mSqlDAO.insertTBL_HISTORY(history);
 
                         }
@@ -382,10 +384,10 @@ public class MainActivity
                 }
 
                 @Override
-                public void onPostMessageSever(ThongBaoResponse errorResponse) {
+                public void onPostMessageSever(String errorResponse) {
                     if (mCountUploadFinish > 0)
                         mCountUploadFinish--;
-                    onUpdate(errorResponse.getThongbao());
+                    onUpdate("Máy chủ thông báo: \"" + errorResponse + "\"");
                 }
 
                 @Override
@@ -512,6 +514,7 @@ public class MainActivity
                 //convert time to date SQL
                 long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
                 history.setDATE_SESSION(String.valueOf(dateSql));
+                history.setINFO_RESULT("");
                 mSqlDAO.insertTBL_HISTORY(history);
             }
 
@@ -530,7 +533,7 @@ public class MainActivity
 
             int CHON = response.getCHON();
             //update MA_CTO
-            mSqlDAO.updateChonCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID(), CHON);
+            mSqlDAO.updateChonCtoKD(mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_GUI_KD(), CHON);
 
             //nếu MA_CTO == 1 thì bỏ ghim, nếu MA_CTO == 2 hoặc 0 thì giữ nguyên ghim
 //            if(MA_CTO == Common.MA_CTO.GUI_THANH_CONG.getCode())
@@ -545,7 +548,7 @@ public class MainActivity
             }
 
             //insert history
-            int id = mListUploadCtoKD.get(mCountUploadFinish - 1).getID();
+            int id = mListUploadCtoKD.get(mCountUploadFinish - 1).getID_TBL_CTO_GUI_KD();
             if (id != 0) {
                 History history = new History();
                 history.setID_TBL_CTO(id);
@@ -556,6 +559,7 @@ public class MainActivity
                 //convert time to date SQL
                 long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
                 history.setDATE_SESSION(String.valueOf(dateSql));
+                history.setINFO_RESULT("");
                 mSqlDAO.insertTBL_HISTORY(history);
             }
 
@@ -651,7 +655,7 @@ public class MainActivity
 
     private void showDialogDetailHistory(int pos) {
         String DATE_SESSION = mListHistory.get(pos).getDATE_SESSION();
-        Common.TYPE_SESSION typeSession = Common.TYPE_SESSION.findNameBy(mListHistory.get(pos).getTYPE_SESSION());
+        Common.TYPE_SESSION TYPE_SESSION = Common.TYPE_SESSION.findNameBy(mListHistory.get(pos).getTYPE_SESSION());
 
         final Dialog dialogConfig = new Dialog(this);
         dialogConfig.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -669,15 +673,15 @@ public class MainActivity
         try {
             if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                 mListCtoKD.clear();
-                mListCtoKD = mSqlDAO.getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
+                mListCtoKD = mSqlDAO.getByDateAllCongToKDByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, TYPE_SESSION);
             }
             if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
                 mListCtoPB.clear();
-                mListCtoPB = mSqlDAO.getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, typeSession);
+                mListCtoPB = mSqlDAO.getByDateAllCongToPBByDATE_SESSIONByTYPE_RESULT(DATE_SESSION, TYPE_SESSION);
             }
 
             DsCongToAdapter dsCongToAdapter = new DsCongToAdapter(this, mListCtoKD, mListCtoPB, mKieuChuongTrinh);
-            dsCongToAdapter.setHistoryAdapter(true);
+            dsCongToAdapter.setHistoryAdapter(true, TYPE_SESSION, DATE_SESSION);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(dsCongToAdapter);
@@ -1431,17 +1435,18 @@ public class MainActivity
                         if (menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM) {
                             if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                                 //bỏ tất cả các cto ghim nếu nó gửi lên THÀNH CÔNG
-                                mSqlDAO.updateGhimCtoKDUploadSuccess(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+                                mSqlDAO.getUpdateGhimCtoAllKD(Common.convertDateUIToDateSQL(mDate), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
                                 mListCtoKD.clear();
                                 mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(Common.convertDateUIToDateSQL(mDate));
-
                             }
 
                             if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
-                                mSqlDAO.updateGhimCtoPBUploadSuccess(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+                                mSqlDAO.getUpdateGhimCtoAllPB(Common.convertDateUIToDateSQL(mDate), Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
                                 mListCtoPB.clear();
                                 mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(Common.convertDateUIToDateSQL(mDate));
                             }
+
+                            prepareDataUpload();
 
                             fillDataReyclerFull();
                         }
@@ -1496,6 +1501,7 @@ public class MainActivity
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mHistoryAdapter, true);
+            mHistoryAdapter = null;
         }
 
         mRvCto.invalidate();
@@ -1602,7 +1608,7 @@ public class MainActivity
                     congToGuiKDProxy.getCHISO_THAO(),
                     congToGuiKDProxy.getHSN(),
                     Common.convertDateSQLToDateUI(congToGuiKDProxy.getNGAY_NHAP_MTB()),
-                    congToGuiKDProxy.getID());
+                    congToGuiKDProxy.getID_TBL_CTO_GUI_KD());
             listUpload.add(congToUpload);
 
         }
@@ -1753,6 +1759,7 @@ public class MainActivity
 
                     history.setDATE_SESSION(Common.getDateTimeNow(Common.DATE_TIME_TYPE.ddMMyyyyHHmmss));
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
+                    history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
                 } catch (Exception e) {
                     try {
@@ -1792,7 +1799,7 @@ public class MainActivity
             @Override
             public void onPostMessageSever(String errorResponse) {
                 Log.d(TAG, "onPostMessageSever: ");
-                onUpdate(errorResponse);
+                onUpdate("Máy chủ thông báo: \"" + errorResponse + "\"");
             }
         };
 
@@ -1826,6 +1833,7 @@ public class MainActivity
 
                     history.setDATE_SESSION(Common.getDateTimeNow(Common.DATE_TIME_TYPE.ddMMyyyyHHmmss));
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
+                    history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
                 } catch (Exception e) {
                     try {
@@ -1983,6 +1991,7 @@ public class MainActivity
                 long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
                 history.setDATE_SESSION(String.valueOf(dateSql));
                 history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
+                history.setINFO_RESULT("");
                 mSqlDAO.insertTBL_HISTORY(history);
             }
         }
@@ -2133,6 +2142,7 @@ public class MainActivity
                 long dateSql = Common.convertDateToLong(time, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
                 history.setDATE_SESSION(String.valueOf(dateSql));
                 history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
+                history.setINFO_RESULT("");
                 mSqlDAO.insertTBL_HISTORY(history);
             }
 
@@ -2180,7 +2190,7 @@ public class MainActivity
 
         try {
             //set filterDataReal GhimCto đồng thời đánh dấu cần refersh lại giá trị công tơ đó
-            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
+            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID_TBL_CTO_GUI_KD() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
 
             int statusGhimCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getTRANG_THAI_GHIM() : mListCtoPB.get(pos).getTRANG_THAI_GHIM();
 
@@ -2272,7 +2282,7 @@ public class MainActivity
                     int idRowDelete;
                     if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                         CongToGuiKDProxy congToGuiKDProxy = mListCtoKD.get(pos);
-                        idRowDelete = mSqlDAO.deleteCongToKD(congToGuiKDProxy.getID());
+                        idRowDelete = mSqlDAO.deleteCongToKD(congToGuiKDProxy.getID_TBL_CTO_GUI_KD());
                     } else {
                         CongToPBProxy congToGuiPBProxy = mListCtoPB.get(pos);
                         idRowDelete = mSqlDAO.deleteCongToPB(congToGuiPBProxy.getID_TBL_CTO_PB());
@@ -2344,7 +2354,7 @@ public class MainActivity
 
         try {
             //set filterDataReal GhimCto đồng thời đánh dấu cần refersh lại giá trị công tơ đó
-            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
+            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID_TBL_CTO_GUI_KD() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
 
             int statusChonCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getTRANG_THAI_CHON() : mListCtoPB.get(pos).getTRANG_THAI_CHON();
             if (statusChonCto == Common.TRANG_THAI_CHON.CHUA_CHON.getCode())
@@ -2398,6 +2408,31 @@ public class MainActivity
                 e1.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public String interactionDataINFO_RESULT(int ID, Common.TYPE_SESSION mTypeSessionHistory, String mDateSessionHistory) {
+        String INFO_RESULT = "";
+        Common.TYPE_TBL_CTO typeTblCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? Common.TYPE_TBL_CTO.KD : Common.TYPE_TBL_CTO.PB;
+        try {
+            INFO_RESULT = mSqlDAO.getByDateHistoryINFO_RESULT(ID, typeTblCto, mTypeSessionHistory, mDateSessionHistory);
+        } catch (Exception e) {
+            try {
+                Snackbar snackbar = Snackbar.make(mCoordinatorLayout, e.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                getInstance().loge(DangNhapActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
+        }
+        return INFO_RESULT;
+    }
+
+    @Override
+    public void clickTvInfoResult(String infoResult) {
+        Toast.makeText(MainActivity.this, infoResult, Toast.LENGTH_SHORT).show();
     }
     //endregion
 
