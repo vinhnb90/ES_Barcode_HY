@@ -2172,6 +2172,10 @@ public class MainActivity
             if (listPositionEqualsMA_CTO.size() == 0)
                 return;
             mRvCto.getLayoutManager().scrollToPosition(listPositionEqualsMA_CTO.get(0));
+
+            //thông báo dưới lưới đã tồn tại và được cập nhật
+            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Dữ liệu công tơ có mã " + listPositionEqualsMA_CTO.get(0) + " đã tồn tại và được cập nhật mới!", Snackbar.LENGTH_LONG);
+            snackbar.show();
 //            int sLightColor = ContextCompat.getColor(MainActivity.this.getApplicationContext(), R.color.primary_light);
 //            mRvCto.getLayoutManager().getChildAt(listPositionEqualsMA_CTO.get(0)).setBackgroundColor(sLightColor);
             //

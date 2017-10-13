@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
@@ -46,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import esolutions.com.barcodehungyenpc.R;
+import esolutions.com.barcodehungyenpc.view.DangNhapActivity;
 import esolutions.com.barcodehungyenpc.view.MainActivity;
 
 import static android.support.v4.app.ActivityCompat.requestPermissions;
@@ -128,6 +130,20 @@ public class Common {
             return false;
         } else
             return true;
+    }
+
+    public static String getVersionApp(Context context) {
+        PackageManager manager = context.getPackageManager();
+        PackageInfo info = null;
+        String version = "";
+        try {
+            info = manager.getPackageInfo(
+                    context.getPackageName(), 0);
+            version = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
     //endregion
 
@@ -443,7 +459,6 @@ public class Common {
         ex22("ex22", "Chưa có thiết bị nào được chọn...!"),
         ex23("ex23", "Thao tác tải đơn vị phiên trước chưa kết thúc...!"),
         ex24("ex24", "Đăng nhập không thành công, vui lòng kiểm tra lại thông tin!"),
-        ex25("ex25", "Vui lòng chọn đơn vị!"),
         ex26("ex26", "Đẩy dữ liệu thành công!"),
         ex261("ex21", "Quá trình đẩy dữ liệu gặp lỗi! Vui lòng xem chi tiết trong lịch sử."),
         ex27("ex27", "Vui lòng chọn đơn vị!"),
@@ -535,7 +550,7 @@ public class Common {
     }
 
     public static String convertDateSQLToDateServer(String time) {
-        if(TextUtils.isEmpty(time))
+        if (TextUtils.isEmpty(time))
             return "";
 
         //convert dang yyyymmdd sang dạng mm/dd/yyyy
@@ -558,9 +573,8 @@ public class Common {
         return y + m + d;
     }
 
-    public static String checkStringNull(String input)
-    {
-        return input == null? "": input;
+    public static String checkStringNull(String input) {
+        return input == null ? "" : input;
     }
 
     public static Date getEndOfDay(Date date) {

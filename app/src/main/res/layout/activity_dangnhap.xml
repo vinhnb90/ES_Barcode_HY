@@ -9,13 +9,13 @@
     tools:context="esolutions.com.barcodehungyenpc.view.MainActivity">
 
     <RelativeLayout
-        android:gravity="center_vertical"
         android:id="@+id/rl_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_menu_bottom"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tv_title1"
@@ -45,11 +45,11 @@
 
         <LinearLayout
             android:id="@+id/ll_1"
-            android:layout_marginTop="@dimen/_32sdp"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_24sdp"
             android:layout_below="@+id/rl_choose"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_32sdp"
             android:background="@color/primary"
             android:orientation="horizontal">
 
@@ -59,20 +59,20 @@
                 android:src="@mipmap/ic_link" />
 
             <EditText
-                android:textColorHint="@color/white"
-                android:hint="Đường dẫn máy chủ"
                 android:id="@+id/et_link"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:background="@drawable/xml_et_bottom_border"
                 android:gravity="center_vertical"
+                android:hint="Đường dẫn máy chủ"
                 android:lines="1"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:scrollbars="horizontal"
                 android:singleLine="true"
                 android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/xml_cursor_white"
                 tools:text="192.168.68.204" />
         </LinearLayout>
@@ -87,26 +87,25 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin">
 
-        <!--    <ImageView
-                android:id="@+id/iv_logo_1"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:src="@mipmap/ic_arrow_right" />-->
+            <!--    <ImageView
+                    android:id="@+id/iv_logo_1"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:src="@mipmap/ic_arrow_right" />-->
 
             <RelativeLayout
                 android:id="@+id/rl_programe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:background="@drawable/xml_et_bottom_border"
-                >
+                android:background="@drawable/xml_et_bottom_border">
 
                 <android.support.v7.widget.AppCompatSpinner
-                    android:layout_centerInParent="true"
                     android:id="@+id/spin_program"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
                     android:backgroundTint="@color/white"
                     android:dropDownWidth="fill_parent"
                     android:gravity="center_vertical"
@@ -117,16 +116,15 @@
         </RelativeLayout>
 
 
-
         <RelativeLayout
             android:id="@+id/ll_1_1"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_24sdp"
             android:layout_below="@+id/ll_1"
-            android:gravity="center_vertical"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:background="@color/primary"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
@@ -175,8 +173,7 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_toLeftOf="@+id/ll_download_dvi"
                 android:layout_toRightOf="@+id/iv_home_icon"
-                android:background="@drawable/xml_et_bottom_border"
-                >
+                android:background="@drawable/xml_et_bottom_border">
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spin_dvi"
@@ -224,7 +221,6 @@
                 android:textCursorDrawable="@drawable/xml_cursor_white"
                 tools:text="account01" />
         </LinearLayout>
-
 
         <RelativeLayout
             android:id="@+id/ll_3"
@@ -324,7 +320,8 @@
                 android:background="@color/accent"
                 android:text="ĐĂNG NHẬP"
                 android:textColor="@color/text_icons"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_10sdp"
+                android:visibility="visible" />
 
             <ProgressBar
                 android:id="@+id/pbar_login"
@@ -335,6 +332,7 @@
                 android:layout_toRightOf="@+id/tv_save_info"
                 android:background="@color/accent"
                 android:indeterminateTint="@color/white"
+                android:indeterminateTintMode="src_in"
                 android:padding="@dimen/_2sdp"
                 android:textColor="@color/text_icons"
                 android:textSize="@dimen/_10sdp"
@@ -357,6 +355,33 @@
                  android:textColor="@color/white"
                  android:textCursorDrawable="@drawable/xml_cursor_white"
                  tools:text="*******" />-->
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv_es"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:gravity="right"
+                android:text="Phần mềm bản quyền công ty ESolution"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_es"
+                android:gravity="right"
+                tools:text="Phiên bản phần mềm 5.6.6"
+                android:textColor="@color/white" />
+
+
         </RelativeLayout>
     </RelativeLayout>
 

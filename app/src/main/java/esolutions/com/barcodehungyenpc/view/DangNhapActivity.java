@@ -354,7 +354,6 @@ public class DangNhapActivity extends BaseActivity implements
                         mPbarLogin.setVisibility(View.VISIBLE);
                     }
                 });
-
             }
 
             @Override
@@ -597,6 +596,35 @@ public class DangNhapActivity extends BaseActivity implements
 
         //show spin dien luc
         setSpinDienLuc();
+
+        ((TextView)findViewById(R.id.tv_version)).setText("Phiên bản phần mềm : " + Common.getVersionApp(DangNhapActivity.this));
+
+        mEtURL.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mEtURL.setError(null);
+                return false;
+            }
+        });
+
+        mEtUser.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mEtUser.setError(null);
+                return false;
+            }
+        });
+
+
+        mEtPass.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mEtPass.setError(null);
+                return false;
+            }
+        });
+
+
     }
 
     private void setSpinDienLuc() throws Exception {
@@ -625,7 +653,7 @@ public class DangNhapActivity extends BaseActivity implements
         }
 
         if (StringUtils.isEmpty(mEtPass.getText().toString())) {
-            mEtPass.setError(Common.MESSAGE.ex25.getContent());
+            mEtPass.setError(Common.MESSAGE.ex03.getContent());
             return false;
         }
 

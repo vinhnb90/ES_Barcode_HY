@@ -99,6 +99,7 @@
                     </LinearLayout>
 
                     <ProgressBar
+                        android:indeterminateTintMode="src_in"
                         android:id="@+id/pbar_search_online"
                         android:layout_width="@dimen/_24sdp"
                         android:layout_height="match_parent"
