@@ -57,23 +57,24 @@
                     android:background="@drawable/xml_border_full_type4_left">
 
 
-
                     <CheckBox
-                        android:button="@drawable/xml_checkbox"
                         android:id="@+id/cb_search_by_id_bban"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
                         android:background="@drawable/xml_border_full_type4_left_orange"
+                        android:button="@drawable/xml_checkbox"
                         android:buttonTint="@color/white"
                         android:paddingRight="@dimen/_5sdp"
                         android:text="Theo biên bản"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <EditText
-
+                        android:gravity="center_vertical"
                         android:id="@+id/et_search_type"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -81,7 +82,6 @@
                         android:layout_toRightOf="@+id/cb_search_by_id_bban"
                         android:layout_weight="1"
                         android:background="@null"
-
                         android:hint="Tìm kiếm trên máy chủ"
                         android:lines="1"
                         android:maxLines="1"
@@ -138,71 +138,70 @@
             android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal">
 
-
-            <!--<EditText
-                android:imeOptions="actionNext"
-                android:id="@+id/et_forcus"
-                android:layout_width="1dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/tv_title_url"
-                android:background="@drawable/xml_border_full_type4_left"
-                android:hint="Tìm kiếm trên máy chủ"
-                android:lines="1"
-                android:maxLines="1"
-                android:paddingLeft="@dimen/_8sdp"
-                android:paddingRight="@dimen/_8sdp"
-                android:scrollHorizontally="true"
-                android:scrollbars="horizontal"
-                android:singleLine="true"
-                android:visibility="visible"
-                android:textSize="@dimen/_10sdp" />-->
-
-            <EditText
-                android:id="@+id/et_search_type2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/tv_title_url"
-                android:layout_weight="1"
-                android:background="@drawable/xml_border_full_type4_left"
-                android:hint="Tìm kiếm trên máy tính bảng"
-                android:imeOptions=""
-                android:lines="1"
-                android:maxLines="1"
-                android:paddingLeft="@dimen/_8sdp"
-                android:paddingRight="@dimen/_8sdp"
-                android:scrollHorizontally="true"
-                android:scrollbars="horizontal"
-                android:singleLine="true"
-                android:textSize="@dimen/_10sdp" />
-
-            <!--<EditText
-                android:id="@+id/et_search_type3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/tv_title_url"
-                android:layout_weight="1"
-                android:background="@drawable/xml_border_full_type4_left"
-                android:hint="Focus"
-                android:lines="1"
-                android:maxLines="1"
-                android:paddingLeft="@dimen/_8sdp"
-                android:paddingRight="@dimen/_8sdp"
-                android:scrollHorizontally="true"
-                android:scrollbars="horizontal"
-                android:singleLine="true"
-                android:textSize="@dimen/_10sdp" />-->
-
-            <ImageButton
-                android:id="@+id/ibtn_clear_search_type2"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
                 android:layout_marginRight="@dimen/_1sdp"
-                android:background="@drawable/xml_border_full_type4_right"
-                android:scaleType="centerInside"
-                android:src="@mipmap/ic_clear" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <!--  android:nextFocusForward="@+id/et_forcus"-->
 
+                <ImageButton
+                    android:id="@+id/ibtn_clear_search_type2"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="@dimen/_1sdp"
+                    android:background="@drawable/xml_border_full_type4_right"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_clear" />
+
+
+                <RelativeLayout
+                    android:id="@+id/id1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/ibtn_clear_search_type2"
+                    android:background="@drawable/xml_border_full_type4_left">
+
+
+                    <CheckBox
+                        android:id="@+id/cb_search_local_by_id_bban"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/xml_border_full_type4_left_orange"
+                        android:button="@drawable/xml_checkbox"
+                        android:buttonTint="@color/white"
+                        android:paddingRight="@dimen/_5sdp"
+                        android:text="Theo biên bản"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="visible" />
+
+                    <EditText
+                        android:gravity="center_vertical"
+                        android:id="@+id/et_search_type2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/cb_search_local_by_id_bban"
+                        android:background="@drawable/xml_border_full_type4_left"
+                        android:hint="Tìm kiếm máy tính bảng"
+                        android:imeOptions=""
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_8sdp"
+                        android:scrollHorizontally="true"
+                        android:scrollbars="horizontal"
+                        android:singleLine="true"
+                        android:textSize="@dimen/_10sdp" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
 
             <ImageButton
                 android:id="@+id/ibtn_search_date"
@@ -268,36 +267,60 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_24sdp"
+                android:layout_height="@dimen/_32sdp"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/et_ngay"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@color/accent"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:scrollHorizontally="true"
-                    android:scrollbars="horizontal"
-                    android:singleLine="true"
-                    android:text="05/09/2017"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/bb_inActiveBottomBarItemColor"
-                    android:textCursorDrawable="@null"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="visible" />
+                    android:layout_weight="1">
+
+
+                    <TextView
+                        android:id="@+id/et_ngay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_weight="1"
+                        android:background="@color/accent"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:padding="@dimen/_5sdp"
+                        android:scrollHorizontally="true"
+                        android:scrollbars="horizontal"
+                        android:singleLine="true"
+                        android:text="05/09/2017"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/bb_inActiveBottomBarItemColor"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tv_count_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:background="@drawable/xml_border_full_type1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:padding="@dimen/_2sdp"
+                        android:text="0"
+                        android:textColor="@color/button_dark_orange"
+                        android:textSize="@dimen/_7sdp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
 
                 <TextView
                     android:id="@+id/et_thongKe"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_weight="1"
                     android:background="@drawable/xml_border_full_type3"
                     android:gravity="center_vertical|center_horizontal"
@@ -312,31 +335,50 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/bb_inActiveBottomBarItemColor"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_9sdp"
                     android:visibility="visible" />
 
 
-                <Button
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:id="@+id/btn_clear_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/accent"
-                    android:drawableRight="@mipmap/ic_delete"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text="Xóa tất cả"
-                    android:textColor="@color/white" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:id="@+id/btn_clear_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@color/accent"
+                            android:drawableRight="@mipmap/ic_delete"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:text="Xóa tất cả"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_9sdp" />
 
 
-                <Button
-                    android:id="@+id/btn_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/accent"
-                    android:drawableRight="@mipmap/ic_filter_ok"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text="Lọc"
-                    android:textColor="@color/white" />
+                        <Button
+                            android:id="@+id/btn_filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_toRightOf="@+id/btn_clear_all"
+                            android:background="@color/accent"
+                            android:drawableRight="@mipmap/ic_filter_ok"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:text="Lọc"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_9sdp" />
+                    </RelativeLayout>
+                </LinearLayout>
 
 
                 <LinearLayout
@@ -459,8 +501,8 @@
                     android:layout_alignBaseline="@+id/iv_logo_4"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="0/0" />
+                    android:text="0/0"
+                    android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:id="@+id/tv_title_upload"

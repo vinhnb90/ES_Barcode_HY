@@ -28,6 +28,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+import org.kobjects.util.Strings;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
@@ -134,6 +137,7 @@ public class Common {
         yyyyMMdd,
         yyyyMMddHHmmssSSS,
         yyyyMMddHHmmssSSZ,
+        MMddyyyyHHmmssa,
         MMyyyy,
         ddMMyyyyHHmm,
         ddMMyyyy,
@@ -161,6 +165,10 @@ public class Common {
             if (this == ddMMyyyyHHmm)
                 return "dd/MM/yyyy HH'h'mm";
 
+            if (this == MMddyyyyHHmmssa)
+                //2017-08-01T00:00:00+07:00
+                return "MM/dd/yyyy HH:mm:ss a";
+
             if (this == FULL)
                 return "yyyy-MM-dd HH:mm:ss";
             return super.toString();
@@ -170,7 +178,7 @@ public class Common {
 
     public enum KIEU_CHUONG_TRINH {
         PHAN_BO(0, "Chức năng phân bổ"),
-        KIEM_DINH(1, "Chức năng kiểm định");
+        KIEM_DINH(1, "Chức năng gửi kiểm định");
 
         private int code;
         private String name;
@@ -414,6 +422,7 @@ public class Common {
         ex04("ex04", "Tham số truyền vào request soap không tương ứng với số lượng tham số yêu cầu!"),
         ex05("ex05", "Xảy ra lỗi trong quá trình kết nối tới máy chủ! Xin kiểm tra lại kết nối wifi!"),
         ex06("ex06", "Không nhận được dữ liệu trả về từ máy chủ!"),
+        ex061("ex061", "Không có dữ liệu"),
         ex07("ex07", "Chưa có kết nối internet, vui lòng kiểm tra lại!"),
         ex08("ex08", "Vui lòng cấu hình địa chỉ máy chủ!"),
         ex09("ex09", "Vui lòng cấu hình mã đơn vị điện lực!"),
@@ -431,11 +440,13 @@ public class Common {
         ex20("ex20", "Dữ liệu nhập rỗng...!"),
 
         ex21("ex21", "Thao tác tìm kiếm phiên trước chưa kết thúc...!"),
-        ex22("ex22", "Chưa có thiết bị nào được chọn để gửi kiểm định...!"),
+        ex22("ex22", "Chưa có thiết bị nào được chọn...!"),
         ex23("ex23", "Thao tác tải đơn vị phiên trước chưa kết thúc...!"),
         ex24("ex24", "Đăng nhập không thành công, vui lòng kiểm tra lại thông tin!"),
         ex25("ex25", "Vui lòng chọn đơn vị!"),
-        ex26("ex26", "Quá trình gửi kiểm định kết thúc!"),
+        ex26("ex26", "Đẩy dữ liệu thành công!"),
+        ex261("ex21", "Quá trình đẩy dữ liệu gặp lỗi! Vui lòng xem chi tiết trong lịch sử."),
+        ex27("ex27", "Vui lòng chọn đơn vị!"),
 
         ex("ex", "Gặp vấn đề không xác định.");
 
@@ -512,7 +523,7 @@ public class Common {
     }
 
     public static String convertDateSQLToDateUI(String time) {
-        if (TextUtils.isEmpty(time))
+        if (StringUtils.isEmpty(time))
             return "";
 
         //convert dang yyyymmdd sang dạng dd/mm/yyyy
@@ -523,9 +534,20 @@ public class Common {
         return d + "/" + m + "/" + y;
     }
 
+    public static String convertDateSQLToDateServer(String time) {
+        if(TextUtils.isEmpty(time))
+            return "";
+
+        //convert dang yyyymmdd sang dạng mm/dd/yyyy
+        String d = time.substring(6, 8);
+        String m = time.substring(4, 6);
+        String y = time.substring(0, 4);
+
+        return m + "/" + d + "/" + y;
+    }
 
     public static String convertDateUIToDateSQL(String time) {
-        if (TextUtils.isEmpty(time))
+        if (StringUtils.isEmpty(time))
             return "";
 
         //convert dang dd/mm/yyyy sang dạng yyyymmdd
@@ -536,6 +558,10 @@ public class Common {
         return y + m + d;
     }
 
+    public static String checkStringNull(String input)
+    {
+        return input == null? "": input;
+    }
 
     public static Date getEndOfDay(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -662,13 +688,15 @@ public class Common {
     public static boolean checkPermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(activity.getApplicationContext(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
+                    ) {
                 requestPermissions(activity, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.CAMERA
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.BLUETOOTH_ADMIN
                 }, REQUEST_CODE_PERMISSION);
                 return true;
             }

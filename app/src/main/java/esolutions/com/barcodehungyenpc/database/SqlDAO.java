@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -202,7 +204,7 @@ public class SqlDAO {
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
         String[] args = SqlDAO.build(
-                Common.CHON.CHUA_GUI.getCode(),
+                congToGuiKD.getCHON(),
                 congToGuiKD.getSTT(),
                 congToGuiKD.getMA_CTO(),
                 congToGuiKD.getSO_CTO(),
@@ -293,17 +295,17 @@ public class SqlDAO {
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
         String[] args = SqlDAO.build(
-                Common.CHON.CHUA_GUI.getCode(),
+                congToPB.getCHON(),
                 congToPB.getMA_CTO(),
                 congToPB.getSO_CTO(),
                 congToPB.getMA_DVIQLY(),
                 congToPB.getMA_CLOAI(),
 
-                Common.convertDateUIToDateSQL(congToPB.getNGAY_NHAP_HTHONG()),
+//                Common.convertDateUIToDateSQL(congToPB.getNGAY_NHAP_HTHONG()),
                 congToPB.getNAM_SX(),
                 congToPB.getLOAI_SOHUU(),
                 congToPB.getMA_BDONG(),
-                Common.convertDateUIToDateSQL(congToPB.getNGAY_BDONG()),
+                congToPB.getNGAY_BDONG(),
 
                 congToPB.getSO_PHA(),
                 congToPB.getSO_DAY(),
@@ -311,9 +313,8 @@ public class SqlDAO {
                 congToPB.getVH_CONG(),
                 congToPB.getDIEN_AP(),
 
-                congToPB.getHS_NHAN(),
                 congToPB.getNGAY_KDINH(),
-                Common.convertDateUIToDateSQL(congToPB.getNGAY_NHAP()),
+                congToPB.getNGAY_NHAP(),
                 congToPB.getNGAY_NHAP_MTB(),
                 congToPB.getTRANG_THAI_GHIM(),
 
@@ -321,20 +322,24 @@ public class SqlDAO {
 
                 //mới
                 congToPB.getID_BBAN_KHO(),
-                congToPB.getNGAY_NHAP_HTHONG(),
                 congToPB.getMA_NVIEN(),
                 congToPB.getSO_BBAN(),
                 congToPB.getID_BBAN_KDINH(),
 
                 congToPB.getNGAY_GUIKD(),
-                congToPB.getNGAY_KDINH_TH(),
                 congToPB.getLOAI_CTO(),
                 congToPB.getSO_CSO(),
                 congToPB.getMA_HANG(),
 
                 congToPB.getCAP_CXAC(),
                 congToPB.getMA_NUOC(),
-                congToPB.getACTION()
+
+                //them
+                congToPB.getLOAISOHUU(),
+                congToPB.getNGAY_NHAP_HTHI(),
+                congToPB.getSO_BBAN_KDINH(),
+                congToPB.getMA_NVIENKDINH(),
+                congToPB.getNGAY_KDINH_HTHI()
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_CTO_PB(), args);
@@ -458,7 +463,7 @@ public class SqlDAO {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 
-        if (TextUtils.isEmpty(maDienLuc))
+        if (StringUtils.isEmpty(maDienLuc))
             return "";
 
         return "";
@@ -514,6 +519,41 @@ public class SqlDAO {
         if (listCongToProxies.isEmpty())
             closeCursor(cursor);
         return listCongToProxies;
+    }
+
+    public int countByDateAllCongToGhimKD(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.countByDateAllCongToGhimKD(), args);
+        int count = 0;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            count = cursor.getInt(0);
+        }
+
+        return count;
+
+    }
+
+    public int countByDateAllCongToGhimPB(String dateSQL) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                dateSQL
+        );
+        Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.countByDateAllCongToGhimPB(), args);
+        int count = 0;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            count = cursor.getInt(0);
+        }
+
+        return count;
     }
 
 
@@ -778,6 +818,35 @@ public class SqlDAO {
         mSqLiteDatabase.execSQL(SqlQuery.deleteByDateAllCongToKD(), args);
     }
 
+    public int countByDateALLHistoryCto(String dateSQL, String TYPE_TBL_CTO, Common.DATE_TIME_TYPE typeDefault) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        dateSQL = Common.convertDateToDate(dateSQL, Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+        Date date = Common.convertDateUIToDateSQL(dateSQL, typeDefault);
+        Date beginDay = Common.getStartOfDay(date);
+        Date endDay = Common.getEndOfDay(date);
+
+        long beginDayTime = beginDay.getTime();
+        long endDayTime = endDay.getTime();
+
+        String[] args = SqlDAO.build(
+                TYPE_TBL_CTO,
+                beginDayTime,
+                endDayTime
+
+        );
+
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.countByDateALLHistoryCto(), args);
+
+        int count = 0;
+        if (cursor != null) {
+            count = cursor.getCount();
+        }
+        return count;
+    }
 
     public List<HistoryProxy> getBydateALLHistoryCto(String dateSQL, String TYPE_TBL_CTO, Common.DATE_TIME_TYPE typeDefault, Common.KIEU_CHUONG_TRINH kieuChuongTrinh) throws Exception {
         if (!Common.isExistDB())
@@ -914,6 +983,41 @@ public class SqlDAO {
 
         Cursor cursor = null;
         cursor = mSqLiteDatabase.rawQuery(SqlQuery.countByDateSessionHistoryCto(), args);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        }
+        return 0;
+    }
+
+    public int countByDateAllCongToPB(String date_session) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = build(
+                date_session
+        );
+
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.countByDateAllPB(), args);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        }
+        return 0;
+    }
+
+
+    public int countByDateAllCongToKD(String date_session) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = build(
+                date_session
+        );
+
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.countByDateAllKD(), args);
         if (cursor != null) {
             cursor.moveToFirst();
             return cursor.getInt(0);

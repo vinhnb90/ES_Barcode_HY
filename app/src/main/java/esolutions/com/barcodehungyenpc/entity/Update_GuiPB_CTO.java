@@ -10,22 +10,17 @@ public class Update_GuiPB_CTO implements KvmSerializable {
      *
      */
     private String ID_BBAN_KHO;
-    private String NGAY_NHAP_HTHONG;//
     private String MA_NVIEN;
     private String SO_BBAN;
     private String ID_BBAN_KDINH;
     private String NGAY_GUIKD;
-    private String NGAY_KDINH_TH;
     private String LOAI_CTO;
     private String SO_CSO;
     private String MA_HANG;
     private String CAP_CXAC;
     private String MA_NUOC;
-    private String ACTION;
-
 
     private int CHON;
-    private String HS_NHAN;
     private String MA_DVIQLY;
     private String NAM_SX;
     private String MA_CTO;
@@ -42,26 +37,28 @@ public class Update_GuiPB_CTO implements KvmSerializable {
     private String DIEN_AP;
     private String DONG_DIEN;
     private String NGAY_NHAP_MTB;
-
     //thêm trường
     private int ID_TBL_CTO_PB;
 
-    public Update_GuiPB_CTO(String ID_BBAN_KHO, String NGAY_NHAP_HTHONG, String MA_NVIEN, String SO_BBAN, String ID_BBAN_KDINH, String NGAY_GUIKD, String NGAY_KDINH_TH, String LOAI_CTO, String SO_CSO, String MA_HANG, String CAP_CXAC, String MA_NUOC, String ACTION, int CHON, String HS_NHAN, String MA_DVIQLY, String NAM_SX, String MA_CTO, String SO_CTO, String LOAI_SOHUU, String MA_CLOAI, String NGAY_BDONG, String MA_BDONG, String NGAY_NHAP, String NGAY_KDINH, String SO_DAY, String VH_CONG, String SO_PHA, String DIEN_AP, String DONG_DIEN, String NGAY_NHAP_MTB, int ID_TBL_CTO_PB) {
+    //them
+    private String LOAISOHUU;
+    private String NGAY_NHAP_HTHI;
+    private String SO_BBAN_KDINH;
+    private String MA_NVIENKDINH;
+    private String NGAY_KDINH_HTHI;
+
+    public Update_GuiPB_CTO(String ID_BBAN_KHO, String MA_NVIEN, String SO_BBAN, String ID_BBAN_KDINH, String NGAY_GUIKD, String LOAI_CTO, String SO_CSO, String MA_HANG, String CAP_CXAC, String MA_NUOC, int CHON, String MA_DVIQLY, String NAM_SX, String MA_CTO, String SO_CTO, String LOAI_SOHUU, String MA_CLOAI, String NGAY_BDONG, String MA_BDONG, String NGAY_NHAP, String NGAY_KDINH, String SO_DAY, String VH_CONG, String SO_PHA, String DIEN_AP, String DONG_DIEN, String NGAY_NHAP_MTB, int ID_TBL_CTO_PB, String LOAISOHUU, String NGAY_NHAP_HTHI, String SO_BBAN_KDINH, String MA_NVIENKDINH, String NGAY_KDINH_HTHI) {
         this.ID_BBAN_KHO = ID_BBAN_KHO;
-        this.NGAY_NHAP_HTHONG = NGAY_NHAP_HTHONG;
         this.MA_NVIEN = MA_NVIEN;
         this.SO_BBAN = SO_BBAN;
         this.ID_BBAN_KDINH = ID_BBAN_KDINH;
         this.NGAY_GUIKD = NGAY_GUIKD;
-        this.NGAY_KDINH_TH = NGAY_KDINH_TH;
         this.LOAI_CTO = LOAI_CTO;
         this.SO_CSO = SO_CSO;
         this.MA_HANG = MA_HANG;
         this.CAP_CXAC = CAP_CXAC;
         this.MA_NUOC = MA_NUOC;
-        this.ACTION = ACTION;
         this.CHON = CHON;
-        this.HS_NHAN = HS_NHAN;
         this.MA_DVIQLY = MA_DVIQLY;
         this.NAM_SX = NAM_SX;
         this.MA_CTO = MA_CTO;
@@ -79,6 +76,11 @@ public class Update_GuiPB_CTO implements KvmSerializable {
         this.DONG_DIEN = DONG_DIEN;
         this.NGAY_NHAP_MTB = NGAY_NHAP_MTB;
         this.ID_TBL_CTO_PB = ID_TBL_CTO_PB;
+        this.LOAISOHUU = LOAISOHUU;
+        this.NGAY_NHAP_HTHI = NGAY_NHAP_HTHI;
+        this.SO_BBAN_KDINH = SO_BBAN_KDINH;
+        this.MA_NVIENKDINH = MA_NVIENKDINH;
+        this.NGAY_KDINH_HTHI = NGAY_KDINH_HTHI;
     }
 
     @Override
@@ -87,65 +89,68 @@ public class Update_GuiPB_CTO implements KvmSerializable {
             case 0:
                 return ID_BBAN_KHO;
             case 1:
-                return NGAY_NHAP_HTHONG;
-            case 2:
                 return MA_NVIEN;
-            case 3:
+            case 2:
                 return SO_BBAN;
-            case 4:
+            case 3:
                 return ID_BBAN_KDINH;
-            case 5:
+            case 4:
                 return NGAY_GUIKD;
-            case 6:
-                return NGAY_KDINH_TH;
-            case 7:
+            case 5:
                 return LOAI_CTO;
-            case 8:
+            case 6:
                 return SO_CSO;
-            case 9:
+            case 7:
                 return MA_HANG;
-            case 10:
+            case 8:
                 return CAP_CXAC;
-            case 11:
+            case 9:
                 return MA_NUOC;
-            case 12:
-                return ACTION;
-            case 13:
+            case 10:
                 return CHON;
-            case 14:
-                return HS_NHAN;
-            case 15:
+            case 11:
                 return MA_DVIQLY;
-            case 16:
+            case 12:
                 return NAM_SX;
-            case 17:
+            case 13:
                 return MA_CTO;
-            case 18:
+            case 14:
                 return SO_CTO;
-            case 19:
+            case 15:
                 return LOAI_SOHUU;
-            case 20:
+            case 16:
                 return MA_CLOAI;
-            case 21:
+            case 17:
                 return NGAY_BDONG;
-            case 22:
+            case 18:
                 return MA_BDONG;
-            case 23:
+            case 19:
                 return NGAY_NHAP;
-            case 24:
+            case 20:
                 return NGAY_KDINH;
-            case 25:
+            case 21:
                 return SO_DAY;
-            case 26:
+            case 22:
                 return VH_CONG;
-            case 27:
+            case 23:
                 return SO_PHA;
-            case 28:
+            case 24:
                 return DIEN_AP;
-            case 29:
+            case 25:
                 return DONG_DIEN;
-            case 30:
+            case 26:
                 return NGAY_NHAP_MTB;
+            //them
+            case 27:
+                return LOAISOHUU;
+            case 28:
+                return NGAY_NHAP_HTHI;
+            case 29:
+                return SO_BBAN_KDINH;
+            case 30:
+                return MA_NVIENKDINH;
+            case 31:
+                return NGAY_KDINH_HTHI;
             default:
                 return null;
         }
@@ -153,7 +158,7 @@ public class Update_GuiPB_CTO implements KvmSerializable {
 
     @Override
     public int getPropertyCount() {
-        return 31;
+        return 32;
     }
 
     @Override
@@ -163,96 +168,131 @@ public class Update_GuiPB_CTO implements KvmSerializable {
             case 0:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "ID_BBAN_KHO";
+                break;
             case 1:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "NGAY_NHAP_HTHONG";
+                info.name = "MA_NVIEN";
+                break;
             case 2:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "MA_NVIEN";
+                info.name = "SO_BBAN";
+                break;
             case 3:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "SO_BBAN";
+                info.name = "ID_BBAN_KDINH";
+                break;
             case 4:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "ID_BBAN_KDINH";
+                info.name = "NGAY_GUIKD";
+                break;
             case 5:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "NGAY_GUIKD";
+                info.name = "LOAI_CTO";
+                break;
             case 6:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "NGAY_KDINH_TH";
+                info.name = "SO_CSO";
+                break;
             case 7:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "LOAI_CTO";
+                info.name = "MA_HANG";
+                break;
             case 8:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "SO_CSO";
+                info.name = "CAP_CXAC";
+                break;
             case 9:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "MA_HANG";
-            case 10:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "CAP_CXAC";
-            case 11:
-                info.type = PropertyInfo.STRING_CLASS;
                 info.name = "MA_NUOC";
-            case 12:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "ACTION";
-            case 13:
+                break;
+            case 10:
                 info.type = PropertyInfo.INTEGER_CLASS;
                 info.name = "CHON";
-            case 14:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "HS_NHAN";
-            case 15:
+                break;
+            case 11:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "MA_DVIQLY";
-            case 16:
+                break;
+            case 12:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "NAM_SX";
-            case 17:
+                break;
+            case 13:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "MA_CTO";
-            case 18:
+                break;
+            case 14:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "SO_CTO";
-            case 19:
+                break;
+            case 15:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "LOAI_SOHUU";
-            case 20:
+                break;
+            case 16:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "MA_CLOAI";
-            case 21:
+                break;
+            case 17:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "NGAY_BDONG";
-            case 22:
+                break;
+            case 18:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "MA_BDONG";
-            case 23:
+                break;
+            case 19:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "NGAY_NHAP";
-            case 24:
+                break;
+            case 20:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "NGAY_KDINH";
-            case 25:
+                break;
+            case 21:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "SO_DAY";
-            case 26:
+                break;
+            case 22:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "VH_CONG";
-            case 27:
+                break;
+            case 23:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "SO_PHA";
-            case 28:
+                break;
+            case 24:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "DIEN_AP";
-            case 29:
+                break;
+            case 25:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "DONG_DIEN";
-            case 30:
+                break;
+            case 26:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "NGAY_NHAP_MTB";
+                break;
+            case 27:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "LOAISOHUU";
+                break;
+            case 28:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "NGAY_NHAP_HTHI";
+                break;
+            case 29:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "SO_BBAN_KDINH";
+                break;
+            case 30:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "MA_NVIENKDINH";
+                break;
+            case 31:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "NGAY_KDINH_HTHI";
+                break;
             default:
                 break;
         }
@@ -265,100 +305,105 @@ public class Update_GuiPB_CTO implements KvmSerializable {
                 ID_BBAN_KHO = value.toString();
                 break;
             case 1:
-                NGAY_NHAP_HTHONG = value.toString();
-                break;
-            case 2:
                 MA_NVIEN = value.toString();
                 break;
-            case 3:
+            case 2:
                 SO_BBAN = value.toString();
                 break;
-            case 4:
+            case 3:
                 ID_BBAN_KDINH = value.toString();
                 break;
-            case 5:
+            case 4:
                 NGAY_GUIKD = value.toString();
                 break;
-            case 6:
-                NGAY_KDINH_TH = value.toString();
-                break;
-            case 7:
+            case 5:
                 LOAI_CTO = value.toString();
                 break;
-            case 8:
+            case 6:
                 SO_CSO = value.toString();
                 break;
-            case 9:
+            case 7:
                 MA_HANG = value.toString();
                 break;
-            case 10:
+            case 8:
                 CAP_CXAC = value.toString();
                 break;
-            case 11:
+            case 9:
                 MA_NUOC = value.toString();
                 break;
-            case 12:
-                ACTION = value.toString();
-                break;
-            case 13:
+            case 10:
                 CHON = ((Integer) value).intValue();
                 break;
-            case 14:
-                HS_NHAN = value.toString();
-                break;
-            case 15:
+            case 11:
                 MA_DVIQLY = value.toString();
                 break;
-            case 16:
+            case 12:
                 NAM_SX = value.toString();
                 break;
-            case 17:
+            case 13:
                 MA_CTO = value.toString();
                 break;
-            case 18:
+            case 14:
                 SO_CTO = value.toString();
                 break;
-            case 19:
+            case 15:
                 LOAI_SOHUU = value.toString();
                 break;
-            case 20:
+            case 16:
                 MA_CLOAI = value.toString();
                 break;
-            case 21:
+            case 17:
                 NGAY_BDONG = value.toString();
                 break;
-            case 22:
+            case 18:
                 MA_BDONG = value.toString();
                 break;
-            case 23:
+            case 19:
                 NGAY_NHAP = value.toString();
                 break;
-            case 24:
+            case 20:
                 NGAY_KDINH = value.toString();
                 break;
-            case 25:
+            case 21:
                 SO_DAY = value.toString();
                 break;
-            case 26:
+            case 22:
                 VH_CONG = value.toString();
                 break;
-            case 27:
+            case 23:
                 SO_PHA = value.toString();
                 break;
-            case 28:
+            case 24:
                 DIEN_AP = value.toString();
                 break;
-            case 29:
+            case 25:
                 DONG_DIEN = value.toString();
                 break;
-            case 30:
+            case 26:
                 NGAY_NHAP_MTB = value.toString();
                 break;
+
+            //them
+            case 27:
+                LOAISOHUU = value.toString();
+                break;
+            case 28:
+                NGAY_NHAP_HTHI = value.toString();
+                break;
+            case 29:
+                SO_BBAN_KDINH = value.toString();
+                break;
+            case 30:
+                MA_NVIENKDINH = value.toString();
+                break;
+            case 31:
+                NGAY_KDINH_HTHI = value.toString();
+                break;
+
             default:
 
         }
     }
-
 
     public String getID_BBAN_KHO() {
         return ID_BBAN_KHO;
@@ -366,14 +411,6 @@ public class Update_GuiPB_CTO implements KvmSerializable {
 
     public void setID_BBAN_KHO(String ID_BBAN_KHO) {
         this.ID_BBAN_KHO = ID_BBAN_KHO;
-    }
-
-    public String getNGAY_NHAP_HTHONG() {
-        return NGAY_NHAP_HTHONG;
-    }
-
-    public void setNGAY_NHAP_HTHONG(String NGAY_NHAP_HTHONG) {
-        this.NGAY_NHAP_HTHONG = NGAY_NHAP_HTHONG;
     }
 
     public String getMA_NVIEN() {
@@ -406,14 +443,6 @@ public class Update_GuiPB_CTO implements KvmSerializable {
 
     public void setNGAY_GUIKD(String NGAY_GUIKD) {
         this.NGAY_GUIKD = NGAY_GUIKD;
-    }
-
-    public String getNGAY_KDINH_TH() {
-        return NGAY_KDINH_TH;
-    }
-
-    public void setNGAY_KDINH_TH(String NGAY_KDINH_TH) {
-        this.NGAY_KDINH_TH = NGAY_KDINH_TH;
     }
 
     public String getLOAI_CTO() {
@@ -456,28 +485,12 @@ public class Update_GuiPB_CTO implements KvmSerializable {
         this.MA_NUOC = MA_NUOC;
     }
 
-    public String getACTION() {
-        return ACTION;
-    }
-
-    public void setACTION(String ACTION) {
-        this.ACTION = ACTION;
-    }
-
     public int getCHON() {
         return CHON;
     }
 
     public void setCHON(int CHON) {
         this.CHON = CHON;
-    }
-
-    public String getHS_NHAN() {
-        return HS_NHAN;
-    }
-
-    public void setHS_NHAN(String HS_NHAN) {
-        this.HS_NHAN = HS_NHAN;
     }
 
     public String getMA_DVIQLY() {
@@ -615,4 +628,45 @@ public class Update_GuiPB_CTO implements KvmSerializable {
     public void setID_TBL_CTO_PB(int ID_TBL_CTO_PB) {
         this.ID_TBL_CTO_PB = ID_TBL_CTO_PB;
     }
+
+    public String getLOAISOHUU() {
+        return LOAISOHUU;
+    }
+
+    public void setLOAISOHUU(String LOAISOHUU) {
+        this.LOAISOHUU = LOAISOHUU;
+    }
+
+    public String getNGAY_NHAP_HTHI() {
+        return NGAY_NHAP_HTHI;
+    }
+
+    public void setNGAY_NHAP_HTHI(String NGAY_NHAP_HTHI) {
+        this.NGAY_NHAP_HTHI = NGAY_NHAP_HTHI;
+    }
+
+    public String getSO_BBAN_KDINH() {
+        return SO_BBAN_KDINH;
+    }
+
+    public void setSO_BBAN_KDINH(String SO_BBAN_KDINH) {
+        this.SO_BBAN_KDINH = SO_BBAN_KDINH;
+    }
+
+    public String getMA_NVIENKDINH() {
+        return MA_NVIENKDINH;
+    }
+
+    public void setMA_NVIENKDINH(String MA_NVIENKDINH) {
+        this.MA_NVIENKDINH = MA_NVIENKDINH;
+    }
+
+    public String getNGAY_KDINH_HTHI() {
+        return NGAY_KDINH_HTHI;
+    }
+
+    public void setNGAY_KDINH_HTHI(String NGAY_KDINH_HTHI) {
+        this.NGAY_KDINH_HTHI = NGAY_KDINH_HTHI;
+    }
+
 }

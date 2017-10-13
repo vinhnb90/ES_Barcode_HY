@@ -18,10 +18,10 @@
         android:id="@+id/rl_row_ds_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_light"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/primary_light">
 
         <ImageView
             android:id="@+id/iv_logo_session"
@@ -31,9 +31,9 @@
             android:layout_alignParentTop="true"
             android:layout_margin="@dimen/_5sdp"
             android:gravity="center_horizontal|center_vertical"
+            android:src="@mipmap/ic_upload_orange"
             android:textColor="@color/button_dark_orange"
             android:textSize="@dimen/_9sdp"
-            android:src="@mipmap/ic_upload_orange"
             android:textStyle="bold"
             tools:text="154"></ImageView>
 
@@ -47,13 +47,13 @@
             android:paddingTop="@dimen/_5sdp">
 
             <LinearLayout
-                android:gravity="center_vertical"
                 android:id="@+id/ll_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_toRightOf="@+id/iv_logo_session"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="3">
 
@@ -186,25 +186,26 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_toLeftOf="@+id/btn_chi_tiet_history"
-                    android:layout_width="match_parent"
+                    android:id="@+id/rl_info_search"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin">
+
                     <TextView
                         android:id="@+id/tv_title_history"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:editable="false"
-                        tools:text="Số thiết bị gửi kiểm định"
                         android:textColor="@color/black_less"
-                        android:textSize="@dimen/_7sdp" />
+                        android:textSize="@dimen/_7sdp"
+                        tools:text="Số thiết bị gửi kiểm định" />
 
 
                     <TextView
                         android:id="@+id/tv_info_history"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_title_history"
                         android:layout_marginTop="@dimen/_2sdp"
@@ -214,17 +215,37 @@
                 </RelativeLayout>
 
                 <Button
-                    android:layout_centerVertical="true"
                     android:id="@+id/btn_chi_tiet_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:background="@drawable/xml_border_full_type2"
                     android:drawableRight="@mipmap/ic_detail"
                     android:paddingLeft="@dimen/_5sdp"
                     android:text="Chi tiết"
                     android:textColor="@color/white"
+
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_chi_tiet_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_toRightOf="@+id/rl_info_search"
+                    android:gravity="right"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    tools:text="Chi tiếtChi tiếtChi tiết  Chi tiết"
+                    android:textSize="@dimen/_9sdp"
+                    android:textColor="@color/black"
 
                     android:visibility="visible" />
             </RelativeLayout>

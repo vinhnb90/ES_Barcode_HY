@@ -10,6 +10,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,7 +88,7 @@ public class Log {
     public Log setupFile(@NonNull Context context, @NonNull String uriLogFile) throws Exception {
         if (context == null)
             throw new NullPointerException(EMPTY_CONTEXT);
-        if (TextUtils.isEmpty(uriLogFile.trim()))
+        if (StringUtils.isEmpty(uriLogFile.trim()))
             throw new NullPointerException(EMPTY_PATH);
 
         sUriLogFile = uriLogFile.trim();
@@ -158,7 +160,7 @@ public class Log {
 
 
     private boolean createFileIfNotExist(String sUriLogFile) throws Exception {
-        if (TextUtils.isEmpty(sUriLogFile))
+        if (StringUtils.isEmpty(sUriLogFile))
             throw new Exception(EMPTY_PATH);
 
         //check permission

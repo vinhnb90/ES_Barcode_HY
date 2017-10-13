@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import esolutions.com.barcodehungyenpc.database.SqlQuery;
 
 /**
@@ -30,7 +32,7 @@ public class DienLucProxy extends CursorItemProxy {
     }
 
     public String getMA_DVIQLY() {
-        if (TextUtils.isEmpty(mDienLuc.getMA_DVIQLY())) {
+        if (StringUtils.isEmpty(mDienLuc.getMA_DVIQLY())) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
 

@@ -96,8 +96,6 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
             holder.ibtnLogo.setImageDrawable(sDrawableUpload);
 
             //nếu upload thì quan tâm tới số lượng bản upload
-
-
             Common.TYPE_TBL_CTO typeTblCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? Common.TYPE_TBL_CTO.KD : Common.TYPE_TBL_CTO.PB;
 
             int countSuccess = 0;
@@ -126,6 +124,17 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
         Common.TYPE_RESULT sTYPE = Common.TYPE_RESULT.findNameBy(TYPE_RESULT);
         holder.tvMessageSession.setText(sTYPE.getTitle());
 
+        //check ID = 0;
+        holder.btnDetailHistory.setVisibility(View.VISIBLE);
+        holder.tvInfoResult.setVisibility(View.GONE);
+        int ID_TBL_CTO = mListHistoryProxies.get(position).getID_TBL_CTO();
+        if (ID_TBL_CTO == 0) {
+            holder.btnDetailHistory.setVisibility(View.GONE);
+            holder.tvInfoResult.setVisibility(View.VISIBLE);
+            String INFO_RESULT = mListHistoryProxies.get(position).getINFO_RESULT();
+            holder.tvInfoResult.setText(INFO_RESULT);
+        }
+
     }
 
     @Override
@@ -143,7 +152,7 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
 
     public class DsHistoryViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout relativeLayout;
-        public TextView tvDate, tvMessageSession, tvTitleSession, tvInfo;
+        public TextView tvDate, tvMessageSession, tvTitleSession, tvInfo, tvInfoResult;
         ImageView ibtnLogo;
         public Button btnDetailHistory;
 
@@ -156,6 +165,7 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
             tvMessageSession = (TextView) itemView.findViewById(R.id.tv_message_session);
             tvTitleSession = (TextView) itemView.findViewById(R.id.tv_title_history);
             tvInfo = (TextView) itemView.findViewById(R.id.tv_info_history);
+            tvInfoResult = (TextView) itemView.findViewById(R.id.tv_chi_tiet_message);
 
             btnDetailHistory = (Button) itemView.findViewById(R.id.btn_chi_tiet_history);
 
@@ -166,12 +176,22 @@ public class DsHistoryAdapter extends RecyclerView.Adapter<DsHistoryAdapter.DsHi
                     mListener.clickBtnHistoryChiTiet(pos);
                 }
             });
+
+            tvInfoResult.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    mListener.clickTvInfoResult(pos);
+                }
+            });
         }
     }
 
     public interface OnDsHistoryAdapterIteraction {
 
         void clickBtnHistoryChiTiet(int pos);
+
+        void clickTvInfoResult(int pos);
     }
 
     public void refresh(List<HistoryProxy> historyProxies

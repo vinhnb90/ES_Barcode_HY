@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import esolutions.com.barcodehungyenpc.database.SqlQuery;
 
 /**
@@ -21,8 +23,70 @@ public class CongToPBProxy extends CursorItemProxy {
         mCongToPB = new CongToPB();
     }
 
+    //thêm
+    /* LOAISOHUU("LOAISOHUU"),
+    NGAY_NHAP_HTHI("NGAY_NHAP_HTHI"),
+    SO_BBAN_KDINH("SO_BBAN_KDINH"),
+    MA_NVIENKDINH("MA_NVIENKDINH"),
+    NGAY_KDINH_HTHI("NGAY_KDINH_HTHI")*/
+    public String getLOAISOHUU() {
+        if (StringUtils.isEmpty(mCongToPB.getID_BBAN_KHO())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String LOAISOHUU =  SqlQuery.TBL_CTO_PB.LOAISOHUU.getNameCollumn();
+            mCongToPB.setLOAISOHUU(cursor.getString(cursor.getColumnIndex(LOAISOHUU)));
+        }
+        return mCongToPB.getLOAISOHUU();
+    }
+
+    public String getNGAY_NHAP_HTHI() {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_NHAP_HTHI())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String NGAY_NHAP_HTHI =  SqlQuery.TBL_CTO_PB.NGAY_NHAP_HTHI.getNameCollumn();
+            mCongToPB.setNGAY_NHAP_HTHI(cursor.getString(cursor.getColumnIndex(NGAY_NHAP_HTHI)));
+        }
+        return mCongToPB.getNGAY_NHAP_HTHI();
+    }
+
+    public String getSO_BBAN_KDINH() {
+        if (StringUtils.isEmpty(mCongToPB.getSO_BBAN_KDINH())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String SO_BBAN_KDINH =  SqlQuery.TBL_CTO_PB.SO_BBAN_KDINH.getNameCollumn();
+            mCongToPB.setSO_BBAN_KDINH(cursor.getString(cursor.getColumnIndex(SO_BBAN_KDINH)));
+        }
+        return mCongToPB.getSO_BBAN_KDINH();
+    }
+
+    public String getMA_NVIENKDINH() {
+        if (StringUtils.isEmpty(mCongToPB.getMA_NVIENKDINH())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String MA_NVIENKDINH =  SqlQuery.TBL_CTO_PB.MA_NVIENKDINH.getNameCollumn();
+            mCongToPB.setMA_NVIENKDINH(cursor.getString(cursor.getColumnIndex(MA_NVIENKDINH)));
+        }
+        return mCongToPB.getMA_NVIENKDINH();
+    }
+
+    public String getNGAY_KDINH_HTHI() {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_KDINH_HTHI())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String NGAY_KDINH_HTHI =  SqlQuery.TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn();
+            mCongToPB.setNGAY_KDINH_HTHI(cursor.getString(cursor.getColumnIndex(NGAY_KDINH_HTHI)));
+        }
+        return mCongToPB.getNGAY_KDINH_HTHI();
+    }
+
+
     public String getID_BBAN_KHO() {
-        if (TextUtils.isEmpty(mCongToPB.getID_BBAN_KHO())) {
+        if (StringUtils.isEmpty(mCongToPB.getID_BBAN_KHO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -32,19 +96,8 @@ public class CongToPBProxy extends CursorItemProxy {
         return mCongToPB.getID_BBAN_KHO();
     }
 
-    public String getNGAY_NHAP_HTHONG() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_NHAP_HTHONG())) {
-
-            Cursor cursor = getmCursor();
-            cursor.moveToPosition(getmIndex());
-            String NGAY_NHAP_HTHONG =  SqlQuery.TBL_CTO_PB.NGAY_NHAP_HTHONG.getNameCollumn();
-            mCongToPB.setNGAY_NHAP_HTHONG(cursor.getString(cursor.getColumnIndex(NGAY_NHAP_HTHONG)));
-        }
-        return mCongToPB.getNGAY_NHAP_HTHONG();
-    }
-
     public String getMA_NVIEN() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_NVIEN())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_NVIEN())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -56,7 +109,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getSO_BBAN() {
-        if (TextUtils.isEmpty(mCongToPB.getSO_BBAN())) {
+        if (StringUtils.isEmpty(mCongToPB.getSO_BBAN())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -67,7 +120,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getID_BBAN_KDINH() {
-        if (TextUtils.isEmpty(mCongToPB.getID_BBAN_KDINH())) {
+        if (StringUtils.isEmpty(mCongToPB.getID_BBAN_KDINH())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -79,7 +132,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getNGAY_GUIKD() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_GUIKD())) {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_GUIKD())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -90,19 +143,8 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
 
-    public String getNGAY_KDINH_TH() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_KDINH_TH())) {
-
-            Cursor cursor = getmCursor();
-            cursor.moveToPosition(getmIndex());
-            String NGAY_KDINH_TH =  SqlQuery.TBL_CTO_PB.NGAY_KDINH_TH.getNameCollumn();
-            mCongToPB.setNGAY_KDINH_TH(cursor.getString(cursor.getColumnIndex(NGAY_KDINH_TH)));
-        }
-        return mCongToPB.getNGAY_KDINH_TH();
-    }
-
     public String getLOAI_CTO() {
-        if (TextUtils.isEmpty(mCongToPB.getLOAI_CTO())) {
+        if (StringUtils.isEmpty(mCongToPB.getLOAI_CTO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -113,7 +155,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getSO_CSO() {
-        if (TextUtils.isEmpty(mCongToPB.getSO_CSO())) {
+        if (StringUtils.isEmpty(mCongToPB.getSO_CSO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -124,7 +166,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getMA_HANG() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_HANG())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_HANG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -135,7 +177,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getCAP_CXAC() {
-        if (TextUtils.isEmpty(mCongToPB.getCAP_CXAC())) {
+        if (StringUtils.isEmpty(mCongToPB.getCAP_CXAC())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -147,7 +189,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getMA_NUOC() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_NUOC())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_NUOC())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -156,18 +198,6 @@ public class CongToPBProxy extends CursorItemProxy {
         }
         return mCongToPB.getMA_NUOC();
     }
-
-    public String getACTION() {
-        if (TextUtils.isEmpty(mCongToPB.getACTION())) {
-
-            Cursor cursor = getmCursor();
-            cursor.moveToPosition(getmIndex());
-            String ACTION =  SqlQuery.TBL_CTO_PB.ACTION.getNameCollumn();
-            mCongToPB.setACTION(cursor.getString(cursor.getColumnIndex(ACTION)));
-        }
-        return mCongToPB.getACTION();
-    }
-
 
 
     public int getCHON() {
@@ -192,7 +222,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getMA_CTO() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_CTO())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_CTO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -202,7 +232,7 @@ public class CongToPBProxy extends CursorItemProxy {
         return mCongToPB.getMA_CTO();
     }
     public String getSO_CTO() {
-        if (TextUtils.isEmpty(mCongToPB.getSO_CTO())) {
+        if (StringUtils.isEmpty(mCongToPB.getSO_CTO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -212,7 +242,7 @@ public class CongToPBProxy extends CursorItemProxy {
         return mCongToPB.getSO_CTO();
     }
     public String getMA_DVIQLY() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_DVIQLY())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_DVIQLY())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -224,7 +254,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getMA_CLOAI() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_CLOAI())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_CLOAI())) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
             String CLOAI =  SqlQuery.TBL_CTO_PB.MA_CLOAI.getNameCollumn();
@@ -234,7 +264,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getNAM_SX() {
-        if (TextUtils.isEmpty(mCongToPB.getNAM_SX())) {
+        if (StringUtils.isEmpty(mCongToPB.getNAM_SX())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -245,7 +275,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getLOAI_SOHUU() {
-        if (TextUtils.isEmpty(mCongToPB.getLOAI_SOHUU())) {
+        if (StringUtils.isEmpty(mCongToPB.getLOAI_SOHUU())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -256,7 +286,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getNGAY_BDONG() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_BDONG())) {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_BDONG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -268,7 +298,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getMA_BDONG() {
-        if (TextUtils.isEmpty(mCongToPB.getMA_BDONG())) {
+        if (StringUtils.isEmpty(mCongToPB.getMA_BDONG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -280,7 +310,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getSO_PHA() {
-        if (TextUtils.isEmpty(mCongToPB.getSO_PHA())) {
+        if (StringUtils.isEmpty(mCongToPB.getSO_PHA())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -291,7 +321,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getSO_DAY() {
-        if (TextUtils.isEmpty(mCongToPB.getSO_DAY())) {
+        if (StringUtils.isEmpty(mCongToPB.getSO_DAY())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -302,7 +332,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getDONG_DIEN() {
-        if (TextUtils.isEmpty(mCongToPB.getDONG_DIEN())) {
+        if (StringUtils.isEmpty(mCongToPB.getDONG_DIEN())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -313,7 +343,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getVH_CONG() {
-        if (TextUtils.isEmpty(mCongToPB.getVH_CONG())) {
+        if (StringUtils.isEmpty(mCongToPB.getVH_CONG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -325,7 +355,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
     public String getDIEN_AP() {
-        if (TextUtils.isEmpty(mCongToPB.getDIEN_AP())) {
+        if (StringUtils.isEmpty(mCongToPB.getDIEN_AP())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -335,19 +365,9 @@ public class CongToPBProxy extends CursorItemProxy {
         return mCongToPB.getDIEN_AP();
     }
 
-    public String getHS_NHAN() {
-        if (TextUtils.isEmpty(mCongToPB.getHS_NHAN())) {
-
-            Cursor cursor = getmCursor();
-            cursor.moveToPosition(getmIndex());
-            String HS_NHAN =  SqlQuery.TBL_CTO_PB.HS_NHAN.getNameCollumn();
-            mCongToPB.setHS_NHAN(cursor.getString(cursor.getColumnIndex(HS_NHAN)));
-        }
-        return mCongToPB.getHS_NHAN();
-    }
 
     public String getNGAY_KDINH() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_KDINH())) {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_KDINH())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -358,7 +378,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getNGAY_NHAP() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_NHAP())) {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_NHAP())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -369,7 +389,7 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
     public String getNGAY_NHAP_MTB() {
-        if (TextUtils.isEmpty(mCongToPB.getNGAY_NHAP_MTB())) {
+        if (StringUtils.isEmpty(mCongToPB.getNGAY_NHAP_MTB())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -403,7 +423,7 @@ public class CongToPBProxy extends CursorItemProxy {
 
 
 //    public String getmTaiKhoan() {
-//        if (TextUtils.isEmpty(mCongToPB.getmTaiKhoan())) {
+//        if (StringUtils.isEmpty(mCongToPB.getmTaiKhoan())) {
 //            Cursor cursor = getmCursor();
 //            cursor.moveToPosition(getmIndex());
 //

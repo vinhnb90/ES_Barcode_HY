@@ -23,8 +23,9 @@
         android:theme="@style/BaseTheme">
         <activity
             android:name=".view.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:launchMode = "singleInstance"
-            android:windowSoftInputMode="stateHidden">
+            >
 
         </activity>
         <activity

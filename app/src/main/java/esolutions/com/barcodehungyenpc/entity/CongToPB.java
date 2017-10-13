@@ -6,23 +6,23 @@ package esolutions.com.barcodehungyenpc.entity;
 
 public class CongToPB {
     private String ID_BBAN_KHO;
-    private String NGAY_NHAP_HTHONG;//
+//    private String NGAY_NHAP_HTHONG;//
     private String MA_NVIEN;
     private String SO_BBAN;
     private String ID_BBAN_KDINH;
     private String NGAY_GUIKD;
-    private String NGAY_KDINH_TH;
+//    private String NGAY_KDINH_TH;
     private String LOAI_CTO;
     private String SO_CSO;
     private String MA_HANG;
     private String CAP_CXAC;
     private String MA_NUOC;
-    private String ACTION;
+//    private String ACTION;
 
 
 
     private int CHON;
-    private String HS_NHAN;
+//    private String HS_NHAN;
     private String MA_DVIQLY;
     private String NAM_SX;
     private String MA_CTO;
@@ -46,11 +46,61 @@ public class CongToPB {
     private int TRANG_THAI_CHON;
     //Session đánh dấu phiên tải xuống và up lên của các công tơ
 
+    //thêm
+    private String LOAISOHUU;
+    private String NGAY_NHAP_HTHI;
+    private String SO_BBAN_KDINH;
+    private String MA_NVIENKDINH;
+    private String NGAY_KDINH_HTHI;
+
     public CongToPB() {
         ID_TBL_CTO_PB = -1;
         TRANG_THAI_GHIM = -1;
         TRANG_THAI_CHON = -1;
         CHON = -1;
+    }
+
+    //thêm
+
+
+    public String getLOAISOHUU() {
+        return LOAISOHUU;
+    }
+
+    public void setLOAISOHUU(String LOAISOHUU) {
+        this.LOAISOHUU = LOAISOHUU;
+    }
+
+    public String getNGAY_NHAP_HTHI() {
+        return NGAY_NHAP_HTHI;
+    }
+
+    public void setNGAY_NHAP_HTHI(String NGAY_NHAP_HTHI) {
+        this.NGAY_NHAP_HTHI = NGAY_NHAP_HTHI;
+    }
+
+    public String getSO_BBAN_KDINH() {
+        return SO_BBAN_KDINH;
+    }
+
+    public void setSO_BBAN_KDINH(String SO_BBAN_KDINH) {
+        this.SO_BBAN_KDINH = SO_BBAN_KDINH;
+    }
+
+    public String getMA_NVIENKDINH() {
+        return MA_NVIENKDINH;
+    }
+
+    public void setMA_NVIENKDINH(String MA_NVIENKDINH) {
+        this.MA_NVIENKDINH = MA_NVIENKDINH;
+    }
+
+    public String getNGAY_KDINH_HTHI() {
+        return NGAY_KDINH_HTHI;
+    }
+
+    public void setNGAY_KDINH_HTHI(String NGAY_KDINH_HTHI) {
+        this.NGAY_KDINH_HTHI = NGAY_KDINH_HTHI;
     }
 
     public String getID_BBAN_KHO() {
@@ -59,14 +109,6 @@ public class CongToPB {
 
     public void setID_BBAN_KHO(String ID_BBAN_KHO) {
         this.ID_BBAN_KHO = ID_BBAN_KHO;
-    }
-
-    public String getNGAY_NHAP_HTHONG() {
-        return NGAY_NHAP_HTHONG;
-    }
-
-    public void setNGAY_NHAP_HTHONG(String NGAY_NHAP_HTHONG) {
-        this.NGAY_NHAP_HTHONG = NGAY_NHAP_HTHONG;
     }
 
     public String getMA_NVIEN() {
@@ -99,14 +141,6 @@ public class CongToPB {
 
     public void setNGAY_GUIKD(String NGAY_GUIKD) {
         this.NGAY_GUIKD = NGAY_GUIKD;
-    }
-
-    public String getNGAY_KDINH_TH() {
-        return NGAY_KDINH_TH;
-    }
-
-    public void setNGAY_KDINH_TH(String NGAY_KDINH_TH) {
-        this.NGAY_KDINH_TH = NGAY_KDINH_TH;
     }
 
     public String getLOAI_CTO() {
@@ -149,28 +183,12 @@ public class CongToPB {
         this.MA_NUOC = MA_NUOC;
     }
 
-    public String getACTION() {
-        return ACTION;
-    }
-
-    public void setACTION(String ACTION) {
-        this.ACTION = ACTION;
-    }
-
     public int getCHON() {
         return CHON;
     }
 
     public void setCHON(int CHON) {
         this.CHON = CHON;
-    }
-
-    public String getHS_NHAN() {
-        return HS_NHAN;
-    }
-
-    public void setHS_NHAN(String HS_NHAN) {
-        this.HS_NHAN = HS_NHAN;
     }
 
     public String getMA_DVIQLY() {

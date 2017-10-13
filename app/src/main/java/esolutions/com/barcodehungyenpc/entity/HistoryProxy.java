@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import esolutions.com.barcodehungyenpc.database.SqlQuery;
 import esolutions.com.barcodehungyenpc.utils.Common;
 
@@ -45,7 +47,7 @@ public class HistoryProxy extends CursorItemProxy {
     }
 
     public String getTYPE_TBL_CTO() {
-        if (TextUtils.isEmpty(mHistory.getTYPE_TBL_CTO())) {
+        if (StringUtils.isEmpty(mHistory.getTYPE_TBL_CTO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -56,7 +58,7 @@ public class HistoryProxy extends CursorItemProxy {
     }
 
     public String getTYPE_SESSION() {
-        if (TextUtils.isEmpty(mHistory.getTYPE_SESSION())) {
+        if (StringUtils.isEmpty(mHistory.getTYPE_SESSION())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -67,7 +69,7 @@ public class HistoryProxy extends CursorItemProxy {
     }
 
     public String getDATE_SESSION() {
-        if (TextUtils.isEmpty(mHistory.getDATE_SESSION())) {
+        if (StringUtils.isEmpty(mHistory.getDATE_SESSION())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -78,7 +80,7 @@ public class HistoryProxy extends CursorItemProxy {
     }
 
     public String getTYPE_RESULT() {
-        if (TextUtils.isEmpty(mHistory.getTYPE_RESULT())) {
+        if (StringUtils.isEmpty(mHistory.getTYPE_RESULT())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -89,7 +91,7 @@ public class HistoryProxy extends CursorItemProxy {
     }
 
     public String getINFO_SEARCH() {
-        if (TextUtils.isEmpty(mHistory.getINFO_SEARCH())) {
+        if (StringUtils.isEmpty(mHistory.getINFO_SEARCH())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -98,6 +100,18 @@ public class HistoryProxy extends CursorItemProxy {
         }
         return mHistory.getINFO_SEARCH();
     }
+
+    public String getINFO_RESULT() {
+        if (StringUtils.isEmpty(mHistory.getINFO_RESULT())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String INFO_RESULT = SqlQuery.TBL_HISTORY.INFO_RESULT.getNameCollumn();
+            mHistory.setINFO_RESULT(cursor.getString(cursor.getColumnIndex(INFO_RESULT)));
+        }
+        return mHistory.getINFO_RESULT();
+    }
+
 
 
 }

@@ -85,74 +85,80 @@
                         tools:text="Số Cto" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_a"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+               <LinearLayout
+                   android:orientation="horizontal"
+                   android:layout_weight="2"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_title_id_bban_kiemdinh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:gravity="center_horizontal"
-                        android:text="Số biên bản"
-                        android:textColor="@color/black_less"
-                        android:textSize="@dimen/_7sdp" />
+                   <LinearLayout
+                       android:id="@+id/ll_bban"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_alignParentRight="true"
+                       android:layout_weight="1"
+                       android:gravity="center_horizontal"
+                       android:orientation="vertical">
 
-
-                    <TextView
-                        android:id="@+id/tv_id_bban_kdinh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_title_so_cto"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="@dimen/_2sdp"
-
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/_10sdp"
-                        tools:text="Số biên bảnSố biên bảnSố biên bảnSố biên bảnSố biên bảnSố biên bản" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toRightOf="@+id/ll_a"
-                    android:layout_weight="1"
+                       <TextView
+                           android:id="@+id/tv_title_id_bban_kiemdinh"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:editable="false"
+                           android:gravity="center_horizontal"
+                           android:text="Số biên bản"
+                           android:textColor="@color/black_less"
+                           android:textSize="@dimen/_7sdp" />
 
 
-                    android:orientation="vertical">
+                       <TextView
+                           android:id="@+id/tv_so_bban_kdinh"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@+id/tv_title_so_cto"
+                           android:layout_marginTop="@dimen/_2sdp"
+                           android:gravity="center_horizontal"
+                           android:paddingLeft="@dimen/_2sdp"
+                           android:textColor="@color/primary_text"
+                           android:textSize="@dimen/_10sdp"
+                           tools:text="Số biên bảnSố biên bảnSố biên bảnSố biên bảnSố biên bảnSố biên bản" />
 
-                    <TextView
-                        android:id="@+id/tv_title_ma_cto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:gravity="right"
-                        android:text="Mã công tơ"
-                        android:textColor="@color/black_less"
-                        android:textSize="@dimen/_7sdp" />
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_alignParentLeft="true"
+                       android:layout_toRightOf="@+id/ll_bban"
+                       android:layout_weight="1"
 
 
-                    <TextView
-                        android:id="@+id/tv_ma_cto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_title_so_cto"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:gravity="right"
-                        android:paddingLeft="@dimen/_2sdp"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/_10sdp"
-                        tools:text="Mã CtoMã CtoMã CtoMã CtoMã CtoMã Cto" />
-                </LinearLayout>
+                       android:orientation="vertical">
+
+                       <TextView
+                           android:id="@+id/tv_title_ma_cto"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:editable="false"
+                           android:gravity="right"
+                           android:text="Mã công tơ"
+                           android:textColor="@color/black_less"
+                           android:textSize="@dimen/_7sdp" />
+
+
+                       <TextView
+                           android:id="@+id/tv_ma_cto"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@+id/tv_title_so_cto"
+                           android:layout_marginTop="@dimen/_2sdp"
+                           android:gravity="right"
+                           android:paddingLeft="@dimen/_2sdp"
+                           android:textColor="@color/primary_text"
+                           android:textSize="@dimen/_10sdp"
+                           tools:text="Mã CtoMã CtoMã CtoMã CtoMã CtoMã Cto" />
+                   </LinearLayout>
+               </LinearLayout>
 
 
             </LinearLayout>
@@ -240,6 +246,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:gravity="center_horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:editable="false"
@@ -249,6 +256,7 @@
 
 
                         <TextView
+                            android:gravity="center_horizontal"
                             android:id="@+id/tv_nam_sx"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -270,10 +278,10 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:gravity="right"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:editable="false"
-                            android:gravity="center_horizontal"
                             android:text="Mã đơn vị"
                             android:textColor="@color/black_less"
                             android:textSize="@dimen/_7sdp" />
@@ -285,7 +293,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_title_so_cto"
                             android:layout_marginTop="@dimen/_2sdp"
-                            android:gravity="center_horizontal"
+                            android:gravity="right"
                             android:paddingLeft="@dimen/_2sdp"
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/_9sdp"

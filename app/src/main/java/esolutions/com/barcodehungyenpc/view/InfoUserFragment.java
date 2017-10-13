@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import org.apache.commons.lang3.StringUtils;
+
 import esolutions.com.barcodehungyenpc.R;
 
 public class InfoUserFragment extends BaseFragment {
@@ -116,7 +118,7 @@ public class InfoUserFragment extends BaseFragment {
     }
 
     public void setErrorUser(String errorUser) {
-        if (TextUtils.isEmpty(errorUser))
+        if (StringUtils.isEmpty(errorUser))
             return;
         mEtUser.setFocusable(true);
         mEtUser.setError(errorUser);
@@ -124,7 +126,7 @@ public class InfoUserFragment extends BaseFragment {
     }
 
     public void setErrorPass(String errorPass) {
-        if (TextUtils.isEmpty(errorPass))
+        if (StringUtils.isEmpty(errorPass))
             return;
         mEtPass.setFocusable(true);
         mEtPass.setError(errorPass);
@@ -132,13 +134,13 @@ public class InfoUserFragment extends BaseFragment {
     }
 
     public void setTextUser(String user) {
-        if (TextUtils.isEmpty(user))
+        if (StringUtils.isEmpty(user))
             return;
         mEtUser.setText(user);
     }
 
     public void setTextPass(String pass) {
-        if (TextUtils.isEmpty(pass))
+        if (StringUtils.isEmpty(pass))
             return;
         mEtPass.setText(pass);
     }

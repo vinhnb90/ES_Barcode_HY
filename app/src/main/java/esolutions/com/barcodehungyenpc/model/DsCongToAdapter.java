@@ -4,13 +4,15 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,16 +117,17 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         holder.tvMaCLoai.setText(MA_CLOAI);
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
-            holder.tvTitleSoIDBBan.setVisibility(View.GONE);
-            holder.tvSoIDBBan.setVisibility(View.GONE);
+//            holder.tvTitleSoIDBBan.setVisibility(View.GONE);
+//            holder.tvSoBBanKD.setVisibility(View.GONE);
+            holder.llBBan.setVisibility(View.GONE);
         }
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
             holder.tvTitleSoIDBBan.setVisibility(View.VISIBLE);
-            holder.tvSoIDBBan.setVisibility(View.VISIBLE);
+            holder.tvSoBBanKD.setVisibility(View.VISIBLE);
 
-            String ID_BBAN_KDINH = mListPB.get(position).getID_BBAN_KDINH();
-            holder.tvSoIDBBan.setText(ID_BBAN_KDINH);
+            String SO_BBAN_KDINH = mListPB.get(position).getSO_BBAN_KDINH();
+            holder.tvSoBBanKD.setText(SO_BBAN_KDINH);
         }
 
 //        String CHISO_THAO = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHISO_THAO() : mListPB.get(position).get();
@@ -140,11 +143,9 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
         holder.tvMaDvi.setText(MA_DVIQLY);
 
         String NGAY_NHAP_MTB = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getNGAY_NHAP_MTB() : mListPB.get(position).getNGAY_NHAP_MTB();
-        holder.tvMaDvi.setText(NGAY_NHAP_MTB);
 
         if (!isHistoryAdapter)
             holder.tvNgayNhap.setText(Common.convertDateSQLToDateUI(NGAY_NHAP_MTB));
-
 
         //xử lý nút ghim
         holder.btnGhim.setText("GHIM");
@@ -244,9 +245,17 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 color = sBlackColor;
                 holder.btnChon.setClickable(false);
                 holder.btnChon.setPadding(0, 0, 0, 0);
-                holder.btnChon.setClickable(false);
                 holder.btnChon.setCompoundDrawables(null, null, null, null);
                 holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
+            }
+
+            if (CHON == Common.CHON.CHUA_GUI.getCode()) {
+                color = sLightColor;
+                holder.btnChon.setClickable(true);
+//                holder.btnChon.setPadding(0, 0, 0, 0);
+//                holder.btnChon.setClickable(false);
+//                holder.btnChon.setCompoundDrawables(null, null, null, null);
+//                holder.btnChon.setText(Common.CHON.findNameBy(CHON).getName());
             }
         }
         holder.relativeLayout.setBackgroundColor(color);
@@ -263,7 +272,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             //get infoResult
             String infoResult = mListener.interactionDataINFO_RESULT(ID, mTypeSessionHistory, mDateSessionHistory);
 
-            holder.tvInfoResult.setText((TextUtils.isEmpty(infoResult)) ? "" : "Thông tin: " + infoResult);
+            holder.tvInfoResult.setText((StringUtils.isEmpty(infoResult)) ? "" : "Thông tin: " + infoResult);
         }
     }
 
@@ -279,7 +288,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     public class DsCtoViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout relativeLayout;
-        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoIDBBan, tvTitleSoIDBBan, tvInfoResult;
+        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoBBanKD, tvTitleSoIDBBan, tvInfoResult;
+        public LinearLayout llBBan;
 
         public Button btnXoa, btnGhim, btnChon;
 
@@ -294,9 +304,10 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             tvMaDvi = (TextView) itemView.findViewById(R.id.tv_ma_dvi);
             tvNamSx = (TextView) itemView.findViewById(R.id.tv_nam_sx);
             tvNgayNhap = (TextView) itemView.findViewById(R.id.tv_ngay_nhap);
-            tvSoIDBBan = (TextView) itemView.findViewById(R.id.tv_id_bban_kdinh);
+            tvSoBBanKD = (TextView) itemView.findViewById(R.id.tv_so_bban_kdinh);
             tvTitleSoIDBBan = (TextView) itemView.findViewById(R.id.tv_title_id_bban_kiemdinh);
             tvInfoResult = (TextView) itemView.findViewById(R.id.tv_info_result);
+            llBBan = (LinearLayout) itemView.findViewById(R.id.ll_bban);
             btnXoa = (Button) itemView.findViewById(R.id.btn_delete);
             btnGhim = (Button) itemView.findViewById(R.id.btn_ghim);
             btnChon = (Button) itemView.findViewById(R.id.btn_chon);

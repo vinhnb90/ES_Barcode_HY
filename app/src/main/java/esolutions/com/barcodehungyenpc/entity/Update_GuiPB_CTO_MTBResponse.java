@@ -38,9 +38,9 @@ public class Update_GuiPB_CTO_MTBResponse {
 //    @SerializedName("MA_CLOAI")
 //    @Expose
 //    private String MA_CLOAI;
-//    @SerializedName("MA_CTO")
-//    @Expose
-//    private String MA_CTO;
+    @SerializedName("MA_CTO")
+    @Expose
+    private String MA_CTO;
 //    @SerializedName("NAM_SX")
 //    @Expose
 //    private String NAM_SX;
@@ -161,13 +161,13 @@ public class Update_GuiPB_CTO_MTBResponse {
 //        this.MA_CLOAI = MA_CLOAI;
 //    }
 //
-//    public String getMA_CTO() {
-//        return MA_CTO;
-//    }
-//
-//    public void setMA_CTO(String MA_CTO) {
-//        this.MA_CTO = MA_CTO;
-//    }
+    public String getMA_CTO() {
+        return MA_CTO;
+    }
+
+    public void setMA_CTO(String MA_CTO) {
+        this.MA_CTO = MA_CTO;
+    }
 //
 //    public String getNAM_SX() {
 //        return NAM_SX;

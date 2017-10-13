@@ -39,11 +39,10 @@ public class Update_GuiKD_CTO implements KvmSerializable {
     //thêm trường
     public int ID_TBL_CTO_GUI_KD;
 
+    //them
+    public String MA_DVIQLY;
 
-    public Update_GuiKD_CTO() {
-    }
-
-    public Update_GuiKD_CTO(int CHON, int STT, String MA_CTO, String SO_CTO, String MA_CLOAI, String NGAY_NHAP_HT, String NGAY_NHAP, String NAM_SX, String LOAI_SOHUU, String TEN_SOHUU, String MA_BDONG, String NGAY_BDONG, String NGAY_BDONG_HTAI, String SO_PHA, String SO_DAY, String DONG_DIEN, String VH_CONG, String DIEN_AP, String HS_NHAN, String NGAY_KDINH, String CHISO_THAO, String HSN, String NGAY_GUI_GKDCT_MTB, int ID_TBL_CTO_GUI_KD) {
+    public Update_GuiKD_CTO(int CHON, int STT, String MA_CTO, String SO_CTO, String MA_CLOAI, String NGAY_NHAP_HT, String NGAY_NHAP, String NAM_SX, String LOAI_SOHUU, String TEN_SOHUU, String MA_BDONG, String NGAY_BDONG, String NGAY_BDONG_HTAI, String SO_PHA, String SO_DAY, String DONG_DIEN, String VH_CONG, String DIEN_AP, String HS_NHAN, String NGAY_KDINH, String CHISO_THAO, String HSN, String NGAY_GUI_GKDCT_MTB, int ID_TBL_CTO_GUI_KD, String MA_DVIQLY) {
         this.CHON = CHON;
         this.STT = STT;
         this.MA_CTO = MA_CTO;
@@ -68,6 +67,7 @@ public class Update_GuiKD_CTO implements KvmSerializable {
         this.HSN = HSN;
         this.NGAY_GUI_GKDCT_MTB = NGAY_GUI_GKDCT_MTB;
         this.ID_TBL_CTO_GUI_KD = ID_TBL_CTO_GUI_KD;
+        this.MA_DVIQLY = MA_DVIQLY;
     }
 
     @Override
@@ -119,6 +119,9 @@ public class Update_GuiKD_CTO implements KvmSerializable {
                 return HSN;
             case 22:
                 return NGAY_GUI_GKDCT_MTB;
+            case 23:
+                return MA_DVIQLY;
+
             default:
                 return null;
         }
@@ -126,7 +129,7 @@ public class Update_GuiKD_CTO implements KvmSerializable {
 
     @Override
     public int getPropertyCount() {
-        return 23;
+        return 24;
     }
 
     @Override
@@ -200,6 +203,9 @@ public class Update_GuiKD_CTO implements KvmSerializable {
                 break;
             case 22:
                 NGAY_GUI_GKDCT_MTB = value.toString();
+                break;
+            case 23:
+                 MA_DVIQLY = value.toString();
                 break;
             default:
                 break;
@@ -281,6 +287,9 @@ public class Update_GuiKD_CTO implements KvmSerializable {
                 break;
             case 22:
                 info.name = "NGAY_GUI_GKDCT_MTB";
+                break;
+            case 23:
+                info.name = "MA_DVIQLY";
                 break;
             default:
                 break;
@@ -478,6 +487,14 @@ public class Update_GuiKD_CTO implements KvmSerializable {
 
     public void setID_TBL_CTO_GUI_KD(int ID_TBL_CTO_GUI_KD) {
         this.ID_TBL_CTO_GUI_KD = ID_TBL_CTO_GUI_KD;
+    }
+
+    public String getMA_DVIQLY() {
+        return MA_DVIQLY;
+    }
+
+    public void setMA_DVIQLY(String MA_DVIQLY) {
+        this.MA_DVIQLY = MA_DVIQLY;
     }
 }
 

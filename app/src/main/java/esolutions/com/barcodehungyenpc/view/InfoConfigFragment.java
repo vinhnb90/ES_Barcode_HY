@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import org.apache.commons.lang3.StringUtils;
+
 import esolutions.com.barcodehungyenpc.R;
 
 public class InfoConfigFragment extends BaseFragment {
@@ -69,7 +71,7 @@ public class InfoConfigFragment extends BaseFragment {
     }
 
     public void setErrorUrlServer(String errorString) {
-        if (TextUtils.isEmpty(errorString))
+        if (StringUtils.isEmpty(errorString))
             return;
         mEtUrlServer.setFocusable(true);
         mEtUrlServer.setError(errorString);
@@ -77,7 +79,7 @@ public class InfoConfigFragment extends BaseFragment {
     }
 
     public void setErrorMaDienLuc(String errorString) {
-        if (TextUtils.isEmpty(errorString))
+        if (StringUtils.isEmpty(errorString))
             return;
         mEtMaDienLuc.setFocusable(true);
         mEtMaDienLuc.setError(errorString);
@@ -85,13 +87,13 @@ public class InfoConfigFragment extends BaseFragment {
     }
 
     public void setTextMaDienLuc(String maDienLuc) {
-        if (TextUtils.isEmpty(maDienLuc))
+        if (StringUtils.isEmpty(maDienLuc))
             return;
         mEtMaDienLuc.setText(maDienLuc);
     }
 
     public void setTextUrlServer(String url) {
-        if (TextUtils.isEmpty(url))
+        if (StringUtils.isEmpty(url))
             return;
         mEtUrlServer.setText(url);
     }

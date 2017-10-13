@@ -26,6 +26,9 @@ public class CToPBResponse extends ResponseSoap {
     @SerializedName("LOAI_SOHUU")
     @Expose
     private String LOAI_SOHUU;
+    @SerializedName("LOAISOHUU")
+    @Expose
+    private String LOAISOHUU;
     @SerializedName("MA_CLOAI")
     @Expose
     private String MA_CLOAI;
@@ -41,30 +44,34 @@ public class CToPBResponse extends ResponseSoap {
     @SerializedName("NGAY_NHAP")
     @Expose
     private String NGAY_NHAP;
-    @SerializedName("NGAY_NHAP_HTHONG")
+    @SerializedName("NGAY_NHAP_HTHI")
     @Expose
-    private String NGAY_NHAP_HTHONG;
+    private String NGAY_NHAP_HTHI;
+
     @SerializedName("MA_NVIEN")
     @Expose
     private String MA_NVIEN;
     @SerializedName("SO_BBAN")
     @Expose
     private String SO_BBAN;
-    @SerializedName("HS_NHAN")
-    @Expose
-    private String HS_NHAN;
     @SerializedName("ID_BBAN_KDINH")
     @Expose
     private String ID_BBAN_KDINH;
+    @SerializedName("SO_BBAN_KDINH")
+    @Expose
+    private String SO_BBAN_KDINH;
+    @SerializedName("MA_NVIENKDINH")
+    @Expose
+    private String MA_NVIENKDINH;
     @SerializedName("NGAY_GUIKD")
     @Expose
     private String NGAY_GUIKD;
     @SerializedName("NGAY_KDINH")
     @Expose
     private String NGAY_KDINH;
-    @SerializedName("NGAY_KDINH_TH")
+    @SerializedName("NGAY_KDINH_HTHI")
     @Expose
-    private String NGAY_KDINH_TH;
+    private String NGAY_KDINH_HTHI;
     @SerializedName("VH_CONG")
     @Expose
     private String VH_CONG;
@@ -96,9 +103,67 @@ public class CToPBResponse extends ResponseSoap {
     @Expose
     private String DONG_DIEN;
 
-    @SerializedName("ACTION")
-    @Expose
-    private String ACTION;
+
+    //region bỏ
+//    @SerializedName("HS_NHAN")
+//    @Expose
+//    private String HS_NHAN;
+//
+//    @SerializedName("NGAY_KDINH_TH")
+//    @Expose
+//    private String NGAY_KDINH_TH;
+//
+//    @SerializedName("NGAY_NHAP_HTHONG")
+//    @Expose
+//    private String NGAY_NHAP_HTHONG;
+//
+//    @SerializedName("ACTION")
+//    @Expose
+//    private String ACTION;
+    //endregion
+
+
+    //region thêm
+    public String getLOAISOHUU() {
+        return LOAISOHUU;
+    }
+
+    public void setLOAISOHUU(String LOAISOHUU) {
+        this.LOAISOHUU = LOAISOHUU;
+    }
+
+    public String getNGAY_NHAP_HTHI() {
+        return NGAY_NHAP_HTHI;
+    }
+
+    public void setNGAY_NHAP_HTHI(String NGAY_NHAP_HTHI) {
+        this.NGAY_NHAP_HTHI = NGAY_NHAP_HTHI;
+    }
+
+    public String getSO_BBAN_KDINH() {
+        return SO_BBAN_KDINH;
+    }
+
+    public void setSO_BBAN_KDINH(String SO_BBAN_KDINH) {
+        this.SO_BBAN_KDINH = SO_BBAN_KDINH;
+    }
+
+    public String getMA_NVIENKDINH() {
+        return MA_NVIENKDINH;
+    }
+
+    public void setMA_NVIENKDINH(String MA_NVIENKDINH) {
+        this.MA_NVIENKDINH = MA_NVIENKDINH;
+    }
+
+    public String getNGAY_KDINH_HTHI() {
+        return NGAY_KDINH_HTHI;
+    }
+
+    public void setNGAY_KDINH_HTHI(String NGAY_KDINH_HTHI) {
+        this.NGAY_KDINH_HTHI = NGAY_KDINH_HTHI;
+    }
+    //endregion
 
     public int getCHON() {
         return CHON;
@@ -188,14 +253,6 @@ public class CToPBResponse extends ResponseSoap {
         this.NGAY_NHAP = NGAY_NHAP;
     }
 
-    public String getNGAY_NHAP_HTHONG() {
-        return NGAY_NHAP_HTHONG;
-    }
-
-    public void setNGAY_NHAP_HTHONG(String NGAY_NHAP_HTHONG) {
-        this.NGAY_NHAP_HTHONG = NGAY_NHAP_HTHONG;
-    }
-
     public String getMA_NVIEN() {
         return MA_NVIEN;
     }
@@ -210,14 +267,6 @@ public class CToPBResponse extends ResponseSoap {
 
     public void setSO_BBAN(String SO_BBAN) {
         this.SO_BBAN = SO_BBAN;
-    }
-
-    public String getHS_NHAN() {
-        return HS_NHAN;
-    }
-
-    public void setHS_NHAN(String HS_NHAN) {
-        this.HS_NHAN = HS_NHAN;
     }
 
     public String getID_BBAN_KDINH() {
@@ -242,14 +291,6 @@ public class CToPBResponse extends ResponseSoap {
 
     public void setNGAY_KDINH(String NGAY_KDINH) {
         this.NGAY_KDINH = NGAY_KDINH;
-    }
-
-    public String getNGAY_KDINH_TH() {
-        return NGAY_KDINH_TH;
-    }
-
-    public void setNGAY_KDINH_TH(String NGAY_KDINH_TH) {
-        this.NGAY_KDINH_TH = NGAY_KDINH_TH;
     }
 
     public String getVH_CONG() {
@@ -330,13 +371,5 @@ public class CToPBResponse extends ResponseSoap {
 
     public void setDONG_DIEN(String DONG_DIEN) {
         this.DONG_DIEN = DONG_DIEN;
-    }
-
-    public String getACTION() {
-        return ACTION;
-    }
-
-    public void setACTION(String ACTION) {
-        this.ACTION = ACTION;
     }
 }

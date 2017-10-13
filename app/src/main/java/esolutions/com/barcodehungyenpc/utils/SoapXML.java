@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +74,7 @@ public class SoapXML {
         Select_MADVIQLY("Select_MADVIQLY", new String[]{}),
         Select_DangNhap("Select_DangNhap", new String[]{"user", "pass", "Ma_DViQLy"}),
         Update_GuiKD_CTO_MTB("Update_GuiKD_CTO", new String[]{"a"}),
-        Update_PBCT_MTB("Update_PBCT_MTB", new String[]{"entity"});
+        Update_PBCT_MTB("Update_PBCT_MTB", new String[]{"a"});
 
 
         private String nameMethod;
@@ -168,6 +169,7 @@ public class SoapXML {
                 try {
                     try {
                         ht = new HttpTransportSE(URL, TIME_OUT);
+                        ht.debug = true;
                         ht.call(SOAP_ACTION, envelope);
 
                     } catch (Exception ex) {
@@ -176,6 +178,8 @@ public class SoapXML {
 
                     SoapObject result = null;
                     SoapPrimitive primitive = null;
+                    String requestDump = ht.requestDump;
+                    String responseDump = ht.responseDump;
 //                    int field = classTypeData.getDeclaredFields().length;
 //                    if (field == 2) {
 ////                        SoapFault soapFault = (SoapFault) envelope.bodyIn;
@@ -262,14 +266,12 @@ public class SoapXML {
                 try {
                     proInfoLv1 = (SoapObject) soapLv1.getProperty("NewDataSet");
                 } catch (Exception e) {
-                    throw new Exception(Common.MESSAGE.ex06.getContent());
+                    throw new Exception(Common.MESSAGE.ex061.getContent());
                 }
 
                 //kiểm tra nếu có property 'CTO' thì lấy dữ liệu dataset
                 //ngược lại nếu là 'Table1" thì lấy dữ liệu thông báo
                 //2 giá trị này được cung cấp bởi server, nên debug các giá trị cây của soapObject để nắm rõ
-
-
                 ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
                 for (int j = 0; j < proInfoLv1.getPropertyCount(); j++) {
                     HashMap<String, String> hashMap = new HashMap<>();
@@ -296,24 +298,37 @@ public class SoapXML {
                 //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
                 Field[] allFields = null;
 
-                if (dataList.size() == 1 && dataList.get(0).containsKey(keyDataSetServerError)) {
-                    isServerErrorResponse = true;
+                int countProInfoLv1 = proInfoLv1.getPropertyCount();
+
+                for (int i = 0; i < countProInfoLv1; i++) {
+                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
+
+                    if (proInfoLv2.hasProperty(keyDataSetServerError)) {
+                        isServerErrorResponse = true;
+                        break;
+                    }
+                }
+
+                if (isServerErrorResponse) {
                     allFields = classTypeError.getDeclaredFields();
                 } else {
-                    isServerErrorResponse = false;
                     allFields = classTypeData.getDeclaredFields();
                 }
-                //[{"thongbao":"Không tìm thấy công tơ","$change":null,"serialVersionUID":null}]
 
                 if (allFields == null) {
                     return jsonReponse;
                 }
 
-
-//                List<V> error = new ArrayList<>();
-//                List<K> data = new ArrayList<>();
-//                final GsonBuilder gsonBuilder = new GsonBuilder();
-//                final Gson gson = gsonBuilder.serializeNulls().create();
+//
+//
+//                if (dataList.size() == 1 && dataList.get(0).containsKey(keyDataSetServerError)) {
+//                    isServerErrorResponse = true;
+//                    allFields = classTypeError.getDeclaredFields();
+//                } else {
+//                    isServerErrorResponse = false;
+//                    allFields = classTypeData.getDeclaredFields();
+//                }
+                //[{"thongbao":"Không tìm thấy công tơ","$change":null,"serialVersionUID":null}]
 
                 for (int i = 0; i < dataList.size(); i++) {
                     JSONObject jsonObject = new JSONObject();
@@ -322,70 +337,11 @@ public class SoapXML {
                         String fieldName = field.getName();
                         if (fieldName.equals("$change") || fieldName.equals("serialVersionUID"))
                             break;
-
-                        if (dataList.get(i).containsKey(fieldName)) {
-                            jsonObject.accumulate(field.getName(), dataList.get(i).get(field.getName()));
-                        } else {
-                            jsonObject.accumulate(field.getName(), JSONObject.NULL);
-                        }
+                        Object data = dataList.get(i).get(fieldName);
+                        jsonObject.put(fieldName, data == null ? JSONObject.NULL : data.toString());
                     }
                     jsonArray.put(jsonObject);
-
-//                    if (isServerErrorResponse) {
-//                        Type collectionType = new TypeToken<V>() {
-//                        }.getType();
-////                        V errorElement = gson.fromJson(jsonObject.toString(), collectionType);
-//                      V  errorElement = (V) gson.fromJson(jsonObject.toString(), classTypeError.newInstance().getClass());
-//                        error.add(errorElement);
-//                    } else {
-//                        Type collectionType = new TypeToken<K>() {
-//                        }.getType();
-//                        K dataElement = gson.fromJson(jsonObject.toString(), collectionType);
-//                        data.add(dataElement);
-//                    }
                 }
-
-
-//
-//                HashMap<String, SoapObject> result = null;
-//                SoapObject proInfoLv2 = null;
-//
-//                //check and get all data by key field project and put to gson object
-//                JSONArray jsonArray = new JSONArray();
-//
-//                //kiểm tra nếu key dataReal là CTO thì sẽ thao tác với classType
-//                Field[] allFields = null;
-//
-//                if (proInfoLv1.hasProperty(keyDataSetServerError)) {
-//                    isServerErrorResponse = true;
-//                    allFields = classTypeError.getDeclaredFields();
-//                } else {
-//                    isServerErrorResponse = false;
-//                    allFields = classTypeData.getDeclaredFields();
-//                }
-//
-//                if (allFields == null) {
-//                    return jsonReponse;
-//                }
-//
-//                int countProInfoLv1 = proInfoLv1.getPropertyCount();
-//
-//                for (int i = 0; i < countProInfoLv1; i++) {
-//                    proInfoLv2 = (SoapObject) proInfoLv1.getProperty(i);
-//                    JSONObject jsonObject = new JSONObject();
-//
-//                    for (Field field : allFields) {
-//                        String fieldName = field.getName();
-//                        if (proInfoLv2.hasProperty(fieldName)) {
-//                            jsonObject.accumulate(field.getName(), proInfoLv2.getPropertyAsString(field.getName()));
-//                        } else {
-//                            jsonObject.accumulate(field.getName(), JSONObject.NULL);
-//                        }
-//                    }
-//
-//                    jsonArray.put(jsonObject);
-//                }
-
                 jsonReponse = jsonArray.toString();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -404,7 +360,7 @@ public class SoapXML {
         @Override
         protected void onPostExecute(String jsonResponse) {
             super.onPostExecute(jsonResponse);
-            if (TextUtils.isEmpty(jsonResponse))
+            if (StringUtils.isEmpty(jsonResponse))
                 return;
             //Xử lý kết quả
             try {
@@ -623,28 +579,7 @@ public class SoapXML {
             try {
 
                 //truyền đủ các tham số tương ứng
-//                SoapSerializationEnvelope envelope = getEnvelope2();
-//                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-//
-//                SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
-//
-//                PropertyInfo pi = callBack.setupRequest(method);
-//                request.addProperty(pi);
-//
-//                envelope.setOutputSoapObject(request);
-//                envelope.dotNet = true;
-//                envelope.implicitTypes = true;
-//                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
-
                 SoapSerializationEnvelope envelope = callBack.setupRequest(NAMESPACE, method);
-
-//                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-//                envelope.setOutputSoapObject(request);
-//                envelope.dotNet = true;
-//                envelope.implicitTypes = true;
-//                envelope.addMapping(NAMESPACE, method.getNameParams()[0], new ArrayList<Update_GuiKD_CTO>().getClass());
-
-//                envelope.addMapping(NAMESPACE, "Test", Test.class);
 
                 HttpTransportSE ht;
                 try {
@@ -677,20 +612,6 @@ public class SoapXML {
 
                     if (jsonResponse == null)
                         throw new Exception(Common.MESSAGE.ex05.getContent());
-//                    if (envelope.bodyIn instanceof SoapObject) {
-//                        // SoapObject = SUCCESS
-//                        result = (SoapObject) envelope.bodyIn;
-//                        jsonResponse = convertDataSoapObject(result);
-//                        if (jsonResponse == null)
-//                            throw new Exception(Common.MESSAGE.ex05.getContent());
-////                        response = (SoapObject) envelope.bodyIn;
-//                    } else if (envelope.bodyIn instanceof SoapFault) { // SoapFault =
-//                        // FAILURE
-//                        SoapFault soapFault = (SoapFault) envelope.bodyIn;
-//                        throw new Exception(soapFault.getMessage());
-//                    }
-
-
                 } catch (Exception ex) {
                     throw new Exception(ex.getMessage());
                 }
@@ -709,285 +630,6 @@ public class SoapXML {
 
             return jsonResponse;
         }
-
-        private SoapSerializationEnvelope getEnvelope2() {
-            List<Test> tests = new ArrayList<Test>();
-
-            Test log1 = new Test();
-            log1.setA(1 + "A");
-            log1.setB(1 + "B");
-
-            Test log2 = new Test();
-            log2.setA(2 + "A");
-            log2.setB(2 + "B");
-
-            tests.add(log1);
-            tests.add(log2);
-
-            SoapObject request = new SoapObject(NAMESPACE, method.getNameMethod());
-
-            SoapObject entity = new SoapObject(NAMESPACE, "entity");
-
-            for (Test i : tests) {
-
-                PropertyInfo pi = new PropertyInfo();
-                pi.setName("Test");
-                pi.setValue(i);
-                pi.setType(SoapObject.class);
-                entity.addProperty("Test", i);
-            }
-
-            request.addProperty("entity", entity);
-
-            String xml = "\n" +
-                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                    "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
-                    "  <soap12:Header>\n" +
-                    "    <AuthenticateHeader xmlns=\"http://tempuri.org/\">\n" +
-                    "      <Username>string</Username>\n" +
-                    "      <Password>string</Password>\n" +
-                    "      <strKeyAuthenticate>string</strKeyAuthenticate>\n" +
-                    "    </AuthenticateHeader>\n" +
-                    "  </soap12:Header>\n" +
-                    "  <soap12:Body>\n" +
-                    "    <Update_GuiKD_CTO_2 xmlns=\"http://tempuri.org/\">\n" +
-                    "      <entity>\n" +
-                    "        <Test>\n" +
-                    "          <MA_CTO>string1</MA_CTO>\n" +
-                    "          <b>string2</b>\n" +
-                    "        </Test>\n" +
-                    "        <Test>\n" +
-                    "          <MA_CTO>string1</MA_CTO>\n" +
-                    "          <b>string2</b>\n" +
-                    "        </Test>\n" +
-                    "      </entity>\n" +
-                    "    </Update_GuiKD_CTO_2>\n" +
-                    "  </soap12:Body>\n" +
-                    "</soap12:Envelope>";
-
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            envelope.dotNet = true;
-            envelope.bodyOut = request;
-            envelope.setOutputSoapObject(request);
-            envelope.addMapping(NAMESPACE, "Test", Test.class);
-
-
-            return envelope;
-        }
-
-
-        private void test3() {
-//            try {
-//
-//                //handle XML
-//                SAXParserFactory spf = SAXParserFactory.newInstance();
-//                SAXParser sp = spf.newSAXParser();
-//                XMLReader xr = sp.getXMLReader();
-//
-//                //URL_LINK to parse XML Tags
-//                URL sourceUrl = new URL(
-//                        "http://www.ces.org/android/android.asmx/SelectPrograms");
-//
-//                //Create handler to handle XML Tags ( extends DefaultHandler )
-//                MyXMLHandler myXMLHandler = new MyXMLHandler();
-//                xr.setContentHandler(myXMLHandler);
-//                xr.parse(new InputSource(sourceUrl.openStream()));
-//
-//            } catch (Exception e) {
-//                System.out.println("XML Pasing Excpetion = " + e);
-//            }
-//            //get result from MyXMLHandler SitlesList Object
-//            ProgramList programList = MyXMLHandler.programList;
-
-
-        }
-
-//        private PropertyInfo testDataset2() {
-//            DataTable1 documentIdVector = new DataTable1("Dataset");
-//            documentIdVector.add("avbcc");
-//
-//            PropertyInfo documentIdsPropertyInfo = new PropertyInfo();
-//            documentIdsPropertyInfo.setName("DataTable1");
-//            documentIdsPropertyInfo.setValue(documentIdVector);
-//            documentIdsPropertyInfo.setType(documentIdVector.getClass());
-//
-//            return documentIdsPropertyInfo;
-//        }
-
-        private String testDataSet() {
-
-            try {
-
-                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-                // root elements
-                Document doc = docBuilder.newDocument();
-                Element rootElement = doc.createElement("company");
-                doc.appendChild(rootElement);
-
-                // staff elements
-                Element staff = doc.createElement("Staff");
-                rootElement.appendChild(staff);
-
-                // set attribute to staff element
-                Attr attr = doc.createAttribute("id");
-                attr.setValue("1");
-                staff.setAttributeNode(attr);
-
-                // shorten way
-                // staff.setAttribute("id", "1");
-
-                // firstname elements
-                Element firstname = doc.createElement("firstname");
-                firstname.appendChild(doc.createTextNode("yong"));
-                staff.appendChild(firstname);
-
-                // lastname elements
-                Element lastname = doc.createElement("lastname");
-                lastname.appendChild(doc.createTextNode("mook kim"));
-                staff.appendChild(lastname);
-
-                // nickname elements
-                Element nickname = doc.createElement("nickname");
-                nickname.appendChild(doc.createTextNode("mkyong"));
-                staff.appendChild(nickname);
-
-                // salary elements
-                Element salary = doc.createElement("salary");
-                salary.appendChild(doc.createTextNode("100000"));
-                staff.appendChild(salary);
-
-                // write the content into xml file
-                TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                Transformer transformer = transformerFactory.newTransformer();
-                DOMSource source = new DOMSource(doc);
-//                StreamResult result = new StreamResult(new File("C:\\file.xml"));
-
-                // Output to console for testing
-                // StreamResult result = new StreamResult(System.out);
-
-//                transformer.transform(source, result);
-                StringWriter writer = new StringWriter();
-                StreamResult result = new StreamResult(writer);
-                transformer.transform(source, result);
-                String a = result.toString();
-                Log.e("TAGaaaaa", result.toString());
-
-            } catch (ParserConfigurationException pce) {
-                pce.printStackTrace();
-            } catch (TransformerException tfe) {
-                tfe.printStackTrace();
-            }
-
-            return "DataTable1 xmlns=\"http://tempuri.org/\">\n" +
-                    "<xs:schema xmlns=\"\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\" id=\"DataTable1\">\n" +
-                    "<xs:element name=\"DataTable1\" msdata:IsDataSet=\"true\" msdata:UseCurrentLocale=\"true\">\n" +
-                    "<xs:complexType>\n" +
-                    "<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n" +
-                    "<xs:element name=\"Table1\">\n" +
-                    "<xs:complexType>\n" +
-                    "<xs:sequence>\n" +
-                    "<xs:element name=\"CHISO_THAO\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"MA_CTO\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"DIEN_AP\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"DONG_DIEN\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"HS_NHAN\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"HSN\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"IDBBGKD\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"LOAI_SOHUU\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"MA_BDONG\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"MA_CLOAI\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"MA_CTO\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NAM_SX\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NGAY_BDONG\" msdata:DateTimeMode=\"Unspecified\" type=\"xs:dateTime\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NGAY_BDONG_HT\" msdata:DateTimeMode=\"Unspecified\" type=\"xs:dateTime\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NGAY_GUI_GKDCT_MTB\" msdata:DateTimeMode=\"Unspecified\" type=\"xs:dateTime\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NGAY_KDINH\" msdata:DateTimeMode=\"Unspecified\" type=\"xs:dateTime\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NGAY_NHAP_MTB\" msdata:DateTimeMode=\"Unspecified\" type=\"xs:dateTime\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"NGAY_NHAP_HT\" msdata:DateTimeMode=\"Unspecified\" type=\"xs:dateTime\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"SO_CTO\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"SO_GKDCT_MTB\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"SO_PHA\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"ID_TBL_DIENLUC\" type=\"xs:decimal\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"TEN_SOHUU\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "<xs:element name=\"VH_CONG\" type=\"xs:string\" minOccurs=\"0\"/>\n" +
-                    "</xs:sequence>\n" +
-                    "</xs:complexType>\n" +
-                    "</xs:element>\n" +
-                    "</xs:choice>\n" +
-                    "</xs:complexType>\n" +
-                    "</xs:element>\n" +
-                    "</xs:schema>\n" +
-                    "<diffgr:diffgram xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\" xmlns:diffgr=\"urn:schemas-microsoft-com:xml-diffgram-v1\">\n" +
-                    "<DataTable1 xmlns=\"\">\n" +
-                    "<Table1 diffgr:id=\"Table11\" msdata:rowOrder=\"0\" diffgr:hasChanges=\"inserted\">\n" +
-                    "<CHISO_THAO>23232</CHISO_THAO>\n" +
-                    "<MA_CTO>1</MA_CTO>\n" +
-                    "<DIEN_AP>220V</DIEN_AP>\n" +
-                    "<DONG_DIEN>1 CHIỀU</DONG_DIEN>\n" +
-                    "<HS_NHAN>10</HS_NHAN>\n" +
-                    "<HSN>43</HSN>\n" +
-                    "<IDBBGKD>1</IDBBGKD>\n" +
-                    "<LOAI_SOHUU>1</LOAI_SOHUU>\n" +
-                    "<MA_BDONG>A</MA_BDONG>\n" +
-                    "<MA_CLOAI>506</MA_CLOAI>\n" +
-                    "<MA_CTO>5062017987</MA_CTO>\n" +
-                    "<NAM_SX>2015</NAM_SX>\n" +
-                    "<NGAY_BDONG>2014-10-20T00:00:00</NGAY_BDONG>\n" +
-                    "<NGAY_BDONG_HT>2013-10-20T00:00:00</NGAY_BDONG_HT>\n" +
-                    "<NGAY_GUI_GKDCT_MTB>2017-09-03T00:00:00</NGAY_GUI_GKDCT_MTB>\n" +
-                    "<NGAY_NHAP_MTB>2014-10-20T00:00:00</NGAY_NHAP_MTB>\n" +
-                    "<SO_CTO>5454</SO_CTO>\n" +
-                    "<SO_GKDCT_MTB>1</SO_GKDCT_MTB>\n" +
-                    "<SO_PHA>3</SO_PHA>\n" +
-                    "<ID_TBL_DIENLUC>1</ID_TBL_DIENLUC>\n" +
-                    "<TEN_SOHUU>Ngành điện</TEN_SOHUU>\n" +
-                    "<VH_CONG>12</VH_CONG>\n" +
-                    "</Table1>\n" +
-                    "<Table1 diffgr:id=\"Table12\" msdata:rowOrder=\"1\" diffgr:hasChanges=\"inserted\">\n" +
-                    "<CHISO_THAO>23232</CHISO_THAO>\n" +
-                    "<MA_CTO>1</MA_CTO>\n" +
-                    "<DIEN_AP>220V</DIEN_AP>\n" +
-                    "<DONG_DIEN>1 CHIỀU</DONG_DIEN>\n" +
-                    "<HS_NHAN>10</HS_NHAN>\n" +
-                    "<HSN>43</HSN>\n" +
-                    "<IDBBGKD>2</IDBBGKD>\n" +
-                    "<LOAI_SOHUU>1</LOAI_SOHUU>\n" +
-                    "<MA_BDONG>A</MA_BDONG>\n" +
-                    "<MA_CLOAI>506</MA_CLOAI>\n" +
-                    "<MA_CTO>5062017987</MA_CTO>\n" +
-                    "<NAM_SX>2015</NAM_SX>\n" +
-                    "<NGAY_BDONG>2014-10-20T00:00:00</NGAY_BDONG>\n" +
-                    "<NGAY_BDONG_HT>2013-10-20T00:00:00</NGAY_BDONG_HT>\n" +
-                    "<NGAY_GUI_GKDCT_MTB>2017-09-02T00:00:00</NGAY_GUI_GKDCT_MTB>\n" +
-                    "<NGAY_KDINH>2014-11-21T00:00:00</NGAY_KDINH>\n" +
-                    "<NGAY_NHAP_MTB>2014-10-20T00:00:00</NGAY_NHAP_MTB>\n" +
-                    "<SO_CTO>5454</SO_CTO>\n" +
-                    "<SO_GKDCT_MTB>2</SO_GKDCT_MTB>\n" +
-                    "<SO_PHA>3</SO_PHA>\n" +
-                    "<ID_TBL_DIENLUC>1</ID_TBL_DIENLUC>\n" +
-                    "<TEN_SOHUU>Ngành điện</TEN_SOHUU>\n" +
-                    "<VH_CONG>12</VH_CONG>\n" +
-                    "</Table1>\n" +
-                    "</DataTable1>\n" +
-                    "</diffgr:diffgram>\n" +
-                    "</DataTable1>"
-                    ;
-        }
-
-//        private String convertDataSoapPrimitive(SoapPrimitive primitive) throws Exception {
-//            if (primitive == null)
-//                return null;
-//            String jsonReponse = "";
-//            try {
-//                JSONObject o = new JSONObject();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                throw new Exception(Common.MESSAGE.ex06.getContent());
-//            }
-//            return jsonReponse;
-//        }
 
         private String convertDataSoapObject(SoapObject response) throws Exception {
             if (response == null)
@@ -1024,7 +666,6 @@ public class SoapXML {
                         isServerErrorResponse = true;
                         break;
                     }
-
                 }
 
                 if (isServerErrorResponse) {
@@ -1050,7 +691,6 @@ public class SoapXML {
                             jsonObject.accumulate(field.getName(), JSONObject.NULL);
                         }
                     }
-
                     jsonArray.put(jsonObject);
                 }
 
@@ -1072,7 +712,7 @@ public class SoapXML {
         @Override
         protected void onPostExecute(String jsonResponse) {
             super.onPostExecute(jsonResponse);
-            if (TextUtils.isEmpty(jsonResponse))
+            if (StringUtils.isEmpty(jsonResponse))
                 return;
             //Xử lý kết quả
             final GsonBuilder gsonBuilder = new GsonBuilder();
@@ -1113,7 +753,6 @@ public class SoapXML {
 
             t = gson.fromJson(json, new ListOfJson<T>(typeClass));
             return t;
-
         }
 
         private static final Set<Class<?>> WRAPPER_TYPES = checkWrapperTypes();

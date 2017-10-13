@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import esolutions.com.barcodehungyenpc.database.SqlQuery;
 import esolutions.com.barcodehungyenpc.utils.Common;
 
@@ -53,7 +55,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getMA_CTO() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getMA_CTO())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getMA_CTO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -63,7 +65,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
         return mCongToGuiKD.getMA_CTO();
     }
     public String getSO_CTO() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getSO_CTO())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getSO_CTO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -73,7 +75,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
         return mCongToGuiKD.getSO_CTO();
     }
     public String getMA_DVIQLY() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getMA_DVIQLY())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getMA_DVIQLY())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -85,7 +87,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getMA_CLOAI() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getMA_CLOAI())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getMA_CLOAI())) {
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
             String CLOAI =  SqlQuery.TBL_CTO_GUI_KD.MA_CLOAI.getNameCollumn();
@@ -95,7 +97,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getNGAY_NHAP_HT() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNGAY_NHAP_HT())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNGAY_NHAP_HT())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -106,7 +108,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getNAM_SX() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNAM_SX())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNAM_SX())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -117,7 +119,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getLOAI_SOHUU() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getLOAI_SOHUU())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getLOAI_SOHUU())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -127,7 +129,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
         return mCongToGuiKD.getLOAI_SOHUU();
     }
     public String getTEN_SOHUU() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getTEN_SOHUU())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getTEN_SOHUU())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -139,7 +141,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getNGAY_BDONG() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNGAY_BDONG())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNGAY_BDONG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -151,7 +153,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getMA_BDONG() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getMA_BDONG())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getMA_BDONG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -163,7 +165,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getNGAY_BDONG_HTAI() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNGAY_BDONG_HTAI())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNGAY_BDONG_HTAI())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -174,7 +176,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getSO_PHA() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getSO_PHA())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getSO_PHA())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -185,7 +187,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getSO_DAY() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getSO_DAY())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getSO_DAY())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -196,7 +198,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getDONG_DIEN() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getDONG_DIEN())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getDONG_DIEN())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -207,7 +209,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getVH_CONG() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getVH_CONG())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getVH_CONG())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -219,7 +221,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getDIEN_AP() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getDIEN_AP())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getDIEN_AP())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -230,7 +232,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getHS_NHAN() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getHS_NHAN())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getHS_NHAN())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -241,7 +243,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getNGAY_KDINH() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNGAY_KDINH())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNGAY_KDINH())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -252,7 +254,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getCHISO_THAO() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getCHISO_THAO())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getCHISO_THAO())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -263,7 +265,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
     }
 
     public String getNGAY_NHAP() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNGAY_NHAP())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNGAY_NHAP())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -275,7 +277,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getHSN() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getHSN())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getHSN())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -287,7 +289,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
     public String getNGAY_NHAP_MTB() {
-        if (TextUtils.isEmpty(mCongToGuiKD.getNGAY_NHAP_MTB())) {
+        if (StringUtils.isEmpty(mCongToGuiKD.getNGAY_NHAP_MTB())) {
 
             Cursor cursor = getmCursor();
             cursor.moveToPosition(getmIndex());
@@ -321,7 +323,7 @@ public class CongToGuiKDProxy extends CursorItemProxy {
 
 
 //    public String getmTaiKhoan() {
-//        if (TextUtils.isEmpty(mCongToPB.getmTaiKhoan())) {
+//        if (StringUtils.isEmpty(mCongToPB.getmTaiKhoan())) {
 //            Cursor cursor = getmCursor();
 //            cursor.moveToPosition(getmIndex());
 //

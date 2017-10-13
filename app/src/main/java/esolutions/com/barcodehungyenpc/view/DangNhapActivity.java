@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,7 @@ public class DangNhapActivity extends BaseActivity implements
     public static final String KEY_PREF_USER = "KEY_PREF_USER";
     public static final String KEY_PREF_PASS = "KEY_PREF_PASS";
     public static final String KEY_PREF_CB_SAVE = "KEY_PREF_CB_SAVE";
-    public static final String KEY_PREF_KEYBOARD = "KEY_PREF_CB_SAVE";
+    public static final String KEY_PREF_KEYBOARD = "KEY_PREF_KEYBOARD";
 
     private String[] tabs = {"Info Config"};
 
@@ -330,7 +332,7 @@ public class DangNhapActivity extends BaseActivity implements
         }
 
         //check url
-        if (TextUtils.isEmpty(mEtURL.getText().toString().trim())) {
+        if (StringUtils.isEmpty(mEtURL.getText().toString().trim())) {
             throw new Exception(Common.MESSAGE.ex08.getContent());
         }
 
@@ -477,7 +479,7 @@ public class DangNhapActivity extends BaseActivity implements
         }
 
         //check url
-        if (TextUtils.isEmpty(mEtURL.getText().toString().trim())) {
+        if (StringUtils.isEmpty(mEtURL.getText().toString().trim())) {
             throw new Exception(Common.MESSAGE.ex08.getContent());
         }
 
@@ -612,30 +614,30 @@ public class DangNhapActivity extends BaseActivity implements
     }
 
     private boolean validateInput() {
-        if (TextUtils.isEmpty(mEtURL.getText().toString())) {
+        if (StringUtils.isEmpty(mEtURL.getText().toString())) {
             mEtURL.setError(Common.MESSAGE.ex03.getContent());
             return false;
         }
 
-        if (TextUtils.isEmpty(mEtUser.getText().toString())) {
+        if (StringUtils.isEmpty(mEtUser.getText().toString())) {
             mEtUser.setError(Common.MESSAGE.ex03.getContent());
             return false;
         }
 
-        if (TextUtils.isEmpty(mEtPass.getText().toString())) {
+        if (StringUtils.isEmpty(mEtPass.getText().toString())) {
             mEtPass.setError(Common.MESSAGE.ex25.getContent());
             return false;
         }
 
         if (mCompatSpinnerDvi.getAdapter().getCount() == 0) {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex03.getContent(), Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, Common.MESSAGE.ex27.getContent(), Snackbar.LENGTH_LONG);
             snackbar.show();
             return false;
         }
 
         String dvi = ((ArrayAdapter<String>) mCompatSpinnerDvi.getAdapter()).getItem(mCompatSpinnerDvi.getSelectedItemPosition());
-        if (TextUtils.isEmpty(dvi)) {
-            ((TextView) mCompatSpinnerDvi.getChildAt(0)).setError(Common.MESSAGE.ex03.getContent());
+        if (StringUtils.isEmpty(dvi)) {
+            ((TextView) mCompatSpinnerDvi.getChildAt(0)).setError(Common.MESSAGE.ex27.getContent());
             return false;
         }
         return true;
