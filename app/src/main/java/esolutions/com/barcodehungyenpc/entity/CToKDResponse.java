@@ -78,8 +78,21 @@ public class CToKDResponse extends ResponseSoap {
     @SerializedName("NGAY_NHAP")
     @Expose
     private String NGAY_NHAP;
+
+    @SerializedName("SO_GKDCT_MTB")
+    @Expose
+    private String SO_GKDCT_MTB;
+
     public int getCHON() {
         return CHON;
+    }
+
+    public String getSO_GKDCT_MTB() {
+        return SO_GKDCT_MTB;
+    }
+
+    public void setSO_GKDCT_MTB(String SO_GKDCT_MTB) {
+        this.SO_GKDCT_MTB = SO_GKDCT_MTB;
     }
 
     public void setCHON(int CHON) {

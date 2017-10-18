@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -120,23 +119,28 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             holder.tvTitleSoIDBBan.setVisibility(View.GONE);
             holder.tvSoBBanKD.setVisibility(View.GONE);
 
-            holder.tvTitleIdBBanPhanBoTamThoi.setVisibility(View.GONE);
-            holder.tvIdBBanPhanBoTamThoi.setVisibility(View.GONE);
+            holder.tvTitleIdBBanTamThoi.setVisibility(View.VISIBLE);
+            holder.tvIdBBanTamThoi.setVisibility(View.VISIBLE);
+
+            String SO_GKDCT_MTB = mListKD.get(position).getSO_GKDCT_MTB();
+            holder.tvTitleIdBBanTamThoi.setText("Số biên bản gửi kiểm định tạm thời: ");
+            holder.tvIdBBanTamThoi.setText(SO_GKDCT_MTB);
         }
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
             holder.tvTitleSoIDBBan.setVisibility(View.VISIBLE);
             holder.tvSoBBanKD.setVisibility(View.VISIBLE);
 
-            holder.tvTitleIdBBanPhanBoTamThoi.setVisibility(View.VISIBLE);
-            holder.tvIdBBanPhanBoTamThoi.setVisibility(View.VISIBLE);
+            holder.tvTitleIdBBanTamThoi.setVisibility(View.VISIBLE);
+            holder.tvIdBBanTamThoi.setVisibility(View.VISIBLE);
 
 
             String SO_BBAN_KDINH = mListPB.get(position).getSO_BBAN_KDINH();
             holder.tvSoBBanKD.setText(SO_BBAN_KDINH);
 
             String SO_PBCT_MTB = mListPB.get(position).getSO_PBCT_MTB();
-            holder.tvIdBBanPhanBoTamThoi.setText(SO_PBCT_MTB);
+            holder.tvTitleIdBBanTamThoi.setText("Số biên bản phân bổ tạm thời: ");
+            holder.tvIdBBanTamThoi.setText(SO_PBCT_MTB);
         }
 
 //        String CHISO_THAO = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHISO_THAO() : mListPB.get(position).get();
@@ -297,7 +301,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
     public class DsCtoViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout relativeLayout;
-        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoBBanKD, tvTitleSoIDBBan, tvInfoResult, tvIdBBanPhanBoTamThoi, tvTitleIdBBanPhanBoTamThoi;
+        public TextView tvSTT, tvSoCto, tvMaCto, tvMaCLoai, tvCSThao, tvMaDvi, tvNamSx, tvNgayNhap, tvSoBBanKD, tvTitleSoIDBBan, tvInfoResult, tvIdBBanTamThoi, tvTitleIdBBanTamThoi;
 
         public Button btnXoa, btnGhim, btnChon;
 
@@ -310,8 +314,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             tvMaCLoai = (TextView) itemView.findViewById(R.id.tv_ma_cloai);
             tvCSThao = (TextView) itemView.findViewById(R.id.tv_cs_thao);
             tvMaDvi = (TextView) itemView.findViewById(R.id.tv_ma_dvi);
-            tvIdBBanPhanBoTamThoi = (TextView) itemView.findViewById(R.id.tv_id_bban_phanbo_tamthoi);
-            tvTitleIdBBanPhanBoTamThoi = (TextView) itemView.findViewById(R.id.tv_title_id_bban_phanbo_tamthoi);
+            tvIdBBanTamThoi = (TextView) itemView.findViewById(R.id.tv_id_bban_phanbo_tamthoi);
+            tvTitleIdBBanTamThoi = (TextView) itemView.findViewById(R.id.tv_title_id_bban_phanbo_tamthoi);
 
             tvNamSx = (TextView) itemView.findViewById(R.id.tv_nam_sx);
             tvNgayNhap = (TextView) itemView.findViewById(R.id.tv_ngay_nhap);

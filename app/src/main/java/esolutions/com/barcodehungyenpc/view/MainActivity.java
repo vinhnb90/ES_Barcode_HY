@@ -489,7 +489,7 @@ public class MainActivity
 
             mSqlDAO.updateChonCtoPB(mListUploadCtoPB.get(i).getID_TBL_CTO_PB(), CHON);
 
-            //update tvIdBBanPhanBoTamThoi
+            //update tvIdBBanTamThoi
             String SO_PBCT_MTB = dataResponse.get(i).getSO_PBCT_MTB();
             mSqlDAO.updateSO_PBCT_MTB(mListUploadCtoPB.get(i).getID_TBL_CTO_PB(), SO_PBCT_MTB);
 
@@ -542,8 +542,12 @@ public class MainActivity
                 }
             }
 
-            //update MA_CTO
+            //update CHON
             mSqlDAO.updateChonCtoKD(mListUploadCtoKD.get(i).getID_TBL_CTO_GUI_KD(), CHON);
+
+            //update SO_GKDCT_MTB
+            String SO_GKDCT_MTB = dataResponse.get(i).getSO_GKDCT_MTB();
+            mSqlDAO.updateSO_GKDCT_MTBCtoKD(mListUploadCtoKD.get(i).getID_TBL_CTO_GUI_KD(), SO_GKDCT_MTB);
 
             if (mCountUploadSuccess < mListDataUploadGKD.size() && CHON != 0)
                 mCountUploadSuccess++;
@@ -2276,6 +2280,7 @@ public class MainActivity
                 congToGuiKD.setNGAY_NHAP_MTB(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
                 congToGuiKD.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
                 congToGuiKD.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
+                congToGuiKD.setSO_GKDCT_MTB(checkStringNull(cToKDResponse.getSO_GKDCT_MTB()));
 
                 int idIfHasExistCto = 0;
                 //check data local với text search và date

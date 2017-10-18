@@ -39,6 +39,7 @@ public class SqlQuery {
         CHISO_THAO("CHISO_THAO"),
         HSN("HSN"),
         NGAY_NHAP("NGAY_NHAP"),
+        SO_GKDCT_MTB("SO_GKDCT_MTB"),
         //        GhimCto("GhimCongTo"),
 //        TaiKhoan("TaiKhoan"),
         NGAY_NHAP_MTB("NGAY_NHAP_MTB"),
@@ -208,6 +209,7 @@ public class SqlQuery {
                 TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + " TEXT, " +
                 TBL_CTO_GUI_KD.HSN.getNameCollumn() + " TEXT, " +
                 TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() + " TEXT, " +
+                TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn() + " TEXT, " +
 //                TBL_CTO_GUI_KD.TaiKhoan.getNameCollumn() + " TEXT, " +
                 TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() + " TEXT, " +
                 TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() + " INTEGER DEFAULT 0, " +
@@ -393,6 +395,8 @@ public class SqlQuery {
                 TBL_CTO_GUI_KD.HS_NHAN.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.NGAY_KDINH.getNameCollumn() + ", " +
 
+                TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn() + ", " +
+
                 TBL_CTO_GUI_KD.CHISO_THAO.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.HSN.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.NGAY_NHAP.getNameCollumn() + ", " +
@@ -400,7 +404,7 @@ public class SqlQuery {
                 TBL_CTO_GUI_KD.NGAY_NHAP_MTB.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.TRANG_THAI_GHIM.getNameCollumn() + ", " +
                 TBL_CTO_GUI_KD.TRANG_THAI_CHON.getNameCollumn() +
-                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+                ") " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
                 ");"
                 ;
     }
@@ -718,13 +722,23 @@ public class SqlQuery {
                 ;
     }
 
-
-
     public static String getUpdateChonCtoKD() {
         return "UPDATE " +
                 TBL_CTO_GUI_KD.getNameTable() +
                 " SET " +
                 TBL_CTO_GUI_KD.CHON.getNameCollumn() +
+                " = ? " +
+                " WHERE " +
+                TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn() +
+                " = ? "
+                ;
+    }
+
+    public static String getupdateSO_GKDCT_MTBCtoKD() {
+        return "UPDATE " +
+                TBL_CTO_GUI_KD.getNameTable() +
+                " SET " +
+                TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn() +
                 " = ? " +
                 " WHERE " +
                 TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn() +

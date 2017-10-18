@@ -44,6 +44,16 @@ public class CongToGuiKDProxy extends CursorItemProxy {
         return mCongToGuiKD.getID_TBL_CTO_GUI_KD();
     }
 
+    public String getSO_GKDCT_MTB() {
+        if (StringUtils.isEmpty(mCongToGuiKD.getSO_GKDCT_MTB())) {
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String SO_GKDCT_MTB = SqlQuery.TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn();
+            mCongToGuiKD.setSO_GKDCT_MTB(cursor.getString(cursor.getColumnIndex(SO_GKDCT_MTB)));
+        }
+        return mCongToGuiKD.getSO_GKDCT_MTB();
+    }
+
     public int getSTT() {
         if (mCongToGuiKD.getSTT() == -1) {
             Cursor cursor = getmCursor();

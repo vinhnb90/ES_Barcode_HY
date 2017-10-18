@@ -29,6 +29,7 @@ public class CongToGuiKD {
     private String CHISO_THAO;
     private String HSN;
     private String NGAY_NHAP;
+    private String SO_GKDCT_MTB;
 //    private int mGhimCto;
 //    private String mTaiKhoan;
 
@@ -44,6 +45,13 @@ public class CongToGuiKD {
         CHON = -1;
     }
 
+    public String getSO_GKDCT_MTB() {
+        return SO_GKDCT_MTB;
+    }
+
+    public void setSO_GKDCT_MTB(String SO_GKDCT_MTB) {
+        this.SO_GKDCT_MTB = SO_GKDCT_MTB;
+    }
 
     public int getID_TBL_CTO_GUI_KD() {
         return ID_TBL_CTO_GUI_KD;

@@ -228,6 +228,8 @@ public class SqlDAO {
                 congToGuiKD.getHS_NHAN(),
                 congToGuiKD.getNGAY_KDINH(),
 
+                congToGuiKD.getSO_GKDCT_MTB(),
+
                 congToGuiKD.getCHISO_THAO(),
                 congToGuiKD.getHSN(),
                 Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_NHAP()),
@@ -446,6 +448,18 @@ public class SqlDAO {
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getUpdateChonCtoKD(), args);
+    }
+
+    public void updateSO_GKDCT_MTBCtoKD(int idCto, String SO_GKDCT_MTB) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                SO_GKDCT_MTB,
+                idCto
+        );
+
+        mSqLiteDatabase.execSQL(SqlQuery.getupdateSO_GKDCT_MTBCtoKD(), args);
     }
 
     public void updateTRANG_THAI_CHONCto(int idCto, int TRANG_THAI_CHON, Common.KIEU_CHUONG_TRINH kieuChuongTrinh) throws Exception {

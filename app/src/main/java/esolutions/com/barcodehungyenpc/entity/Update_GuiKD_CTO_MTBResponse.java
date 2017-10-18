@@ -67,7 +67,7 @@ public class Update_GuiKD_CTO_MTBResponse {
     private String SO_CTO;
     @SerializedName("SO_GKDCT_MTB")
     @Expose
-    private int SO_GKDCT_MTB;
+    private String SO_GKDCT_MTB;
     @SerializedName("SO_PHA")
     @Expose
     private String SO_PHA;
@@ -233,11 +233,11 @@ public class Update_GuiKD_CTO_MTBResponse {
         this.SO_CTO = SO_CTO;
     }
 
-    public int getSO_GKDCT_MTB() {
+    public String getSO_GKDCT_MTB() {
         return SO_GKDCT_MTB;
     }
 
-    public void setSO_GKDCT_MTB(int SO_GKDCT_MTB) {
+    public void setSO_GKDCT_MTB(String SO_GKDCT_MTB) {
         this.SO_GKDCT_MTB = SO_GKDCT_MTB;
     }
 
