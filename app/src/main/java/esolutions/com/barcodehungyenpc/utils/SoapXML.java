@@ -180,6 +180,7 @@ public class SoapXML {
                     SoapPrimitive primitive = null;
                     String requestDump = ht.requestDump;
                     String responseDump = ht.responseDump;
+                    getInstance().logi(SoapXML.class, "Response server API " + METHOD_NAME + " \n has content \n" + responseDump);
 //                    int field = classTypeData.getDeclaredFields().length;
 //                    if (field == 2) {
 ////                        SoapFault soapFault = (SoapFault) envelope.bodyIn;
@@ -385,10 +386,7 @@ public class SoapXML {
                         List<K> objectTypeData = null;
                         objectTypeData = toList(jsonResponse, classTypeData);
                         callBack.onPostData(objectTypeData);
-
                     }
-
-
                 }
 
 //

@@ -113,6 +113,9 @@ public class DangNhapActivity extends BaseActivity implements
         if (Common.checkPermission(this)) {
             return;
         }
+
+        getInstance().setIsModeDebug(true);
+
         try {
             //setup file debug
             getInstance().setupFile(this, PATH_LOG + NAME_FILE_LOG).setIsModeDebug(true);

@@ -80,6 +80,16 @@ public class Update_GuiPB_CTO_MTBResponse {
 //    @SerializedName("VH_CONG")
 //    @Expose
 //    private String VH_CONG;
+    @SerializedName("SO_PBCT_MTB")
+    @Expose
+    private String SO_PBCT_MTB;
+    @SerializedName("ID_PBCT_MTB")
+    @Expose
+    private String ID_PBCT_MTB;
+    @SerializedName("NGAY_GUI_PBCT_MTB")
+    @Expose
+    private String NGAY_GUI_PBCT_MTB;
+
 //
 //    public String getCHISO_THAO() {
 //        return CHISO_THAO;
@@ -89,6 +99,32 @@ public class Update_GuiPB_CTO_MTBResponse {
 //        this.CHISO_THAO = CHISO_THAO;
 //    }
 //
+
+
+    public String getSO_PBCT_MTB() {
+        return SO_PBCT_MTB;
+    }
+
+    public void setSO_PBCT_MTB(String SO_PBCT_MTB) {
+        this.SO_PBCT_MTB = SO_PBCT_MTB;
+    }
+
+    public String getID_PBCT_MTB() {
+        return ID_PBCT_MTB;
+    }
+
+    public void setID_PBCT_MTB(String ID_PBCT_MTB) {
+        this.ID_PBCT_MTB = ID_PBCT_MTB;
+    }
+
+    public String getNGAY_GUI_PBCT_MTB() {
+        return NGAY_GUI_PBCT_MTB;
+    }
+
+    public void setNGAY_GUI_PBCT_MTB(String NGAY_GUI_PBCT_MTB) {
+        this.NGAY_GUI_PBCT_MTB = NGAY_GUI_PBCT_MTB;
+    }
+
     public int getCHON() {
         return CHON;
     }

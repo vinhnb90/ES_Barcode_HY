@@ -103,6 +103,10 @@ public class CToPBResponse extends ResponseSoap {
     @Expose
     private String DONG_DIEN;
 
+    @SerializedName("SO_PBCT_MTB")
+    @Expose
+    private String SO_PBCT_MTB;
+
 
     //region bỏ
 //    @SerializedName("HS_NHAN")
@@ -371,5 +375,13 @@ public class CToPBResponse extends ResponseSoap {
 
     public void setDONG_DIEN(String DONG_DIEN) {
         this.DONG_DIEN = DONG_DIEN;
+    }
+
+    public String getSO_PBCT_MTB() {
+        return SO_PBCT_MTB;
+    }
+
+    public void setSO_PBCT_MTB(String SO_PBCT_MTB) {
+        this.SO_PBCT_MTB = SO_PBCT_MTB;
     }
 }

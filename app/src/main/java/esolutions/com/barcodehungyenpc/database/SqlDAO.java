@@ -339,7 +339,8 @@ public class SqlDAO {
                 congToPB.getNGAY_NHAP_HTHI(),
                 congToPB.getSO_BBAN_KDINH(),
                 congToPB.getMA_NVIENKDINH(),
-                congToPB.getNGAY_KDINH_HTHI()
+                congToPB.getNGAY_KDINH_HTHI(),
+                congToPB.getSO_PBCT_MTB()
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_CTO_PB(), args);
@@ -928,6 +929,47 @@ public class SqlDAO {
         return historyProxyList;
     }
 
+    public List<HistoryProxy> getBydateALLHistoryCtoSuccess(String dateSQL, String TYPE_TBL_CTO, Common.DATE_TIME_TYPE typeDefault, Common.KIEU_CHUONG_TRINH kieuChuongTrinh) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        dateSQL = Common.convertDateToDate(dateSQL, Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+        Date date = Common.convertDateUIToDateSQL(dateSQL, typeDefault);
+        Date beginDay = Common.getStartOfDay(date);
+        Date endDay = Common.getEndOfDay(date);
+
+        long beginDayTime = beginDay.getTime();
+        long endDayTime = endDay.getTime();
+
+        List<HistoryProxy> historyProxyList = new ArrayList<>();
+
+        String[] args = SqlDAO.build(
+                TYPE_TBL_CTO,
+                beginDayTime,
+                endDayTime
+
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getBydateALLHistoryCtoSuccess(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return historyProxyList;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            historyProxyList.add(new HistoryProxy(cursor, cursor.getPosition(), kieuChuongTrinh));
+            cursor.moveToNext();
+        }
+
+        if (historyProxyList.isEmpty())
+            closeCursor(cursor);
+        return historyProxyList;
+    }
+
+
 
     public void getByDateDeleteHistory(int idRowDelete) throws Exception {
         if (!Common.isExistDB())
@@ -1232,6 +1274,18 @@ public class SqlDAO {
             }
         }
         return INFO_RESULT;
+    }
+
+    public void updateSO_PBCT_MTB(int idCto, String SO_PBCT_MTB) throws Exception{
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                SO_PBCT_MTB,
+                idCto
+        );
+
+        mSqLiteDatabase.execSQL(SqlQuery.updateSO_PBCT_MTB(), args);
     }
 
     //endregion

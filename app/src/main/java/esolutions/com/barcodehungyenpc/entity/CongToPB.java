@@ -52,6 +52,7 @@ public class CongToPB {
     private String SO_BBAN_KDINH;
     private String MA_NVIENKDINH;
     private String NGAY_KDINH_HTHI;
+    private String SO_PBCT_MTB;
 
     public CongToPB() {
         ID_TBL_CTO_PB = -1;
@@ -62,6 +63,14 @@ public class CongToPB {
 
     //thêm
 
+
+    public String getSO_PBCT_MTB() {
+        return SO_PBCT_MTB;
+    }
+
+    public void setSO_PBCT_MTB(String SO_PBCT_MTB) {
+        this.SO_PBCT_MTB = SO_PBCT_MTB;
+    }
 
     public String getLOAISOHUU() {
         return LOAISOHUU;

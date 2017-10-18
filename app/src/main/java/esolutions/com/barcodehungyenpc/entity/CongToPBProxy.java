@@ -421,6 +421,17 @@ public class CongToPBProxy extends CursorItemProxy {
         return mCongToPB.getTRANG_THAI_CHON();
     }
 
+    public String getSO_PBCT_MTB() {
+        if (StringUtils.isEmpty(mCongToPB.getSO_PBCT_MTB())) {
+
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+            String SO_PBCT_MTB =  SqlQuery.TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn();
+            mCongToPB.setSO_PBCT_MTB(cursor.getString(cursor.getColumnIndex(SO_PBCT_MTB)));
+        }
+        return mCongToPB.getSO_PBCT_MTB();
+    }
+
 
 //    public String getmTaiKhoan() {
 //        if (StringUtils.isEmpty(mCongToPB.getmTaiKhoan())) {

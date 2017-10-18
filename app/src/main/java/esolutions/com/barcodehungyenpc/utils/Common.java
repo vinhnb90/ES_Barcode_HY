@@ -238,7 +238,7 @@ public class Common {
     public enum CHON {
         CHUA_GUI(0, "Chưa gửi"),
         GUI_THANH_CONG(1, "Đã gửi"),
-        GUI_THAT_BAI(2, "Gửi thất bại");
+        GUI_THAT_BAI(2, "Đã tồn tại");
         private int code;
         private String name;
 
@@ -265,6 +265,13 @@ public class Common {
         }
     }
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
 //    public enum REQUEST_CHON {
 //        HUY(0, "Gửi yêu cầu hủy"),
 //        GUI(1, "Gửi yêu cầu đăng ký");
@@ -462,6 +469,8 @@ public class Common {
         ex26("ex26", "Đẩy dữ liệu thành công!"),
         ex261("ex21", "Quá trình đẩy dữ liệu gặp lỗi! Vui lòng xem chi tiết trong lịch sử."),
         ex27("ex27", "Vui lòng chọn đơn vị!"),
+        ex28("ex28", "Dữ liệu được cập nhật mới!"),
+
 
         ex("ex", "Gặp vấn đề không xác định.");
 

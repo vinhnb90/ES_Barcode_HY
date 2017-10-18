@@ -9,6 +9,7 @@
     tools:context="esolutions.com.barcodehungyenpc.view.MainActivity">
 
     <RelativeLayout
+        android:paddingTop="@dimen/_20sdp"
         android:id="@+id/rl_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

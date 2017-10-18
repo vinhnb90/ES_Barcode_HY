@@ -117,7 +117,9 @@ public class SqlQuery {
         NGAY_NHAP_HTHI("NGAY_NHAP_HTHI"),
         SO_BBAN_KDINH("SO_BBAN_KDINH"),
         MA_NVIENKDINH("MA_NVIENKDINH"),
-        NGAY_KDINH_HTHI("NGAY_KDINH_HTHI");
+        NGAY_KDINH_HTHI("NGAY_KDINH_HTHI"),
+        SO_PBCT_MTB("SO_PBCT_MTB"),
+        ;
 
 
         private String mNameCollumn;
@@ -257,7 +259,8 @@ public class SqlQuery {
                 TBL_CTO_PB.NGAY_NHAP_HTHI.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.SO_BBAN_KDINH.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_NVIENKDINH.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn() + " TEXT" +
+                TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() + " TEXT" +
                 ");";
     }
 
@@ -347,8 +350,8 @@ public class SqlQuery {
                 TBL_CTO_PB.NGAY_NHAP_HTHI.getNameCollumn() + ", " +
                 TBL_CTO_PB.SO_BBAN_KDINH.getNameCollumn() + ", " +
                 TBL_CTO_PB.MA_NVIENKDINH.getNameCollumn() + ", " +
-                TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn() +
-
+                TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn() + ", " +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() +
                 ") " + "VALUES (" +
                 "?, ?, ?, ?, ?," +
                 "?, ?, ?, ?, ?," +
@@ -358,7 +361,7 @@ public class SqlQuery {
                 "?, ?, ?, ?, ?," +
 //                "?, ?, ?, ?" +
                 //thêm
-                "?, ?, ?, ?" +
+                "?, ?, ?, ?, ?" +
                 ");"
                 ;
     }
@@ -457,7 +460,7 @@ public class SqlQuery {
                 " = ? " +
                 " AND " +
                 TBL_CTO_PB.CHON.getNameCollumn() +
-                " != " + Common.CHON.GUI_THANH_CONG.getCode()
+                " = " + Common.CHON.CHUA_GUI.getCode()
                 ;
     }
 
@@ -595,6 +598,26 @@ public class SqlQuery {
                 " DESC";
     }
 
+    public static String getBydateALLHistoryCtoSuccess() {
+        return "SELECT DISTINCT *" +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = ? " +
+                " AND " +
+                TBL_HISTORY.TYPE_RESULT.getNameCollumn() +
+                " = '" + Common.TYPE_RESULT.SUCCESS.getCode() + "'" +
+                " AND " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " BETWEEN ? AND ? " +
+                " GROUP BY " +
+                TBL_HISTORY.DATE_SESSION +
+                " ORDER BY " +
+                TBL_HISTORY.DATE_SESSION +
+                " DESC";
+    }
+
     public static String getByDateDeleteAllHistory() {
         return "DELETE" +
                 " FROM " +
@@ -628,7 +651,7 @@ public class SqlQuery {
                 " = ? " +
                 " AND " +
                 TBL_CTO_GUI_KD.CHON.getNameCollumn() +
-                " != " + Common.CHON.GUI_THANH_CONG.getCode()
+                " = " + Common.CHON.CHUA_GUI.getCode()
                 ;
     }
 
@@ -682,6 +705,20 @@ public class SqlQuery {
                 " = ? "
                 ;
     }
+
+    public static String updateSO_PBCT_MTB() {
+        return "UPDATE " +
+                TBL_CTO_PB.getNameTable() +
+                " SET " +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() +
+                " = ? " +
+                " WHERE " +
+                TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn() +
+                " = ? "
+                ;
+    }
+
+
 
     public static String getUpdateChonCtoKD() {
         return "UPDATE " +
@@ -787,7 +824,7 @@ public class SqlQuery {
                 " = ? " +
                 " AND " +
                 TBL_CTO_PB.CHON.getNameCollumn() +
-                " != " + Common.CHON.GUI_THANH_CONG.getCode()
+                " = " + Common.CHON.CHUA_GUI.getCode()
                 ;
     }
 
@@ -847,7 +884,7 @@ public class SqlQuery {
                 " = ? " +
                 " AND " +
                 TBL_CTO_GUI_KD.CHON.getNameCollumn() +
-                " != " + Common.CHON.GUI_THANH_CONG.getCode()
+                " = " + Common.CHON.CHUA_GUI.getCode()
                 ;
     }
 
