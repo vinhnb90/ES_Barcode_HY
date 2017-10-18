@@ -97,6 +97,7 @@ import static esolutions.com.barcodehungyenpc.utils.Common.TIME_DELAY_ANIM;
 import static esolutions.com.barcodehungyenpc.utils.Common.checkStringNull;
 import static esolutions.com.barcodehungyenpc.utils.Common.convertDateSQLToDateUI;
 import static esolutions.com.barcodehungyenpc.utils.Common.getDateTimeNow;
+import static esolutions.com.barcodehungyenpc.utils.Common.hideKeyboard;
 import static esolutions.com.barcodehungyenpc.utils.Log.getInstance;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.KEY_PREF_KEYBOARD;
 import static esolutions.com.barcodehungyenpc.view.DangNhapActivity.PARAM_DVI;
@@ -631,8 +632,10 @@ public class MainActivity
     protected void onResume() {
         super.onResume();
         //check file config
-        Boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, false);
+        Boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, true);
         if (!isShowKeyboard) {
+            hideKeyboard(MainActivity.this);
+            hideKeyboard(MainActivity.this, findViewById(R.id.cl_main));
             mEtSearchOnline.setInputType(InputType.TYPE_NULL);
             mEtSearchOnline.setRawInputType(InputType.TYPE_CLASS_TEXT);
             mEtSearchOnline.setTextIsSelectable(true);
@@ -859,7 +862,7 @@ public class MainActivity
             mPrefManager = SharePrefManager.getInstance(this);
 
         //check setup keyboard, ban đầu là show
-        final boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, false);
+        final boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, true);
         swtShowKeyboard.setChecked(isShowKeyboard);
 
         dialogConfig.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -1011,41 +1014,79 @@ public class MainActivity
 
             // setup kiểu mListDataUploadGKD công tơ và refersh lại text thống kê
             searchLocal(mDate);
-
-            mEtSearchLocal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            mEtSearchOnline.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
-                    if (hasFocus && isSearchOnline) {
-                        isSearchOnline = false;
+                    Boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, false);
+                    if (hasFocus) {
+                        if (isShowKeyboard) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(mEtSearchOnline, InputMethodManager.SHOW_IMPLICIT);
+                        } else {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mEtSearchOnline.getWindowToken(), 0);
 
-                        //set text
-                        mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
-                        mEtSearchOnline.setText("");
-                        mEtSearchOnline.setFocusable(true);
-                        mEtSearchOnline.requestFocus();
+                        }
+                    }else {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mEtSearchOnline.getWindowToken(), 0);
+                        getWindow().getDecorView().clearFocus();
+                        mEtSearchOnline.clearFocus();
                     }
                 }
             });
 
+
             mEtSearchLocal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
+                public void onFocusChange(View view, boolean hasFocus) {
+                    Boolean isShowKeyboard = mPrefManager.getSharePref(PREF_CONFIG, MODE_PRIVATE).getBoolean(KEY_PREF_KEYBOARD, false);
+                    if (hasFocus) {
+                        if (isShowKeyboard) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(mEtSearchLocal, InputMethodManager.SHOW_IMPLICIT);
+                        } else {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mEtSearchLocal.getWindowToken(), 0);
+
+                        }
+                        if (isSearchOnline) {
+                            isSearchOnline = false;
+
+                            //set text
+                            mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
+                            mEtSearchOnline.setText("");
+                            mEtSearchOnline.setFocusable(true);
+                            mEtSearchOnline.requestFocus();
+                        }
+                    }else {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mEtSearchLocal.getWindowToken(), 0);
                         getWindow().getDecorView().clearFocus();
                         mEtSearchLocal.clearFocus();
                     }
                 }
             });
 
-            mEtSearchOnline.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        getWindow().getDecorView().clearFocus();
-                        mEtSearchOnline.clearFocus();
-                    }
-                }
-            });
+//            mEtSearchLocal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if (!hasFocus) {
+//                        getWindow().getDecorView().clearFocus();
+//                        mEtSearchLocal.clearFocus();
+//                    }
+//                }
+//            });
+//
+//            mEtSearchOnline.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if (!hasFocus) {
+//                        getWindow().getDecorView().clearFocus();
+//                        mEtSearchOnline.clearFocus();
+//                    }
+//                }
+//            });
 
             mEtSearchOnline.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override

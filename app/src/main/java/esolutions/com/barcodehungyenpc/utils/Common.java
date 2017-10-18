@@ -730,12 +730,12 @@ public class Common {
     }
 
     public static void hideKeyboard(Activity activity, View view) {
-        // Check if no view has focus:
-//        View view = activity.getCurrentFocus();
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (view != null)
-//            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        View f = activity.getCurrentFocus();
+        if (null != f && null != f.getWindowToken() && EditText.class.isAssignableFrom(f.getClass()))
+            imm.hideSoftInputFromWindow(f.getWindowToken(), 0);
+        else
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     public static void disableSoftInputFromAppearing(EditText editText) {

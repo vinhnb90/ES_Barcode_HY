@@ -725,7 +725,7 @@ public class DangNhapActivity extends BaseActivity implements
                     .putString(KEY_PREF_USER, "")
                     .putString(KEY_PREF_PASS, "")
                     .putBoolean(KEY_PREF_CB_SAVE, false)
-                    .putBoolean(KEY_PREF_KEYBOARD, false)
+                    .putBoolean(KEY_PREF_KEYBOARD, true)
                     .commit();
         }
     }
