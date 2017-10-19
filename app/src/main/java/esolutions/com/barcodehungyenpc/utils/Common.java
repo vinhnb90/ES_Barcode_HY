@@ -216,7 +216,8 @@ public class Common {
     public enum MENU_BOTTOM_KD {
         ALL(0, "Danh sách thiết bị"),
         DS_GHIM(1, "Danh sách chọn"),
-        LICH_SU(2, "Lịch sử");
+        LICH_SU(2, "Lịch sử"),
+        THONG_KE(3, "Thống kê");
 
         private int code;
         private String name;
@@ -466,7 +467,7 @@ public class Common {
         ex22("ex22", "Chưa có thiết bị nào được chọn...!"),
         ex23("ex23", "Thao tác tải đơn vị phiên trước chưa kết thúc...!"),
         ex24("ex24", "Đăng nhập không thành công, vui lòng kiểm tra lại thông tin!"),
-        ex26("ex26", "Đẩy dữ liệu thành công!"),
+        ex26("ex26", "Đẩy dữ liệu thành công!\nVui lòng xem lại các trạng thái của thiết bị từ máy chủ gửi về!"),
         ex261("ex21", "Quá trình đẩy dữ liệu gặp lỗi! Vui lòng xem chi tiết trong lịch sử."),
         ex27("ex27", "Vui lòng chọn đơn vị!"),
         ex28("ex28", "Dữ liệu được cập nhật mới!"),

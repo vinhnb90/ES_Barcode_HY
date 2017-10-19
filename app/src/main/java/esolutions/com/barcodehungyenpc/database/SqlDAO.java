@@ -3,7 +3,6 @@ package esolutions.com.barcodehungyenpc.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +20,7 @@ import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
 import esolutions.com.barcodehungyenpc.entity.History;
 import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
+import esolutions.com.barcodehungyenpc.entity.ThongKe;
 import esolutions.com.barcodehungyenpc.utils.Common;
 
 import static android.content.ContentValues.TAG;
@@ -903,6 +903,112 @@ public class SqlDAO {
         return historyProxyList;
     }
 
+
+    public List<ThongKe> getByDateAllThongKeKD(String dateSQL, Common.DATE_TIME_TYPE typeDefault) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        List<ThongKe> result = new ArrayList<>();
+        dateSQL = Common.convertDateToDate(dateSQL, Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+        Date date = Common.convertDateUIToDateSQL(dateSQL, typeDefault);
+        Date beginDay = Common.getStartOfDay(date);
+        Date endDay = Common.getEndOfDay(date);
+
+        long beginDayTime = beginDay.getTime();
+        long endDayTime = endDay.getTime();
+
+        String[] args = SqlDAO.build(
+                beginDayTime,
+                endDayTime
+
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllThongKeKD(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return result;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String SO_GKDCT_MTB = cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn()));
+            int count = cursor.getInt(cursor.getColumnIndex("COUNT"));
+
+            ThongKe thongKe = new ThongKe(SO_GKDCT_MTB, count);
+            result.add(thongKe);
+            cursor.moveToNext();
+        }
+
+        closeCursor(cursor);
+        return result;
+    }
+
+    public int countByDateAllBbanTamThoiThongKeKD(String dateSQL, Common.DATE_TIME_TYPE typeDefault) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        List<ThongKe> result = new ArrayList<>();
+
+        result = getByDateAllThongKeKD(dateSQL, typeDefault);
+
+        return result.size();
+    }
+
+    public int countByDateAllBbanTamThoiThongKePB(String dateSQL, Common.DATE_TIME_TYPE typeDefault) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        List<ThongKe> result = new ArrayList<>();
+
+        result = getByDateAllThongKePB(dateSQL, typeDefault);
+
+        return result.size();
+    }
+
+
+    public List<ThongKe> getByDateAllThongKePB(String dateSQL, Common.DATE_TIME_TYPE typeDefault) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        List<ThongKe> result = new ArrayList<>();
+        dateSQL = Common.convertDateToDate(dateSQL, Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+        Date date = Common.convertDateUIToDateSQL(dateSQL, typeDefault);
+        Date beginDay = Common.getStartOfDay(date);
+        Date endDay = Common.getEndOfDay(date);
+
+        long beginDayTime = beginDay.getTime();
+        long endDayTime = endDay.getTime();
+
+        String[] args = SqlDAO.build(
+                beginDayTime,
+                endDayTime
+
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getByDateAllThongKePB(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return result;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String SO_GKDCT_MTB = cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn()));
+            int count = cursor.getInt(cursor.getColumnIndex("COUNT"));
+
+            ThongKe thongKe = new ThongKe(SO_GKDCT_MTB, count);
+            result.add(thongKe);
+            cursor.moveToNext();
+        }
+
+        closeCursor(cursor);
+        return result;
+    }
+
     public List<HistoryProxy> getBydateALLHistoryCtoNoSuccess(String dateSQL, String TYPE_TBL_CTO, Common.DATE_TIME_TYPE typeDefault, Common.KIEU_CHUONG_TRINH kieuChuongTrinh) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -982,7 +1088,6 @@ public class SqlDAO {
             closeCursor(cursor);
         return historyProxyList;
     }
-
 
 
     public void getByDateDeleteHistory(int idRowDelete) throws Exception {
@@ -1290,7 +1395,7 @@ public class SqlDAO {
         return INFO_RESULT;
     }
 
-    public void updateSO_PBCT_MTB(int idCto, String SO_PBCT_MTB) throws Exception{
+    public void updateSO_PBCT_MTB(int idCto, String SO_PBCT_MTB) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
 

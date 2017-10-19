@@ -119,8 +119,7 @@ public class SqlQuery {
         SO_BBAN_KDINH("SO_BBAN_KDINH"),
         MA_NVIENKDINH("MA_NVIENKDINH"),
         NGAY_KDINH_HTHI("NGAY_KDINH_HTHI"),
-        SO_PBCT_MTB("SO_PBCT_MTB"),
-        ;
+        SO_PBCT_MTB("SO_PBCT_MTB"),;
 
 
         private String mNameCollumn;
@@ -543,6 +542,77 @@ public class SqlQuery {
                 TBL_HISTORY.DATE_SESSION +
                 " DESC";
     }
+
+    public static String getByDateAllThongKeKD() {
+
+        return "SELECT " +
+                TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn() +
+                ", COUNT (" +
+                TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn() +
+                ") AS COUNT FROM " +
+                TBL_CTO_GUI_KD.getNameTable() +
+                " WHERE " +
+                TBL_CTO_GUI_KD.ID_TBL_CTO_GUI_KD.getNameCollumn() +
+                " IN (SELECT " +
+                TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE  " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " > ? AND  " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " <? AND " +
+                TBL_HISTORY.TYPE_SESSION.getNameCollumn() +
+                " = '" +
+                Common.TYPE_SESSION.UPLOAD.getCode() +
+                "' AND " +
+                TBL_HISTORY.TYPE_RESULT.getNameCollumn() +
+                " = '" +
+                Common.TYPE_RESULT.SUCCESS.getCode() +
+                "' AND " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = '" +
+                Common.TYPE_TBL_CTO.KD.getCode() +
+                "') GROUP BY " +
+                TBL_CTO_GUI_KD.SO_GKDCT_MTB.getNameCollumn() +
+                "";
+    }
+
+    public static String getByDateAllThongKePB() {
+
+        return "SELECT " +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() +
+                ", COUNT (" +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() +
+                ") AS COUNT FROM " +
+                TBL_CTO_PB.getNameTable() +
+                " WHERE " +
+                TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn() +
+                " IN (SELECT " +
+                TBL_HISTORY.ID_TBL_CTO.getNameCollumn() +
+                " FROM " +
+                TBL_HISTORY.getNameTable() +
+                " WHERE  " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " > ? AND  " +
+                TBL_HISTORY.DATE_SESSION.getNameCollumn() +
+                " <? AND " +
+                TBL_HISTORY.TYPE_SESSION.getNameCollumn() +
+                " = '" +
+                Common.TYPE_SESSION.UPLOAD.getCode() +
+                "' AND " +
+                TBL_HISTORY.TYPE_RESULT.getNameCollumn() +
+                " = '" +
+                Common.TYPE_RESULT.SUCCESS.getCode() +
+                "' AND " +
+                TBL_HISTORY.TYPE_TBL_CTO.getNameCollumn() +
+                " = '" +
+                Common.TYPE_TBL_CTO.PB.getCode() +
+                "') GROUP BY " +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() +
+                "";
+    }
+
 
     public static String countByDateALLHistoryCto() {
         return "SELECT DATE_SESSION " +

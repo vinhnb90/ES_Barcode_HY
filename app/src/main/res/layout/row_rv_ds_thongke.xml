@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp"
+    android:background="@drawable/xml_border_full"
+    android:orientation="horizontal"
+    android:padding="@dimen/_5sdp"
+    android:weightSum="5">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_STT_thongKe"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/xml_button_cricle_type1_black"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/black_less"
+            android:textSize="@dimen/_9sdp"
+            android:textStyle="bold"
+            tools:text="154"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/_2sdp"
+        android:layout_weight="2"
+
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title_tv_so_bienban_tamthoi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:gravity="center_horizontal"
+            android:text="Số biên bản tạm thời"
+            android:textColor="@color/black_less"
+            android:textSize="@dimen/_7sdp" />
+
+
+        <TextView
+            android:id="@+id/tv_so_bienban_tamthoi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_so_cto"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_12sdp"
+            tools:text="3464646313133" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/_2sdp"
+        android:layout_weight="2"
+
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:gravity="center_horizontal"
+            android:text="Số thiết bị trong ngày"
+            android:textColor="@color/black_less"
+            android:textSize="@dimen/_7sdp" />
+
+        <TextView
+            android:id="@+id/tv_count_so_cto_thongKe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_so_cto"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_12sdp"
+            tools:text="3464646313133" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,17 +2,23 @@
 <tabs>
     <tab
         barColorWhenSelected="@color/white"
-        icon="@drawable/ic_list1"
+        icon="@drawable/ic_list_24"
         id="@+id/nav_bottom_ds_thietbi"
-        title="Danh sách thiết bị" />
+        title="Danh sách Thiết bị" />
     <tab
         barColorWhenSelected="@color/white"
-        icon="@drawable/ic_pin"
+        icon="@drawable/ic_history_24"
         id="@+id/nav_bottom_ds_chon"
-        title="Danh sách chọn" />
+        title="Danh sách Chọn" />
     <tab
         barColorWhenSelected="@color/white"
-        icon="@drawable/ic_pin"
+        icon="@drawable/ic_sync24"
         id="@+id/nav_bottom_lichsu"
-        title="Lịch sử đồng bộ" />
+        title="Lịch sử" />
+
+    <tab
+        barColorWhenSelected="@color/white"
+        icon="@drawable/ic_trending24"
+        id="@+id/nav_bottom_thongke"
+        title="Thống kê" />
 </tabs>

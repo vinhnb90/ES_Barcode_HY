@@ -82,12 +82,14 @@ import esolutions.com.barcodehungyenpc.entity.History;
 import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
 import esolutions.com.barcodehungyenpc.entity.ThongBao2Response;
 import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
+import esolutions.com.barcodehungyenpc.entity.ThongKe;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiKD_CTO_MTBResponse;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiPB_CTO;
 import esolutions.com.barcodehungyenpc.entity.Update_GuiPB_CTO_MTBResponse;
 import esolutions.com.barcodehungyenpc.model.DsCongToAdapter;
 import esolutions.com.barcodehungyenpc.model.DsHistoryAdapter;
+import esolutions.com.barcodehungyenpc.model.DsThongKeAdapter;
 import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
 import esolutions.com.barcodehungyenpc.utils.SoapXML;
@@ -154,6 +156,8 @@ public class MainActivity
 
     private List<HistoryProxy> mListHistory = new ArrayList<>();
 
+    private List<ThongKe> mListThongKe = new ArrayList<>();
+
     private int mCountUploadSuccess = 0;
 
     private Handler mHandlerUpload = new Handler() {
@@ -174,6 +178,7 @@ public class MainActivity
                     showSnackbar(Common.MESSAGE.ex26.getContent());
                 mBtnUpload.setVisibility(View.VISIBLE);
                 mPbarUpload.setVisibility(View.GONE);
+                mCountUploadSuccess = 0;
                 time = "";
                 return;
             }
@@ -435,6 +440,7 @@ public class MainActivity
     };
 
     private Snackbar snackbar;
+    private boolean isUseScanBarcode;
 
     private void showSnackbar(String message) {
         snackbar = Snackbar
@@ -447,7 +453,7 @@ public class MainActivity
                     }
                 });
         (snackbar.getView()).getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(5);
+        ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(10);
         snackbar.show();
     }
 
@@ -588,6 +594,7 @@ public class MainActivity
 
     private DsCongToAdapter mCtoAdapter = null;
     private DsHistoryAdapter mHistoryAdapter;
+    private DsThongKeAdapter mThongKeAdapter;
     private SQLiteDatabase mDatabase;
     private SqlDAO mSqlDAO;
     private Common.KIEU_CHUONG_TRINH mKieuChuongTrinh;
@@ -826,6 +833,7 @@ public class MainActivity
             @Override
             public void onResult(String text) {
                 mEtSearchOnline.setText(text);
+                isUseScanBarcode = true;
                 try {
                     if (TextUtils.isEmpty(text)) {
                         mEtSearchOnline.setError(Common.MESSAGE.ex03.getContent());
@@ -1031,7 +1039,7 @@ public class MainActivity
                             imm.hideSoftInputFromWindow(mEtSearchOnline.getWindowToken(), 0);
 
                         }
-                    }else {
+                    } else {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mEtSearchOnline.getWindowToken(), 0);
                         getWindow().getDecorView().clearFocus();
@@ -1063,7 +1071,7 @@ public class MainActivity
                             mEtSearchOnline.setFocusable(true);
                             mEtSearchOnline.requestFocus();
                         }
-                    }else {
+                    } else {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mEtSearchLocal.getWindowToken(), 0);
                         getWindow().getDecorView().clearFocus();
@@ -1118,6 +1126,10 @@ public class MainActivity
                         isSearchOnline = true;
 
                         //search online tự động
+
+                        //phân biệt trạng thái dùng máy barcode hay dùng thủ công
+                        isUseScanBarcode = true;
+
                         try {
                             searchOnline(textSearch);
                         } catch (Exception e) {
@@ -1180,6 +1192,16 @@ public class MainActivity
             totalCount = mSqlDAO.countByDateALLHistoryCto(mDate, TYPE_TBL_CTO, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
         }
 
+        if (menuBottom == Common.MENU_BOTTOM_KD.THONG_KE) {
+            mTvThongKeCto.setText(String.valueOf(total) + " biên bản");
+            if(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
+            {
+                totalCount = mSqlDAO.countByDateAllBbanTamThoiThongKeKD(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+            }else {
+                totalCount = mSqlDAO.countByDateAllBbanTamThoiThongKePB(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+            }
+        }
+
         mTvThongKeAll.setText(String.valueOf(totalCount));
         mTvDate.setText(mDate);
     }
@@ -1199,6 +1221,8 @@ public class MainActivity
             mTvDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mEtSearchLocal.setText("");
+                    mEtSearchOnline.setText("");
                     try {
                         if (menuBottom == Common.MENU_BOTTOM_KD.ALL) {
                             isClickFilterOkDsAll = false;
@@ -1234,6 +1258,19 @@ public class MainActivity
                             mListHistory = mSqlDAO.getBydateALLHistoryCto(mDate, TYPE_TBL_CTO, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss, mKieuChuongTrinh);
                             fillDataRecylerHistory(mListHistory);
                         }
+
+                        //TODO here
+                        if (menuBottom == Common.MENU_BOTTOM_KD.THONG_KE) {
+                            mListThongKe.clear();
+                            if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
+                                mListThongKe = mSqlDAO.getByDateAllThongKeKD(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                            else
+                                mListThongKe = mSqlDAO.getByDateAllThongKePB(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+                            fillDataRecylerThongKe(mListThongKe);
+                        }
+
+
                     } catch (Exception e) {
                         try {
                             showSnackbar(e.getMessage());
@@ -1257,7 +1294,9 @@ public class MainActivity
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (menuBottom == Common.MENU_BOTTOM_KD.LICH_SU)
                         searchLocalHistoryOnDate(charSequence);
-                    else {
+                    else if (menuBottom == Common.MENU_BOTTOM_KD.THONG_KE) {
+                        searchThongKeOnDate(charSequence);
+                    } else {
                         searchLocalOnDate(charSequence);
                     }
                 }
@@ -1289,6 +1328,7 @@ public class MainActivity
             mBtnSearchOnline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    isUseScanBarcode = false;
                     try {
                         if (StringUtils.isEmpty(mEtSearchOnline.getText().toString())) {
                             mEtSearchOnline.setError(Common.MESSAGE.ex03.getContent());
@@ -1325,14 +1365,17 @@ public class MainActivity
                     try {
                         //clear textSearch
                         mEtSearchOnline.setText("");
-
+                        mEtSearchLocal.setText("");
                         switch (tabId) {
                             case R.id.nav_bottom_ds_thietbi:
                                 //show ll search
                                 if (mLLSearchOnline.getVisibility() == View.GONE)
                                     mLLSearchOnline.setVisibility(View.VISIBLE);
+                                mBtnDeleteAll.setVisibility(View.VISIBLE);
+                                mBtnFilterOK.setVisibility(View.VISIBLE);
 //                                //init Data
                                 menuBottom = Common.MENU_BOTTOM_KD.ALL;
+
                                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                                     mListCtoKD.clear();
                                     mListCtoKD = mSqlDAO.getByDateAllCongToKD(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
@@ -1355,6 +1398,8 @@ public class MainActivity
                             case R.id.nav_bottom_ds_chon:
 //                                //init Data
                                 menuBottom = Common.MENU_BOTTOM_KD.DS_GHIM;
+                                mBtnDeleteAll.setVisibility(View.VISIBLE);
+                                mBtnFilterOK.setVisibility(View.VISIBLE);
 
                                 //init Data
                                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
@@ -1385,7 +1430,10 @@ public class MainActivity
                             case R.id.nav_bottom_lichsu:
                                 menuBottom = Common.MENU_BOTTOM_KD.LICH_SU;
                                 mCbSearchBBanLocal.setVisibility(View.GONE);
-                                //show fab
+                                mBtnDeleteAll.setVisibility(View.VISIBLE);
+                                mBtnFilterOK.setVisibility(View.VISIBLE);
+
+                                //hide fab
                                 if (mFab.getVisibility() == View.VISIBLE) {
                                     mFab.setVisibility(View.GONE);
                                 }
@@ -1403,6 +1451,31 @@ public class MainActivity
                                 mListHistory = mSqlDAO.getBydateALLHistoryCto(mDate, TYPE_TBL_CTO, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss, mKieuChuongTrinh);
                                 fillDataRecylerHistory(mListHistory);
                                 break;
+
+
+                            case R.id.nav_bottom_thongke:
+                                menuBottom = Common.MENU_BOTTOM_KD.THONG_KE;
+                                mCbSearchBBanLocal.setVisibility(View.VISIBLE);
+                                mBtnDeleteAll.setVisibility(View.GONE);
+                                mBtnFilterOK.setVisibility(View.GONE);
+                                mCbSearchBBanLocal.setVisibility(View.GONE);
+
+                                //hide fab
+                                if (mFab.getVisibility() == View.VISIBLE) {
+                                    mFab.setVisibility(View.GONE);
+                                }
+                                //hide search online
+                                if (mLLSearchOnline.getVisibility() == View.VISIBLE) {
+                                    mLLSearchOnline.setVisibility(View.GONE);
+                                }
+
+                                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+                                    mListThongKe = mSqlDAO.getByDateAllThongKeKD(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                                } else
+                                    mListThongKe = mSqlDAO.getByDateAllThongKePB(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+                                fillDataRecylerThongKe(mListThongKe);
+//                                SELECT SO_PBCT_MTB, COUNT (SO_PBCT_MTB) FROM TBL_CTO_PB WHERE ID_TBL_CTO_PB IN (SELECT ID_TBL_CTO FROM TBL_HISTORY WHERE  DATE_SESSION >'1508210000000' AND  DATE_SESSION <'1508220000000' AND TYPE_SESSION = 'UPLOAD' AND TYPE_RESULT = 'SUCCESS' AND TYPE_TBL_CTO = 'PB') GROUP BY SO_PBCT_MTB
                         }
 
                     } catch (Exception e) {
@@ -1655,16 +1728,14 @@ public class MainActivity
         }
     }
 
-
     private void fillDataRecylerHistory(List<HistoryProxy> listData) throws Exception {
-
         if (mRvCto.getAdapter() instanceof DsHistoryAdapter && (menuBottom == Common.MENU_BOTTOM_KD.ALL || menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mCtoAdapter, true);
         }
 
-        if (mRvCto.getAdapter() instanceof DsCongToAdapter && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
+        if ((mRvCto.getAdapter() instanceof DsCongToAdapter || mRvCto.getAdapter() instanceof DsThongKeAdapter) && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mHistoryAdapter, true);
@@ -1681,11 +1752,30 @@ public class MainActivity
         } else {
             mHistoryAdapter.setMenuBottom(menuBottom);
             mHistoryAdapter.refresh(listData);
-
         }
 
         //set text thống kê cto theo số item adapter
         setTextCountCtoAndDate(mCountCto);
+    }
+
+    private void fillDataRecylerThongKe(List<ThongKe> listData) throws Exception {
+        if (!(mRvCto.getAdapter() instanceof DsThongKeAdapter)) {
+            mRvCto.removeAllViews();
+            mRvCto.invalidate();
+            mRvCto.swapAdapter(mThongKeAdapter, true);
+            mThongKeAdapter = null;
+        }
+
+        if (mThongKeAdapter == null) {
+            mThongKeAdapter = new DsThongKeAdapter(this, listData, mKieuChuongTrinh);
+            mRvCto.setAdapter(mThongKeAdapter);
+        } else {
+            mThongKeAdapter.refresh(listData);
+        }
+
+        mRvCto.invalidate();
+        int mCountBBan = listData.size();
+        setTextCountCtoAndDate(mCountBBan);
     }
 
     private void upload() throws Exception {
@@ -2002,6 +2092,12 @@ public class MainActivity
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
                     history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
+
+                    if (isUseScanBarcode) {
+                        mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
+                        mEtSearchOnline.setText("");
+                    }
+
                 } catch (Exception e) {
                     try {
                         showSnackbar(e.getMessage());
@@ -2122,7 +2218,7 @@ public class MainActivity
             congToPB.setDIEN_AP(checkStringNull(cToPBResponse.getDIEN_AP()));
             congToPB.setDONG_DIEN(checkStringNull(cToPBResponse.getDONG_DIEN()));
             congToPB.setNGAY_NHAP_MTB(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
-            congToPB.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+            congToPB.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.DA_GHIM.getCode());
             congToPB.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
 
             congToPB.setID_BBAN_KHO(checkStringNull(cToPBResponse.getID_BBAN_KHO()));
@@ -2278,7 +2374,7 @@ public class MainActivity
                 congToGuiKD.setHSN(checkStringNull(cToKDResponse.getHSN()));
                 congToGuiKD.setNGAY_NHAP(Common.convertDateToDate(checkStringNull(cToKDResponse.getNGAY_NHAP()), Common.DATE_TIME_TYPE.yyyyMMddHHmmssSSZ, Common.DATE_TIME_TYPE.ddMMyyyy));
                 congToGuiKD.setNGAY_NHAP_MTB(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
-                congToGuiKD.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode());
+                congToGuiKD.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.DA_GHIM.getCode());
                 congToGuiKD.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
                 congToGuiKD.setSO_GKDCT_MTB(checkStringNull(cToKDResponse.getSO_GKDCT_MTB()));
 
@@ -2689,6 +2785,16 @@ public class MainActivity
 
                 searchLocalHistoryOnDate(charSearch);
             }
+
+            if (menuBottom == Common.MENU_BOTTOM_KD.THONG_KE) {
+                mListThongKe.clear();
+                if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
+                    mListThongKe = mSqlDAO.getByDateAllThongKeKD(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+                else
+                    mListThongKe = mSqlDAO.getByDateAllThongKePB(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
+
+                searchThongKeOnDate(charSearch);
+            }
         } catch (Exception e) {
             try {
                 showSnackbar(e.getMessage());
@@ -2781,15 +2887,42 @@ public class MainActivity
         }
     }
 
+
+    private void searchThongKeOnDate(CharSequence charSearch) {
+        try {
+            String query = Common.removeAccent(charSearch.toString().trim().toLowerCase());
+            List<ThongKe> dataThongKe = new ArrayList<>();
+
+            for (ThongKe thongKe : mListThongKe) {
+                if (Common.removeAccent(thongKe.getmSoBBanTamThoi().toLowerCase()).contains(query)) {
+                    dataThongKe.add(thongKe);
+                }
+                //giữ nguyên dữ liệu, lọc cái cần dùng
+            }
+
+            fillDataRecylerThongKe(dataThongKe);
+
+        } catch (Exception e) {
+            try {
+                showSnackbar(e.getMessage());
+                getInstance().loge(MainActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
+        }
+    }
+
     private void fillDataReyclerFull() throws Exception {
-        if (mRvCto.getAdapter() instanceof DsHistoryAdapter && (menuBottom == Common.MENU_BOTTOM_KD.ALL || menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)) {
+        if ((mRvCto.getAdapter() instanceof DsHistoryAdapter|| mRvCto.getAdapter() instanceof DsThongKeAdapter) && (menuBottom == Common.MENU_BOTTOM_KD.ALL || menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mCtoAdapter, true);
             mCtoAdapter = null;
         }
 
-        if (mRvCto.getAdapter() instanceof DsHistoryAdapter && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
+        if ((mRvCto.getAdapter() instanceof DsHistoryAdapter|| mRvCto.getAdapter() instanceof DsThongKeAdapter) && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mHistoryAdapter, true);
