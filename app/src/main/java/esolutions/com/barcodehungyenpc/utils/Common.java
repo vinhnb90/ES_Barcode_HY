@@ -395,7 +395,7 @@ public class Common {
 
     public enum TYPE_SESSION {
         DOWNLOAD("DOWNLOAD", "Thông tin tìm kiếm"),
-        UPLOAD("UPLOAD", "Số thiết bị gửi kiểm định");
+        UPLOAD("UPLOAD", "Số lượng thiết bị đẩy lên");
 
         private String code;
         private String title;

@@ -2022,6 +2022,13 @@ public class MainActivity
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
                     history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
+
+                    if(isUseScanBarcode)
+                    {
+                        mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
+                        mEtSearchOnline.setText("");
+                        mEtSearchOnline.requestFocus();
+                    }
                 } catch (Exception e) {
                     try {
                         showSnackbar(e.getMessage());
@@ -2092,12 +2099,12 @@ public class MainActivity
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
                     history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
-
-                    if (isUseScanBarcode) {
+                    if(isUseScanBarcode)
+                    {
                         mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
                         mEtSearchOnline.setText("");
+                        mEtSearchOnline.requestFocus();
                     }
-
                 } catch (Exception e) {
                     try {
                         showSnackbar(e.getMessage());
@@ -2354,14 +2361,25 @@ public class MainActivity
                 congToGuiKD.setSO_CTO(checkStringNull(cToKDResponse.getSO_CTO()));
                 congToGuiKD.setMA_DVIQLY(mStringDvi);
                 congToGuiKD.setMA_CLOAI(checkStringNull(cToKDResponse.getMA_CLOAI()));
-                congToGuiKD.setNGAY_NHAP_HT(checkStringNull(cToKDResponse.getNGAY_NHAP_HT()));
+
+                //13/09/2016 to
+                String dateSqlNGAY_NHAP_HT = Common.convertDateToDate(checkStringNull(cToKDResponse.getNGAY_NHAP_HT()), Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.yyyyMMdd);
+                congToGuiKD.setNGAY_NHAP_HT(dateSqlNGAY_NHAP_HT);
+
                 congToGuiKD.setNAM_SX(checkStringNull(cToKDResponse.getNAM_SX()));
                 congToGuiKD.setLOAI_SOHUU(checkStringNull(cToKDResponse.getLOAI_SOHUU()));
                 congToGuiKD.setTEN_SOHUU(checkStringNull(cToKDResponse.getTEN_SOHUU()));
 
                 congToGuiKD.setMA_BDONG(checkStringNull(cToKDResponse.getMA_BDONG()));
-                congToGuiKD.setNGAY_BDONG(checkStringNull(cToKDResponse.getNGAY_BDONG()));
-                congToGuiKD.setNGAY_BDONG_HTAI(checkStringNull(cToKDResponse.getNGAY_BDONG_HTAI()));
+                //2016-09-14T00:00:00+07:00 to
+                //2017-08-01T00:00:00+07:00 to yyyyMMdd
+                String dateSqlNGAY_BDONG = Common.convertDateToDate(checkStringNull(cToKDResponse.getNGAY_BDONG()), Common.DATE_TIME_TYPE.yyyyMMddHHmmssSSZ, Common.DATE_TIME_TYPE.yyyyMMdd);
+                congToGuiKD.setNGAY_BDONG(dateSqlNGAY_BDONG);
+
+                //14/09/2016 to yyyyMMdd
+                String dateSqlNGAY_BDONG_HTAI = Common.convertDateToDate(checkStringNull(cToKDResponse.getNGAY_BDONG_HTAI()), Common.DATE_TIME_TYPE.ddMMyyyy, Common.DATE_TIME_TYPE.yyyyMMdd);
+                congToGuiKD.setNGAY_BDONG_HTAI(dateSqlNGAY_BDONG_HTAI);
+
                 congToGuiKD.setSO_PHA(checkStringNull(cToKDResponse.getSO_PHA()));
                 congToGuiKD.setSO_DAY(checkStringNull(cToKDResponse.getSO_DAY()));
                 congToGuiKD.setDONG_DIEN(checkStringNull(cToKDResponse.getDONG_DIEN()));
@@ -2372,7 +2390,9 @@ public class MainActivity
                 congToGuiKD.setNGAY_KDINH(checkStringNull(cToKDResponse.getNGAY_KDINH()));
                 congToGuiKD.setCHISO_THAO(checkStringNull(cToKDResponse.getCHISO_THAO()));
                 congToGuiKD.setHSN(checkStringNull(cToKDResponse.getHSN()));
-                congToGuiKD.setNGAY_NHAP(Common.convertDateToDate(checkStringNull(cToKDResponse.getNGAY_NHAP()), Common.DATE_TIME_TYPE.yyyyMMddHHmmssSSZ, Common.DATE_TIME_TYPE.ddMMyyyy));
+                //2016-09-13T00:00:00+07:00
+                String dateSqlNGAY_NHAP = Common.convertDateToDate(checkStringNull(cToKDResponse.getNGAY_NHAP()), Common.DATE_TIME_TYPE.yyyyMMddHHmmssSSZ, Common.DATE_TIME_TYPE.yyyyMMdd);
+                congToGuiKD.setNGAY_NHAP(dateSqlNGAY_NHAP);
                 congToGuiKD.setNGAY_NHAP_MTB(Common.getDateTimeNow(Common.DATE_TIME_TYPE.yyyyMMdd));
                 congToGuiKD.setTRANG_THAI_GHIM(Common.TRANG_THAI_GHIM.DA_GHIM.getCode());
                 congToGuiKD.setTRANG_THAI_CHON(Common.TRANG_THAI_CHON.CHUA_CHON.getCode());
@@ -2851,6 +2871,13 @@ public class MainActivity
                     }
                 }
 
+//                if(menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)
+//                {
+////                    giu nguyen list
+//                    mListCtoKD.clear();
+//                    mListCtoKD.addAll(dataKD);
+//                }
+
                 //giữ nguyên dữ liệu, lọc cái cần dùng
                 fillDataReyclerLocal(dataKD, dataPB);
             }
@@ -2870,6 +2897,13 @@ public class MainActivity
                         }
                     }
                 }
+
+//                if(menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)
+//                {
+//                //giu nguyen list
+//                mListCtoPB.clear();
+//                mListCtoPB.addAll(dataPB);
+//                }
 
                 //giữ nguyên dữ liệu, lọc cái cần dùng
                 fillDataReyclerLocal(dataKD, dataPB);

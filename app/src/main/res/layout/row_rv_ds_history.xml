@@ -200,7 +200,7 @@
                         android:editable="false"
                         android:textColor="@color/black_less"
                         android:textSize="@dimen/_7sdp"
-                        tools:text="Số thiết bị gửi kiểm định" />
+                        tools:text="Số thiết bị gửi" />
 
 
                     <TextView

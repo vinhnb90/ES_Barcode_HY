@@ -211,14 +211,17 @@ public class SqlDAO {
                 congToGuiKD.getMA_DVIQLY(),
 
                 congToGuiKD.getMA_CLOAI(),
-                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_NHAP_HT()),
+                congToGuiKD.getNGAY_NHAP_HT(),
+//                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_NHAP_HT()),
                 congToGuiKD.getNAM_SX(),
                 congToGuiKD.getLOAI_SOHUU(),
                 congToGuiKD.getTEN_SOHUU(),
 
                 congToGuiKD.getMA_BDONG(),
-                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_BDONG()),
-                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_BDONG_HTAI()),
+                congToGuiKD.getNGAY_BDONG(),
+//                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_BDONG()),
+                congToGuiKD.getNGAY_BDONG_HTAI(),
+//                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_BDONG_HTAI()),
                 congToGuiKD.getSO_PHA(),
                 congToGuiKD.getSO_DAY(),
 
@@ -232,7 +235,8 @@ public class SqlDAO {
 
                 congToGuiKD.getCHISO_THAO(),
                 congToGuiKD.getHSN(),
-                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_NHAP()),
+                congToGuiKD.getNGAY_NHAP(),
+//                Common.convertDateUIToDateSQL(congToGuiKD.getNGAY_NHAP()),
                 congToGuiKD.getNGAY_NHAP_MTB(),
                 congToGuiKD.getTRANG_THAI_GHIM(),
                 congToGuiKD.getTRANG_THAI_CHON()
