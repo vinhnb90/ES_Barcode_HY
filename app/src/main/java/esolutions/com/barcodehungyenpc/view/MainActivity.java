@@ -43,6 +43,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -52,6 +53,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +80,9 @@ import esolutions.com.barcodehungyenpc.entity.CongToGuiKDProxy;
 import esolutions.com.barcodehungyenpc.entity.CongToGuiKD;
 import esolutions.com.barcodehungyenpc.entity.CongToPB;
 import esolutions.com.barcodehungyenpc.entity.CongToPBProxy;
+import esolutions.com.barcodehungyenpc.entity.DviPBCapDuoiProxy;
+import esolutions.com.barcodehungyenpc.entity.DviPBCapDuoiResponse;
+import esolutions.com.barcodehungyenpc.entity.EmptyResponse;
 import esolutions.com.barcodehungyenpc.entity.History;
 import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
 import esolutions.com.barcodehungyenpc.entity.ThongBao2Response;
@@ -115,7 +120,7 @@ public class MainActivity
         DsHistoryAdapter.OnDsHistoryAdapterIteraction,
         DsCongToAdapter.OnDsCtoAdapterIteraction {
 
-    private LinearLayout mLLSearchOnline;
+    private LinearLayout mLLSearchOnline, mLLDownloadDeptPB;
     private EditText mEtSearchOnline, mEtSearchLocal;
     private TextView mTvThongKeCto, mTvDate, mTvThongKeAll;
     private ImageButton mBtnDate, mBtnClearSearchOnline, mBtnClearSearchLocal, mBtnSearchOnline;
@@ -441,6 +446,13 @@ public class MainActivity
 
     private Snackbar snackbar;
     private boolean isUseScanBarcode;
+    private Spinner mSpDeptPB;
+    private ImageButton mIbtnShowDeptPB;
+    private ImageButton mIbtnDownloadDeptPB;
+    private ProgressBar mPbarDownloadDviCapDuoiPB;
+    private ArrayAdapter<DviPBCapDuoiProxy> adapterDviPBCapDuoi;
+    private List<DviPBCapDuoiProxy> listDviPBCapDuoi = new ArrayList<>();
+    private String DVI_CDUOI;
 
     private void showSnackbar(String message) {
         snackbar = Snackbar
@@ -498,6 +510,10 @@ public class MainActivity
             //update tvIdBBanTamThoi
             String SO_PBCT_MTB = dataResponse.get(i).getSO_PBCT_MTB();
             mSqlDAO.updateSO_PBCT_MTB(mListUploadCtoPB.get(i).getID_TBL_CTO_PB(), SO_PBCT_MTB);
+
+            //update dviCapduoiDuocPB
+            String MA_DVIQLY_CAPDUOI = DVI_CDUOI;
+            mSqlDAO.updateMA_DVIQLY_CAPDUOI(mListUploadCtoPB.get(i).getID_TBL_CTO_PB(), MA_DVIQLY_CAPDUOI);
 
             if (mCountUploadSuccess < mListDataUploadPB.size())
                 mCountUploadSuccess++;
@@ -603,6 +619,7 @@ public class MainActivity
     Bundle savedInstanceState;
 
     SoapXML.AsyncSoap<List<CToKDResponse>, ThongBaoResponse> soapSearchCto = null;
+    SoapXML.AsyncSoap<List<DviPBCapDuoiResponse>, EmptyResponse> soapDownloadDviPBCapDuoi = null;
     SoapXML.AsyncSoapUpload soapUpload = null;
     private static boolean isLoadedFolder = false;
 
@@ -951,6 +968,10 @@ public class MainActivity
         mEtSearchOnline = (EditText) findViewById(R.id.et_search_type);
         mEtSearchLocal = (EditText) findViewById(R.id.et_search_type2);
         mLLSearchOnline = (LinearLayout) findViewById(R.id.ll_search);
+        mLLDownloadDeptPB = (LinearLayout) findViewById(R.id.ll_download_dept_pb);
+        mSpDeptPB = (Spinner) findViewById(R.id.sp_dvi_pbo);
+//        mIbtnShowDeptPB = (ImageButton) findViewById(R.id.ibtn_show_dept_pb);
+        mIbtnDownloadDeptPB = (ImageButton) findViewById(R.id.ibtn_download_dept_pb);
 
         mTvThongKeCto = (TextView) findViewById(R.id.et_thongKe);
         mTvThongKeAll = (TextView) findViewById(R.id.tv_count_all);
@@ -961,6 +982,8 @@ public class MainActivity
         mBtnClearSearchLocal = (ImageButton) findViewById(R.id.ibtn_clear_search_type2);
         mBtnSearchOnline = (ImageButton) findViewById(R.id.ibtn_search_online);
         mPbarSearchOnline = (ProgressBar) findViewById(R.id.pbar_search_online);
+        mPbarDownloadDviCapDuoiPB = (ProgressBar) findViewById(R.id.pbar_download_dvi_capduoi_pb);
+
         mCbSearchBBan = (CheckBox) findViewById(R.id.cb_search_by_id_bban);
         mCbSearchBBanLocal = (CheckBox) findViewById(R.id.cb_search_local_by_id_bban);
 
@@ -1194,10 +1217,9 @@ public class MainActivity
 
         if (menuBottom == Common.MENU_BOTTOM_KD.THONG_KE) {
             mTvThongKeCto.setText(String.valueOf(total) + " biên bản");
-            if(mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH)
-            {
+            if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                 totalCount = mSqlDAO.countByDateAllBbanTamThoiThongKeKD(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
-            }else {
+            } else {
                 totalCount = mSqlDAO.countByDateAllBbanTamThoiThongKePB(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
             }
         }
@@ -1335,8 +1357,25 @@ public class MainActivity
                             return;
                         }
 
-                        //TODO mark 1
                         searchOnline(mEtSearchOnline.getText().toString());
+                    } catch (Exception e) {
+                        try {
+                            showSnackbar(e.getMessage());
+                            getInstance().loge(MainActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+            mIbtnDownloadDeptPB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        downloadDviCapDuoiPB();
                     } catch (Exception e) {
                         try {
                             showSnackbar(e.getMessage());
@@ -1392,6 +1431,11 @@ public class MainActivity
                                     mFab.hide(true);
                                     mFab.setVisibility(View.GONE);
                                 }
+
+                                //hide
+                                if (mLLDownloadDeptPB.getVisibility() == View.VISIBLE)
+                                    mLLDownloadDeptPB.setVisibility(View.GONE);
+
                                 fillDataReyclerFull();
                                 break;
 
@@ -1405,12 +1449,24 @@ public class MainActivity
                                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                                     mListCtoKD.clear();
                                     mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+
+                                    //hide
+                                    if (mLLDownloadDeptPB.getVisibility() == View.VISIBLE)
+                                        mLLDownloadDeptPB.setVisibility(View.GONE);
                                 }
 
                                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
                                     mCbSearchBBanLocal.setVisibility(View.VISIBLE);
                                     mListCtoPB.clear();
                                     mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+
+                                    //show
+                                    if (mLLDownloadDeptPB.getVisibility() == View.GONE)
+                                        mLLDownloadDeptPB.setVisibility(View.VISIBLE);
+
+                                    List<DviPBCapDuoiProxy> listProxy = new ArrayList<>();
+                                    listProxy = mSqlDAO.getDviPBCapDuoi(mStringDvi);
+                                    fillDataDviPBCapDuoi(listProxy);
                                 }
 
                                 //show fab
@@ -1424,6 +1480,7 @@ public class MainActivity
                                 if (mLLSearchOnline.getVisibility() == View.VISIBLE) {
                                     mLLSearchOnline.setVisibility(View.GONE);
                                 }
+
                                 fillDataReyclerFull();
                                 break;
 
@@ -1444,6 +1501,10 @@ public class MainActivity
                                 if (mLLSearchOnline.getVisibility() == View.VISIBLE) {
                                     mLLSearchOnline.setVisibility(View.GONE);
                                 }
+
+                                //hide
+                                if (mLLDownloadDeptPB.getVisibility() == View.VISIBLE)
+                                    mLLDownloadDeptPB.setVisibility(View.GONE);
 
                                 mListHistory.clear();
 
@@ -1468,6 +1529,10 @@ public class MainActivity
                                 if (mLLSearchOnline.getVisibility() == View.VISIBLE) {
                                     mLLSearchOnline.setVisibility(View.GONE);
                                 }
+
+                                //hide
+                                if (mLLDownloadDeptPB.getVisibility() == View.VISIBLE)
+                                    mLLDownloadDeptPB.setVisibility(View.GONE);
 
                                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
                                     mListThongKe = mSqlDAO.getByDateAllThongKeKD(mDate, Common.DATE_TIME_TYPE.ddMMyyyyHHmmss);
@@ -1547,8 +1612,52 @@ public class MainActivity
                 @Override
                 public void onClick(View view) {
                     try {
-                        //TODO mark3
-                        upload();
+                        prepareDataUpload();
+
+                        int size = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListUploadCtoKD.size() : mListUploadCtoPB.size();
+                        if (size == 0)
+                            throw new Exception(Common.MESSAGE.ex22.getContent());
+
+                        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
+                            upload();
+                        }
+
+                        if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+
+                            OnClickButtonAlertDialog onClickButtonAlertDialog = new OnClickButtonAlertDialog() {
+                                @Override
+                                public void doClickYes() {
+                                    try {
+                                        upload();
+                                    } catch (Exception e) {
+                                        try {
+                                            showSnackbar(e.getMessage());
+                                            getInstance().loge(MainActivity.class, e.getMessage());
+                                            e.printStackTrace();
+                                        } catch (Exception e1) {
+                                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            e1.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void doClickNo() {
+                                }
+
+                            };
+
+                            int pos = mSpDeptPB.getSelectedItemPosition();
+                            String mDviCapDuoi = "";
+                            try {
+                                mDviCapDuoi = listDviPBCapDuoi.get(pos).toString();
+                            } catch (Exception e) {
+                                throw new Exception(Common.MESSAGE.ex29.getContent());
+                            }
+
+                            Common.showAlertDialog(MainActivity.this, onClickButtonAlertDialog, "Phân bổ thiết bị", "Chuẩn bị phân bổ thiết bị cho đơn vị có mã " + mDviCapDuoi);
+                        }
+
                     } catch (Exception e) {
                         try {
                             showSnackbar(e.getMessage());
@@ -1728,6 +1837,98 @@ public class MainActivity
         }
     }
 
+    private void downloadDviCapDuoiPB() {
+        try {
+            SoapXML.AsyncSoap.AsyncSoapCallBack<List<DviPBCapDuoiResponse>, EmptyResponse> callBackDownloadDvi = new SoapXML.AsyncSoap.AsyncSoapCallBack<List<DviPBCapDuoiResponse>, EmptyResponse>() {
+                @Override
+                public void onPre(SoapXML.AsyncSoap soap) {
+                    //show progress bar
+                    showProgresbarDownloadDviCapDuoiPB(true);
+                    mSpDeptPB.setEnabled(false);
+                }
+
+                @Override
+                public void onUpdate(String message) {
+                    //ẩn progress bar
+                    showProgresbarDownloadDviCapDuoiPB(false);
+                    mSpDeptPB.setEnabled(true);
+                    showSnackbar(message);
+                }
+
+                @Override
+                public void onPostData(List<DviPBCapDuoiResponse> dataResponse) {
+                    //ẩn progress bar
+                    showProgresbarDownloadDviCapDuoiPB(false);
+                    mSpDeptPB.setEnabled(true);
+                    //Xử lý kết quả
+                    try {
+                        doProcessAfterDownloadDviPBCapDuoi(dataResponse);
+                    } catch (Exception e) {
+                        try {
+                            showSnackbar(e.getMessage());
+                            getInstance().loge(MainActivity.class, e.getMessage());
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onPostMessageSever(String errorResponse) {
+                    onUpdate(errorResponse);
+                }
+            };
+
+
+            soapDownloadDviPBCapDuoi = new SoapXML.AsyncSoap(
+                    DviPBCapDuoiResponse.class,
+                    EmptyResponse.class,
+                    "",
+                    callBackDownloadDvi,
+                    METHOD.GetCatalogueAllocate_PBCTMTB.getNameMethod(),
+                    SoapXML.getURL(mURL),
+                    METHOD.GetCatalogueAllocate_PBCTMTB.getNameParams()
+            );
+            soapDownloadDviPBCapDuoi.execute(new String[]{});
+
+        } catch (Exception e) {
+            try {
+                showSnackbar(e.getMessage());
+                getInstance().loge(MainActivity.class, e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e1) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void doProcessAfterDownloadDviPBCapDuoi(List<DviPBCapDuoiResponse> dataResponse) throws Exception {
+
+        for (DviPBCapDuoiResponse dviPB : dataResponse) {
+            boolean isHasExist = mSqlDAO.checkExistTBL_DVI_PB_CAPDUOI(mStringDvi, dviPB.getMA_DVIQLY());
+            if (!isHasExist) {
+                mSqlDAO.insertTBL_DIENLUC_PB(mStringDvi, dviPB.getMA_DVIQLY(), dviPB.getSEARCH());
+            }
+        }
+
+        List<DviPBCapDuoiProxy> listProxy = new ArrayList<>();
+        listProxy = mSqlDAO.getDviPBCapDuoi(mStringDvi);
+        fillDataDviPBCapDuoi(listProxy);
+
+    }
+
+    private void fillDataDviPBCapDuoi(List<DviPBCapDuoiProxy> listData) {
+        listDviPBCapDuoi.clear();
+        listDviPBCapDuoi.addAll(listData);
+
+        adapterDviPBCapDuoi = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_single_choice, listDviPBCapDuoi);
+        mSpDeptPB.setAdapter(adapterDviPBCapDuoi);
+        mSpDeptPB.invalidate();
+    }
+
     private void fillDataRecylerHistory(List<HistoryProxy> listData) throws Exception {
         if (mRvCto.getAdapter() instanceof DsHistoryAdapter && (menuBottom == Common.MENU_BOTTOM_KD.ALL || menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)) {
             mRvCto.removeAllViews();
@@ -1779,12 +1980,6 @@ public class MainActivity
     }
 
     private void upload() throws Exception {
-        prepareDataUpload();
-
-        int size = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListUploadCtoKD.size() : mListUploadCtoPB.size();
-        if (size == 0)
-            throw new Exception(Common.MESSAGE.ex22.getContent());
-
         //check thread hiện tại
         if (soapSearchCto != null) {
             if (soapSearchCto.getStatus() == AsyncTask.Status.RUNNING || soapSearchCto.getStatus() == AsyncTask.Status.PENDING) {
@@ -1818,8 +2013,11 @@ public class MainActivity
 
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+            int pos = mSpDeptPB.getSelectedItemPosition();
+            DVI_CDUOI = listDviPBCapDuoi.get(pos).getMA_DVIQLY_CAPDUOI();
             mListDataUploadPB.clear();
-            mListDataUploadPB = setupDataCtoGuiPBUpload();
+
+            mListDataUploadPB = setupDataCtoGuiPBUpload(DVI_CDUOI);
         }
 
         Thread thread = new Thread(new Runnable() {
@@ -1876,9 +2074,9 @@ public class MainActivity
         return listUpload;
     }
 
-    private List<Update_GuiPB_CTO> setupDataCtoGuiPBUpload() {
+    private List<Update_GuiPB_CTO> setupDataCtoGuiPBUpload(String DVI_CDUOI) {
         ArrayList<Update_GuiPB_CTO> listUpload = new ArrayList<>();
-        if (mListUploadCtoPB.size() == 0)
+        if (mListUploadCtoPB.size() == 0 || StringUtils.isEmpty(DVI_CDUOI))
             return listUpload;
 
         for (CongToPBProxy congToPBProxy : mListUploadCtoPB) {
@@ -1917,7 +2115,8 @@ public class MainActivity
                     Common.convertDateSQLToDateServer(congToPBProxy.getNGAY_NHAP_HTHI()),
                     congToPBProxy.getSO_BBAN_KDINH(),
                     congToPBProxy.getMA_NVIENKDINH(),
-                    Common.convertDateSQLToDateServer(congToPBProxy.getNGAY_KDINH_HTHI())
+                    Common.convertDateSQLToDateServer(congToPBProxy.getNGAY_KDINH_HTHI()),
+                    DVI_CDUOI
             );
             listUpload.add(congToUpload);
 
@@ -1997,14 +2196,14 @@ public class MainActivity
             @Override
             public void onPre(SoapXML.AsyncSoap soap) {
                 //show progress bar
-                showProgresbar(true);
+                showProgresbarSearchOnline(true);
                 mEtSearchOnline.setEnabled(false);
             }
 
             @Override
             public void onUpdate(String message) {
                 //ẩn progress bar
-                showProgresbar(false);
+                showProgresbarSearchOnline(false);
                 mEtSearchOnline.setEnabled(true);
                 showSnackbar(message);
                 try {
@@ -2023,8 +2222,7 @@ public class MainActivity
                     history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
 
-                    if(isUseScanBarcode)
-                    {
+                    if (isUseScanBarcode) {
                         mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
                         mEtSearchOnline.setText("");
                         mEtSearchOnline.requestFocus();
@@ -2045,7 +2243,7 @@ public class MainActivity
             public void onPostData(List<CToPBResponse> dataResponse) {
                 Log.d(TAG, "onPostData: ");
                 //ẩn progress bar
-                showProgresbar(false);
+                showProgresbarSearchOnline(false);
                 mEtSearchOnline.setEnabled(true);
                 //Xử lý kết quả
                 try {
@@ -2074,14 +2272,14 @@ public class MainActivity
             @Override
             public void onPre(SoapXML.AsyncSoap soap) {
                 //show progress bar
-                showProgresbar(true);
+                showProgresbarSearchOnline(true);
                 mEtSearchOnline.setEnabled(false);
             }
 
             @Override
             public void onUpdate(String message) {
                 //ẩn progress bar
-                showProgresbar(false);
+                showProgresbarSearchOnline(false);
                 mEtSearchOnline.setEnabled(true);
                 showSnackbar(message);
                 try {
@@ -2099,8 +2297,7 @@ public class MainActivity
                     history.setINFO_SEARCH(mEtSearchOnline.getText().toString());
                     history.setINFO_RESULT(message);
                     mSqlDAO.insertTBL_HISTORY(history);
-                    if(isUseScanBarcode)
-                    {
+                    if (isUseScanBarcode) {
                         mEtSearchOnline.setHint(mEtSearchOnline.getText().toString());
                         mEtSearchOnline.setText("");
                         mEtSearchOnline.requestFocus();
@@ -2121,7 +2318,7 @@ public class MainActivity
             public void onPostData(List<CToKDResponse> dataResponse) {
                 Log.d(TAG, "onPostData: ");
                 //ẩn progress bar
-                showProgresbar(false);
+                showProgresbarSearchOnline(false);
                 mEtSearchOnline.setEnabled(true);
                 //Xử lý kết quả
                 try {
@@ -2256,6 +2453,7 @@ public class MainActivity
             congToPB.setNGAY_KDINH_HTHI(dateSqlNGAY_KDINH_HTHI);
 
             congToPB.setSO_PBCT_MTB(checkStringNull(cToPBResponse.getSO_PBCT_MTB()));
+            congToPB.setMA_DVIQLY_CAPDUOI("");
 
             int idIfHasExistCto = 0;
             //check data local với text search và date
@@ -2493,7 +2691,7 @@ public class MainActivity
         searchLocal(mEtSearchOnline.getHint().toString());
     }
 
-    private void showProgresbar(boolean isShow) {
+    private void showProgresbarSearchOnline(boolean isShow) {
         if (isShow) {
             //hiện
             if (mPbarSearchOnline.getVisibility() == View.GONE) {
@@ -2509,6 +2707,24 @@ public class MainActivity
             }
         }
     }
+
+    private void showProgresbarDownloadDviCapDuoiPB(boolean isShow) {
+        if (isShow) {
+            //hiện
+            if (mPbarDownloadDviCapDuoiPB.getVisibility() == View.GONE) {
+                mIbtnDownloadDeptPB.setVisibility(View.GONE);
+                mPbarDownloadDviCapDuoiPB.setVisibility(View.VISIBLE);
+            }
+
+        } else {
+            //ẩn progress bar
+            if (mPbarDownloadDviCapDuoiPB.getVisibility() == View.VISIBLE) {
+                mIbtnDownloadDeptPB.setVisibility(View.VISIBLE);
+                mPbarDownloadDviCapDuoiPB.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     private void showDialogChooseDate() {
         DateTimePickerFragment dateTimePickerFragment = new DateTimePickerFragment();
@@ -2607,6 +2823,7 @@ public class MainActivity
         }
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
+            DVI_CDUOI = "";
             mListUploadCtoPB.clear();
             mListUploadCtoPB = mSqlDAO.getByDateAllCongToGhimAndChonPB(dateSQL);
             mTvCountCtoUpload.setText(mListUploadCtoPB.size() + "");
@@ -2871,13 +3088,6 @@ public class MainActivity
                     }
                 }
 
-//                if(menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)
-//                {
-////                    giu nguyen list
-//                    mListCtoKD.clear();
-//                    mListCtoKD.addAll(dataKD);
-//                }
-
                 //giữ nguyên dữ liệu, lọc cái cần dùng
                 fillDataReyclerLocal(dataKD, dataPB);
             }
@@ -2892,18 +3102,12 @@ public class MainActivity
                     } else {
                         if (Common.removeAccent(congToPBProxy.getMA_CTO().toLowerCase()).contains(query)
                                 || Common.removeAccent(congToPBProxy.getSO_CTO().toLowerCase()).contains(query)
-                                || convertDateSQLToDateUI(congToPBProxy.getNGAY_NHAP_MTB()).contains(query)) {
+                                || convertDateSQLToDateUI(congToPBProxy.getNGAY_NHAP_MTB()).contains(query) ||
+                                Common.removeAccent(congToPBProxy.getMA_DVIQLY_CAPDUOI().toLowerCase()).equalsIgnoreCase(query)) {
                             dataPB.add(congToPBProxy);
                         }
                     }
                 }
-
-//                if(menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)
-//                {
-//                //giu nguyen list
-//                mListCtoPB.clear();
-//                mListCtoPB.addAll(dataPB);
-//                }
 
                 //giữ nguyên dữ liệu, lọc cái cần dùng
                 fillDataReyclerLocal(dataKD, dataPB);
@@ -2949,14 +3153,14 @@ public class MainActivity
     }
 
     private void fillDataReyclerFull() throws Exception {
-        if ((mRvCto.getAdapter() instanceof DsHistoryAdapter|| mRvCto.getAdapter() instanceof DsThongKeAdapter) && (menuBottom == Common.MENU_BOTTOM_KD.ALL || menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)) {
+        if ((mRvCto.getAdapter() instanceof DsHistoryAdapter || mRvCto.getAdapter() instanceof DsThongKeAdapter) && (menuBottom == Common.MENU_BOTTOM_KD.ALL || menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM)) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mCtoAdapter, true);
             mCtoAdapter = null;
         }
 
-        if ((mRvCto.getAdapter() instanceof DsHistoryAdapter|| mRvCto.getAdapter() instanceof DsThongKeAdapter) && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
+        if ((mRvCto.getAdapter() instanceof DsHistoryAdapter || mRvCto.getAdapter() instanceof DsThongKeAdapter) && menuBottom == Common.MENU_BOTTOM_KD.LICH_SU) {
             mRvCto.removeAllViews();
             mRvCto.invalidate();
             mRvCto.swapAdapter(mHistoryAdapter, true);
@@ -2980,16 +3184,6 @@ public class MainActivity
 
         //set text thống kê cto theo số item adapter
         setTextCountCtoAndDate(mCountCto);
-//        int mCountCto = 0;
-//        mCtoAdapter = new DsCongToAdapter(this, mListCtoKD);
-//        ((DsCongToAdapter) mCtoAdapter).setMenuBottom(menuBottom);
-//        mRvCto.setAdapter(mCtoAdapter);
-//        mCountCto = mListCtoKD.size();
-//
-//        mRvCto.invalidate();
-//
-//        //set text thống kê cto theo số item adapter
-//        setTextCountCtoAndDate(mCountCto);
     }
 
     private void fillDataReyclerLocal(List<CongToGuiKDProxy> dataKD, List<CongToPBProxy> dataPB) throws Exception {

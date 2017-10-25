@@ -22,9 +22,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_24sdp"
             android:layout_below="@+id/appbar"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginRight="@dimen/_12sdp"
             android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal">
 
@@ -59,22 +59,20 @@
 
                     <CheckBox
                         android:id="@+id/cb_search_by_id_bban"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_80sdp"
                         android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:background="@drawable/xml_border_full_type4_left_orange"
                         android:button="@drawable/xml_checkbox"
                         android:buttonTint="@color/white"
-                        android:paddingRight="@dimen/_5sdp"
-                        android:text="Theo biên bản"
+                        android:text="Theo B.Bản"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="visible"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:visibility="visible" />
 
                     <EditText
-                        android:gravity="center_vertical"
                         android:id="@+id/et_search_type"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -82,6 +80,7 @@
                         android:layout_toRightOf="@+id/cb_search_by_id_bban"
                         android:layout_weight="1"
                         android:background="@null"
+                        android:gravity="center_vertical"
                         android:hint="Tìm kiếm trên máy chủ"
                         android:lines="1"
                         android:maxLines="1"
@@ -99,7 +98,6 @@
             </RelativeLayout>
 
             <ProgressBar
-                android:indeterminateTintMode="src_in"
                 android:id="@+id/pbar_search_online"
                 android:layout_width="@dimen/_24sdp"
                 android:layout_height="match_parent"
@@ -108,6 +106,7 @@
                 android:layout_marginLeft="@dimen/_2sdp"
                 android:background="@drawable/xml_button_cricle_type3"
                 android:indeterminateTint="@color/white"
+                android:indeterminateTintMode="src_in"
                 android:padding="@dimen/_2sdp"
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_search_online_white"
@@ -132,9 +131,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_24sdp"
             android:layout_below="@+id/ll_search"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginRight="@dimen/_12sdp"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal">
@@ -169,25 +168,24 @@
 
                     <CheckBox
                         android:id="@+id/cb_search_local_by_id_bban"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_80sdp"
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:background="@drawable/xml_border_full_type4_left_orange"
                         android:button="@drawable/xml_checkbox"
                         android:buttonTint="@color/white"
-                        android:paddingRight="@dimen/_5sdp"
-                        android:text="Theo biên bản"
+                        android:text="Theo B.Bản"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_10sdp"
                         android:visibility="visible" />
 
                     <EditText
-                        android:gravity="center_vertical"
                         android:id="@+id/et_search_type2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@+id/cb_search_local_by_id_bban"
                         android:background="@drawable/xml_border_full_type4_left"
+                        android:gravity="center_vertical"
                         android:hint="Tìm kiếm máy tính bảng"
                         android:imeOptions=""
                         android:lines="1"
@@ -218,50 +216,125 @@
 
         </LinearLayout>
 
-        <!--   <LinearLayout
+
+        <LinearLayout
+            android:id="@+id/ll_download_dept_pb"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_below="@+id/ll_search3"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginRight="@dimen/_12sdp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/_1sdp"
                 android:layout_weight="1"
-                android:background="@color/white"
                 android:orientation="horizontal">
+                <!--  android:nextFocusForward="@+id/et_forcus"-->
 
-                <EditText
-                    android:id="@+id/et_search_type2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/tv_title_url"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:hint="Nhập thông tin"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingLeft="@dimen/_2sdp"
-                    android:paddingRight="@dimen/_2sdp"
-                    android:scrollHorizontally="true"
-                    android:scrollbars="horizontal"
-                    android:singleLine="true"
-                    android:textSize="@dimen/_10sdp" />
 
-                <ImageButton
-                    android:id="@+id/ibtn_clear_search_type2"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@drawable/xml_border_right"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/ic_clear" />
-            </LinearLayout>-->
+                <RelativeLayout
+                    android:id="@+id/id1_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                    <TextView
+                        android:id="@+id/tv_title_dept_lower"
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/xml_border_full_type4_left_orange"
+                        android:button="@drawable/xml_checkbox"
+                        android:buttonTint="@color/white"
+
+                        android:gravity="center_vertical|left"
+                        android:paddingLeft="@dimen/_8sdp"
+                        android:text="Gán đơn vị"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="visible" />
+
+                    <Spinner
+                        android:id="@+id/sp_dvi_pbo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/tv_title_dept_lower"
+                        android:background="@drawable/xml_border_full_type4_right"
+                        android:gravity="center_vertical"
+                        android:imeOptions=""
+                        android:lines="1"
+                        android:spinnerMode="dialog"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:scrollbars="horizontal"
+                        android:singleLine="true"
+                        android:textSize="@dimen/_10sdp" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/ibtn_download_dept_pb"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:background="@drawable/xml_button_cricle_type3"
+                android:padding="@dimen/_2sdp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_download_2"
+                android:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/pbar_download_dvi_capduoi_pb"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:background="@drawable/xml_button_cricle_type3"
+                android:indeterminateTint="@color/white"
+                android:indeterminateTintMode="src_in"
+                android:padding="@dimen/_2sdp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_download_2"
+                android:visibility="gone" />
+
+            <!--<ProgressBar
+                android:id="@+id/pbar_download_dvi_capduoi_pb"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:background="@drawable/xml_button_cricle_type3"
+                android:indeterminateTint="@color/white"
+                android:indeterminateTintMode="src_in"
+                android:padding="@dimen/_2sdp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_search_online_white"
+                android:visibility="gone" />
+-->
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_search2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_search3"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_below="@+id/ll_download_dept_pb"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginRight="@dimen/_12sdp"
             android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal">
 
@@ -484,7 +557,7 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:background="@drawable/xml_border_full"
                 android:gravity="center_vertical"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:padding="@dimen/_5sdp">
 
                 <ImageView
                     android:id="@+id/iv_logo_4"
@@ -501,7 +574,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/iv_logo_4"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/_12sdp"
                     android:text="0/0"
                     android:textSize="@dimen/_12sdp" />
 
@@ -510,7 +583,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/iv_logo_4"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/_12sdp"
                     android:layout_toRightOf="@+id/iv_logo_4"
                     android:text="Tải dữ liệu lên máy chủ"
                     android:textSize="@dimen/_12sdp" />
@@ -570,7 +643,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/tv_count_upload"
                     android:layout_below="@+id/tv_title_upload"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_toRightOf="@+id/iv_logo_4"
                     android:text="Số thiết bị gửi lên "
@@ -582,7 +655,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_title_upload"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_toRightOf="@+id/tv_title_upload_2"
                     android:text="0"
@@ -613,7 +686,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/_72sdp"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/_12sdp"
             android:src="@mipmap/ic_upload_white"
             android:visibility="gone"
             tools:visibility="visible" />

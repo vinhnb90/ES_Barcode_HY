@@ -54,6 +54,9 @@ public class CongToPB {
     private String NGAY_KDINH_HTHI;
     private String SO_PBCT_MTB;
 
+    //thêm
+    private String MA_DVIQLY_CAPDUOI;
+
     public CongToPB() {
         ID_TBL_CTO_PB = -1;
         TRANG_THAI_GHIM = -1;
@@ -350,5 +353,13 @@ public class CongToPB {
 
     public void setTRANG_THAI_CHON(int TRANG_THAI_CHON) {
         this.TRANG_THAI_CHON = TRANG_THAI_CHON;
+    }
+
+    public String getMA_DVIQLY_CAPDUOI() {
+        return MA_DVIQLY_CAPDUOI;
+    }
+
+    public void setMA_DVIQLY_CAPDUOI(String MA_DVIQLY_CAPDUOI) {
+        this.MA_DVIQLY_CAPDUOI = MA_DVIQLY_CAPDUOI;
     }
 }

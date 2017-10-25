@@ -433,14 +433,14 @@ public class CongToPBProxy extends CursorItemProxy {
     }
 
 
-//    public String getmTaiKhoan() {
-//        if (StringUtils.isEmpty(mCongToPB.getmTaiKhoan())) {
-//            Cursor cursor = getmCursor();
-//            cursor.moveToPosition(getmIndex());
-//
-//            mCongToPB.setmTaiKhoan(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.TaiKhoan.getNameCollumn())));
-//        }
-//        return mCongToPB.getmTaiKhoan();
-//    }
+    public String getMA_DVIQLY_CAPDUOI() {
+        if (StringUtils.isEmpty(mCongToPB.getMA_DVIQLY_CAPDUOI())) {
+            Cursor cursor = getmCursor();
+            cursor.moveToPosition(getmIndex());
+
+            mCongToPB.setMA_DVIQLY_CAPDUOI(cursor.getString(cursor.getColumnIndex(SqlQuery.TBL_CTO_PB.MA_DVIQLY_CAPDUOI.getNameCollumn())));
+        }
+        return mCongToPB.getMA_DVIQLY_CAPDUOI();
+    }
 
 }

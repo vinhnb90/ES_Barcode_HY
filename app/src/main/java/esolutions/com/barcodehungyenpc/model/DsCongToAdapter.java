@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -125,6 +126,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             String SO_GKDCT_MTB = mListKD.get(position).getSO_GKDCT_MTB();
             holder.tvTitleIdBBanTamThoi.setText("Số biên bản gửi kiểm định tạm thời: ");
             holder.tvIdBBanTamThoi.setText(SO_GKDCT_MTB);
+
+            holder.llDviCapDuoiPB.setVisibility(View.GONE);
         }
 
         if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
@@ -141,6 +144,9 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             String SO_PBCT_MTB = mListPB.get(position).getSO_PBCT_MTB();
             holder.tvTitleIdBBanTamThoi.setText("Số biên bản phân bổ tạm thời: ");
             holder.tvIdBBanTamThoi.setText(SO_PBCT_MTB);
+
+            holder.llDviCapDuoiPB.setVisibility(View.VISIBLE);
+            holder.tvDviCapDuoiPB.setText(mListPB.get(position).getMA_DVIQLY_CAPDUOI());
         }
 
 //        String CHISO_THAO = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListKD.get(position).getCHISO_THAO() : mListPB.get(position).get();
@@ -305,6 +311,9 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
 
         public Button btnXoa, btnGhim, btnChon;
 
+        public LinearLayout llDviCapDuoiPB;
+        public TextView tvDviCapDuoiPB;
+
         public DsCtoViewHolder(View itemView) {
             super(itemView);
             relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rl_row_ds_cto);
@@ -325,6 +334,8 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
             btnXoa = (Button) itemView.findViewById(R.id.btn_delete);
             btnGhim = (Button) itemView.findViewById(R.id.btn_ghim);
             btnChon = (Button) itemView.findViewById(R.id.btn_chon);
+            llDviCapDuoiPB = (LinearLayout) itemView.findViewById(R.id.ll_a1_2_1);
+            tvDviCapDuoiPB = (TextView) itemView.findViewById(R.id.tv_dvi_phanbo);
 
             btnGhim.setOnClickListener(new View.OnClickListener() {
                 @Override

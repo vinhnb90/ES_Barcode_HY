@@ -471,6 +471,7 @@ public class Common {
         ex261("ex21", "Quá trình đẩy dữ liệu gặp lỗi! Vui lòng xem chi tiết trong lịch sử."),
         ex27("ex27", "Vui lòng chọn đơn vị!"),
         ex28("ex28", "Dữ liệu được cập nhật mới!"),
+        ex29("ex29", "Vui lòng gán đơn vị cấp dưới được phân bổ!"),
 
 
         ex("ex", "Gặp vấn đề không xác định.");

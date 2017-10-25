@@ -47,7 +47,10 @@ public class Update_GuiPB_CTO implements KvmSerializable {
     private String MA_NVIENKDINH;
     private String NGAY_KDINH_HTHI;
 
-    public Update_GuiPB_CTO(String ID_BBAN_KHO, String MA_NVIEN, String SO_BBAN, String ID_BBAN_KDINH, String NGAY_GUIKD, String LOAI_CTO, String SO_CSO, String MA_HANG, String CAP_CXAC, String MA_NUOC, int CHON, String MA_DVIQLY, String NAM_SX, String MA_CTO, String SO_CTO, String LOAI_SOHUU, String MA_CLOAI, String NGAY_BDONG, String MA_BDONG, String NGAY_NHAP, String NGAY_KDINH, String SO_DAY, String VH_CONG, String SO_PHA, String DIEN_AP, String DONG_DIEN, String NGAY_NHAP_MTB, int ID_TBL_CTO_PB, String LOAISOHUU, String NGAY_NHAP_HTHI, String SO_BBAN_KDINH, String MA_NVIENKDINH, String NGAY_KDINH_HTHI) {
+    //thêm
+    private String DV_NHAN;
+
+    public Update_GuiPB_CTO(String ID_BBAN_KHO, String MA_NVIEN, String SO_BBAN, String ID_BBAN_KDINH, String NGAY_GUIKD, String LOAI_CTO, String SO_CSO, String MA_HANG, String CAP_CXAC, String MA_NUOC, int CHON, String MA_DVIQLY, String NAM_SX, String MA_CTO, String SO_CTO, String LOAI_SOHUU, String MA_CLOAI, String NGAY_BDONG, String MA_BDONG, String NGAY_NHAP, String NGAY_KDINH, String SO_DAY, String VH_CONG, String SO_PHA, String DIEN_AP, String DONG_DIEN, String NGAY_NHAP_MTB, int ID_TBL_CTO_PB, String LOAISOHUU, String NGAY_NHAP_HTHI, String SO_BBAN_KDINH, String MA_NVIENKDINH, String NGAY_KDINH_HTHI, String DV_NHAN) {
         this.ID_BBAN_KHO = ID_BBAN_KHO;
         this.MA_NVIEN = MA_NVIEN;
         this.SO_BBAN = SO_BBAN;
@@ -81,6 +84,7 @@ public class Update_GuiPB_CTO implements KvmSerializable {
         this.SO_BBAN_KDINH = SO_BBAN_KDINH;
         this.MA_NVIENKDINH = MA_NVIENKDINH;
         this.NGAY_KDINH_HTHI = NGAY_KDINH_HTHI;
+        this.DV_NHAN = DV_NHAN;
     }
 
     @Override
@@ -151,6 +155,8 @@ public class Update_GuiPB_CTO implements KvmSerializable {
                 return MA_NVIENKDINH;
             case 31:
                 return NGAY_KDINH_HTHI;
+            case 32:
+                return DV_NHAN;
             default:
                 return null;
         }
@@ -158,7 +164,7 @@ public class Update_GuiPB_CTO implements KvmSerializable {
 
     @Override
     public int getPropertyCount() {
-        return 32;
+        return 33;
     }
 
     @Override
@@ -293,6 +299,10 @@ public class Update_GuiPB_CTO implements KvmSerializable {
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "NGAY_KDINH_HTHI";
                 break;
+            case 32:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "DV_NHAN";
+                break;
             default:
                 break;
         }
@@ -398,6 +408,9 @@ public class Update_GuiPB_CTO implements KvmSerializable {
                 break;
             case 31:
                 NGAY_KDINH_HTHI = value.toString();
+                break;
+            case 32:
+                DV_NHAN = value.toString();
                 break;
 
             default:
@@ -669,4 +682,11 @@ public class Update_GuiPB_CTO implements KvmSerializable {
         this.NGAY_KDINH_HTHI = NGAY_KDINH_HTHI;
     }
 
+    public String getDV_NHAN() {
+        return DV_NHAN;
+    }
+
+    public void setDV_NHAN(String DV_NHAN) {
+        this.DV_NHAN = DV_NHAN;
+    }
 }

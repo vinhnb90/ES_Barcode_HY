@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/_5sdp"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:layout_marginRight="@dimen/_5sdp"
     android:layout_marginTop="@dimen/_5sdp"
 
     android:background="@android:color/transparent"
@@ -50,8 +50,8 @@
                 android:id="@+id/ll_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_toRightOf="@+id/tv_STT"
                 android:orientation="horizontal"
                 android:weightSum="3">
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_below="@+id/ll_header"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:layout_toRightOf="@+id/tv_STT"
                 android:background="@color/black_less"
@@ -140,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_line1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_toRightOf="@+id/tv_STT"
                 android:orientation="vertical">
 
@@ -153,8 +153,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_line1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
 
                 android:layout_toRightOf="@+id/tv_STT"
@@ -180,7 +180,7 @@
                         />
 
                     <TextView
-                        android:gravity="left"
+                        android:gravity="right"
                         android:id="@+id/tv_ma_cloai"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -233,8 +233,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_line1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
 
                 android:layout_toRightOf="@+id/tv_STT"
@@ -266,7 +266,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_title_so_cto"
-                        android:gravity="left"
+                        android:gravity="right"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/_9sdp"
                         tools:text="PD" />
@@ -310,8 +310,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_line1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
 
                 android:layout_toRightOf="@+id/tv_STT"
@@ -320,7 +320,8 @@
 
                 <LinearLayout
                     android:id="@+id/ll_a1_2"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:weightSum="3"
@@ -338,7 +339,42 @@
 
 
                     <TextView
+                        android:layout_marginRight="@dimen/_2sdp"
                         android:id="@+id/tv_id_bban_phanbo_tamthoi"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_title_so_cto"
+                        android:gravity="right"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/_9sdp"
+                        tools:text="0" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_a1_2_1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:weightSum="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_title_dvi_phanbo"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:text="Đơn vị được phân bổ: "
+                        android:textColor="@color/black_less"
+                        android:textSize="@dimen/_9sdp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_dvi_phanbo"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -350,8 +386,6 @@
                         tools:text="0" />
 
                 </LinearLayout>
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -359,8 +393,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_header2"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_toRightOf="@+id/tv_STT"
                 android:gravity="right"
@@ -433,7 +467,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_below="@+id/ll_header3"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_toRightOf="@+id/tv_STT"
                 android:background="@color/black_less"
@@ -444,7 +478,7 @@
                 android:layout_height="@dimen/_24sdp"
                 android:layout_below="@id/ll_line2"
                 android:layout_gravity="right"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_toRightOf="@id/tv_STT"
                 android:orientation="horizontal"
@@ -457,7 +491,7 @@
                     android:layout_alignBaseline="@+id/btn_delete"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_toLeftOf="@+id/btn_delete"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
@@ -542,7 +576,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ll_line2"
                 android:layout_gravity="right"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_toRightOf="@id/tv_STT"
                 android:orientation="horizontal">
@@ -597,7 +631,7 @@
                     android:layout_alignBaseline="@+id/btn_delete"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_toLeftOf="@+id/btn_delete"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/_10sdp"

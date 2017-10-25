@@ -119,7 +119,8 @@ public class SqlQuery {
         SO_BBAN_KDINH("SO_BBAN_KDINH"),
         MA_NVIENKDINH("MA_NVIENKDINH"),
         NGAY_KDINH_HTHI("NGAY_KDINH_HTHI"),
-        SO_PBCT_MTB("SO_PBCT_MTB"),;
+        SO_PBCT_MTB("SO_PBCT_MTB"),
+        MA_DVIQLY_CAPDUOI("MA_DVIQLY_CAPDUOI");
 
 
         private String mNameCollumn;
@@ -154,6 +155,28 @@ public class SqlQuery {
 
         public static String getNameTable() {
             return "TBL_DIENLUC";
+        }
+    }
+
+    public enum TBL_DIENLUC_PB {
+        ID_TBL_DIENLUC_PB("ID_TBL_DIENLUC_PB"),
+        MA_DVIQLY_CAPTREN("MA_DVIQLY_CAPTREN"),
+        MA_DVIQLY_CAPDUOI("MA_DVIQLY_CAPDUOI"),
+        SEARCH("SEARCH"),;
+
+
+        private String mNameCollumn;
+
+        TBL_DIENLUC_PB(String mNameCollumn) {
+            this.mNameCollumn = mNameCollumn;
+        }
+
+        public String getNameCollumn() {
+            return mNameCollumn;
+        }
+
+        public static String getNameTable() {
+            return "TBL_DIENLUC_PB";
         }
     }
 
@@ -261,7 +284,8 @@ public class SqlQuery {
                 TBL_CTO_PB.SO_BBAN_KDINH.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.MA_NVIENKDINH.getNameCollumn() + " TEXT, " +
                 TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn() + " TEXT, " +
-                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() + " TEXT" +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() + " TEXT, " +
+                TBL_CTO_PB.MA_DVIQLY_CAPDUOI.getNameCollumn() + " TEXT" +
                 ");";
     }
 
@@ -285,6 +309,16 @@ public class SqlQuery {
                 ");";
     }
 
+    public static String getCreateTBL_DIENLUC_PB() {
+        return "CREATE TABLE IF NOT EXISTS " + TBL_DIENLUC_PB.getNameTable() + " (" +
+                TBL_DIENLUC_PB.ID_TBL_DIENLUC_PB.getNameCollumn() + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPTREN.getNameCollumn() + " TEXT, " +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPDUOI.getNameCollumn() + " TEXT," +
+                TBL_DIENLUC_PB.SEARCH.getNameCollumn() + " TEXT" +
+
+                ");";
+    }
+
     public static String getDropTBL_CTO_PB() {
         return "DROP TABLE IF EXISTS " + TBL_CTO_PB.getNameTable() + " ;";
     }
@@ -299,6 +333,10 @@ public class SqlQuery {
 
     public static String getDropTBL_HISTORY() {
         return "DROP TABLE IF EXISTS " + TBL_HISTORY.getNameTable() + " ;";
+    }
+
+    public static String getDropTBL_DIENLUC_PB() {
+        return "DROP TABLE IF EXISTS " + TBL_DIENLUC_PB.getNameTable() + " ;";
     }
 
     public static String getInsertTBL_CTO_PB() {
@@ -352,7 +390,9 @@ public class SqlQuery {
                 TBL_CTO_PB.SO_BBAN_KDINH.getNameCollumn() + ", " +
                 TBL_CTO_PB.MA_NVIENKDINH.getNameCollumn() + ", " +
                 TBL_CTO_PB.NGAY_KDINH_HTHI.getNameCollumn() + ", " +
-                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() +
+                TBL_CTO_PB.SO_PBCT_MTB.getNameCollumn() + ", " +
+                TBL_CTO_PB.MA_DVIQLY_CAPDUOI.getNameCollumn() +
+
                 ") " + "VALUES (" +
                 "?, ?, ?, ?, ?," +
                 "?, ?, ?, ?, ?," +
@@ -362,11 +402,10 @@ public class SqlQuery {
                 "?, ?, ?, ?, ?," +
 //                "?, ?, ?, ?" +
                 //thêm
-                "?, ?, ?, ?, ?" +
+                "?, ?, ?, ?, ?, ?" +
                 ");"
                 ;
     }
-
 
     public static String getInsertTBL_CTO_GUI_KD() {
         return "INSERT INTO " + TBL_CTO_GUI_KD.getNameTable() + " (" +
@@ -420,6 +459,16 @@ public class SqlQuery {
 
                 ") " + "VALUES (?, ?, ?, ?, ?, ?, ?" +
                 ");"
+                ;
+    }
+
+    public static String getInsertTBL_DIENLUC_PB() {
+        return "INSERT INTO " + TBL_DIENLUC_PB.getNameTable() + " (" +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPTREN.getNameCollumn() + ", " +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPDUOI.getNameCollumn() + ", " +
+                TBL_DIENLUC_PB.SEARCH.getNameCollumn() +
+                ") " + "VALUES (" +
+                " ?, ? ,?);"
                 ;
     }
 
@@ -541,6 +590,15 @@ public class SqlQuery {
                 " ORDER BY " +
                 TBL_HISTORY.DATE_SESSION +
                 " DESC";
+    }
+
+    public static String getDviCapDuoiPB() {
+        return "SELECT DISTINCT *" +
+                " FROM " +
+                TBL_DIENLUC_PB.getNameTable() +
+                " WHERE " +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPTREN.getNameCollumn() +
+                " = ? ";
     }
 
     public static String getByDateAllThongKeKD() {
@@ -792,6 +850,18 @@ public class SqlQuery {
                 ;
     }
 
+    public static String MA_DVIQLY_CAPDUOI() {
+        return "UPDATE " +
+                TBL_CTO_PB.getNameTable() +
+                " SET " +
+                TBL_CTO_PB.MA_DVIQLY_CAPDUOI.getNameCollumn() +
+                " = ? " +
+                " WHERE " +
+                TBL_CTO_PB.ID_TBL_CTO_PB.getNameCollumn() +
+                " = ? "
+                ;
+    }
+
     public static String getUpdateChonCtoKD() {
         return "UPDATE " +
                 TBL_CTO_GUI_KD.getNameTable() +
@@ -998,6 +1068,19 @@ public class SqlQuery {
                 +
                 " WHERE " +
                 TBL_CTO_GUI_KD.MA_CTO.getNameCollumn()
+                + " = ?"
+                ;
+    }
+
+    public static String getcheckExistTBL_DVI_PB_CAPDUOI() {
+        return "SELECT COUNT(*) FROM " +
+                TBL_DIENLUC_PB.getNameTable()
+                +
+                " WHERE " +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPTREN.getNameCollumn()
+                + " = ?" +
+                " AND " +
+                TBL_DIENLUC_PB.MA_DVIQLY_CAPDUOI.getNameCollumn()
                 + " = ?"
                 ;
     }

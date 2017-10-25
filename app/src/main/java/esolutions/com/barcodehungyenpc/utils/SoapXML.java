@@ -74,7 +74,9 @@ public class SoapXML {
         Select_MADVIQLY("Select_MADVIQLY", new String[]{}),
         Select_DangNhap("Select_DangNhap", new String[]{"user", "pass", "Ma_DViQLy"}),
         Update_GuiKD_CTO_MTB("Update_GuiKD_CTO", new String[]{"a"}),
-        Update_PBCT_MTB("Update_PBCT_MTB", new String[]{"a"});
+        Update_PBCT_MTB("Update_PBCT_MTB", new String[]{"a"}),
+
+        GetCatalogueAllocate_PBCTMTB("GetCatalogueAllocate_PBCTMTB", new String[]{});
 
 
         private String nameMethod;

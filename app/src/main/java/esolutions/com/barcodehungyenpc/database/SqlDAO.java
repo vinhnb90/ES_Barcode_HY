@@ -18,6 +18,7 @@ import esolutions.com.barcodehungyenpc.entity.CongToPB;
 import esolutions.com.barcodehungyenpc.entity.CongToPBProxy;
 import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
+import esolutions.com.barcodehungyenpc.entity.DviPBCapDuoiProxy;
 import esolutions.com.barcodehungyenpc.entity.History;
 import esolutions.com.barcodehungyenpc.entity.HistoryProxy;
 import esolutions.com.barcodehungyenpc.entity.ThongKe;
@@ -346,7 +347,8 @@ public class SqlDAO {
                 congToPB.getSO_BBAN_KDINH(),
                 congToPB.getMA_NVIENKDINH(),
                 congToPB.getNGAY_KDINH_HTHI(),
-                congToPB.getSO_PBCT_MTB()
+                congToPB.getSO_PBCT_MTB(),
+                congToPB.getMA_DVIQLY_CAPDUOI()
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_CTO_PB(), args);
@@ -674,6 +676,25 @@ public class SqlDAO {
         return (count > 0) ? true : false;
     }
 
+    public boolean checkExistTBL_DVI_PB_CAPDUOI(String MA_DVIQLY_CAPTREN, String MA_DVIQLY_CAPDUOI) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = build(
+                MA_DVIQLY_CAPTREN,
+                MA_DVIQLY_CAPDUOI
+        );
+        Cursor cursor = mSqLiteDatabase.rawQuery(SqlQuery.getcheckExistTBL_DVI_PB_CAPDUOI(), args);
+        if (cursor == null) {
+            throw new Exception(Common.MESSAGE.ex02.getContent());
+        }
+
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+
+        return (count > 0) ? true : false;
+    }
+
     public int checkExistByDateTBL_CTO_GUI_KDreturnID(String MA_CTO, String dateSQL) throws Exception {
         if (!Common.isExistDB())
             throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
@@ -905,6 +926,34 @@ public class SqlDAO {
         if (historyProxyList.isEmpty())
             closeCursor(cursor);
         return historyProxyList;
+    }
+
+    public List<DviPBCapDuoiProxy> getDviPBCapDuoi(String MA_DVIQLY_CAPTREN) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        List<DviPBCapDuoiProxy> dviPBCapDuoiProxies = new ArrayList<>();
+
+        String[] args = SqlDAO.build(
+                MA_DVIQLY_CAPTREN
+        );
+        Cursor cursor = null;
+        cursor = mSqLiteDatabase.rawQuery(SqlQuery.getDviCapDuoiPB(), args);
+
+        if (cursor == null) {
+            Log.d(TAG, "getAllCongTo: null cursor");
+            return dviPBCapDuoiProxies;
+        }
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            dviPBCapDuoiProxies.add(new DviPBCapDuoiProxy(cursor, cursor.getPosition()));
+            cursor.moveToNext();
+        }
+
+        if (dviPBCapDuoiProxies.isEmpty())
+            closeCursor(cursor);
+        return dviPBCapDuoiProxies;
     }
 
 
@@ -1409,6 +1458,32 @@ public class SqlDAO {
         );
 
         mSqLiteDatabase.execSQL(SqlQuery.updateSO_PBCT_MTB(), args);
+    }
+
+    public void updateMA_DVIQLY_CAPDUOI(int idCto, String MA_DVIQLY_CAPDUOI) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                MA_DVIQLY_CAPDUOI,
+                idCto
+        );
+
+        mSqLiteDatabase.execSQL(SqlQuery.MA_DVIQLY_CAPDUOI(), args);
+    }
+
+    public void insertTBL_DIENLUC_PB(String MA_DVIQLY_CAPTREN, String MA_DVIQLY_CAPDUOI, String SEARCH) throws Exception {
+        if (!Common.isExistDB())
+            throw new FileNotFoundException(Common.MESSAGE.ex01.getContent());
+
+        String[] args = SqlDAO.build(
+                MA_DVIQLY_CAPTREN,
+                MA_DVIQLY_CAPDUOI,
+                SEARCH
+        );
+
+        mSqLiteDatabase.execSQL(SqlQuery.getInsertTBL_DIENLUC_PB(), args);
+
     }
 
     //endregion

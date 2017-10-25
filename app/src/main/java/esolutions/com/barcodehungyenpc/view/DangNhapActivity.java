@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +35,7 @@ import esolutions.com.barcodehungyenpc.database.SqlDAO;
 import esolutions.com.barcodehungyenpc.entity.DienLuc;
 import esolutions.com.barcodehungyenpc.entity.DienLucProxy;
 import esolutions.com.barcodehungyenpc.entity.DonViResponse;
-import esolutions.com.barcodehungyenpc.entity.LoginResponse;
+import esolutions.com.barcodehungyenpc.entity.EmptyResponse;
 import esolutions.com.barcodehungyenpc.entity.ThongBaoResponse;
 import esolutions.com.barcodehungyenpc.utils.Common;
 import esolutions.com.barcodehungyenpc.utils.SharePrefManager;
@@ -74,7 +73,7 @@ public class DangNhapActivity extends BaseActivity implements
 
     SoapXML.AsyncSoap<List<DonViResponse>, ThongBaoResponse> soapDownloadDvi = null;
 
-    SoapXML.AsyncSoap<LoginResponse, ThongBaoResponse> soapLogin = null;
+    SoapXML.AsyncSoap<EmptyResponse, ThongBaoResponse> soapLogin = null;
 
     public static final String PARAM_USER = "PARAM_USER";
     public static final String PARAM_PASS = "PARAM_PASS";

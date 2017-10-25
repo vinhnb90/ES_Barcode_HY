@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/_5sdp"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:layout_marginRight="@dimen/_5sdp"
     android:layout_marginTop="@dimen/_5sdp"
 
     android:background="@android:color/transparent"
@@ -50,8 +50,8 @@
                 android:id="@+id/ll_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_toRightOf="@+id/iv_logo_session"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_below="@+id/ll_header"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:layout_toRightOf="@+id/iv_logo_session"
                 android:background="@color/black_less"
@@ -105,8 +105,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_header2"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_toRightOf="@+id/iv_logo_session"
                 android:gravity="right"
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ll_line2"
                 android:layout_gravity="right"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_toRightOf="@id/iv_logo_session"
                 android:orientation="horizontal">
@@ -191,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin">
+                    android:layout_marginLeft="@dimen/_5sdp">
 
                     <TextView
                         android:id="@+id/tv_title_history"

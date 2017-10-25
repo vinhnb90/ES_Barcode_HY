@@ -7,5 +7,5 @@ import com.google.gson.annotations.SerializedName;
  * Created by VinhNB on 8/31/2017.
  */
 
-public class LoginResponse extends ResponseSoap {
+public class EmptyResponse extends ResponseSoap {
 }

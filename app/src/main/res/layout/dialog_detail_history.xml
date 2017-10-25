@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@drawable/xml_border_full"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="@dimen/_5sdp">
 
 
         <TextView
@@ -44,7 +44,7 @@
             android:layout_below="@+id/tv_title_config"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/_5sdp"
             android:gravity="center_vertical|center_horizontal">
 
            
@@ -55,7 +55,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_below="@+id/rv_history_detail"
-              android:layout_marginTop="@dimen/activity_horizontal_margin"
+              android:layout_marginTop="@dimen/_5sdp"
               android:text="Đường dẫn máy chủ"
               android:textSize="@dimen/_10sdp" />
 
@@ -80,7 +80,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_below="@+id/et_url"
-              android:layout_marginTop="@dimen/activity_horizontal_margin"
+              android:layout_marginTop="@dimen/_5sdp"
               android:text="Đơn vị quản lý"
               android:textSize="@dimen/_10sdp"
               android:visibility="visible" />
