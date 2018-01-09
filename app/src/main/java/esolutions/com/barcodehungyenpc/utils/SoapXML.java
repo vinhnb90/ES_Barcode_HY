@@ -61,7 +61,7 @@ public class SoapXML {
 //                "http://" + address + "/servicedodem28.8/ServiceTienIch_DoDem.asmx";
 //        return "http://" + address + "/WebService1.asmx";
 //        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
-        return "http://" + address + "/ServiceTienIchDoDem/ServiceTienIch_DoDem.asmx";
+        return "http://" + address + "/Service_TienIchDoDem/ServiceTienIch_DoDem.asmx";
 //        return "http://192.168.68.103:9999/serTienIch_DoDem/ServiceTienIch_DoDem.asmx";
     }
 
