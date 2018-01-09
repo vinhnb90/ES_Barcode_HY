@@ -341,7 +341,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
-                    mListener.clickBtnGhimRowCto(pos);
+                    mListener.clickBtnGhimRowCto(pos, mListKD, mListPB);
                 }
             });
 
@@ -372,7 +372,7 @@ public class DsCongToAdapter extends RecyclerView.Adapter<DsCongToAdapter.DsCtoV
     }
 
     public interface OnDsCtoAdapterIteraction {
-        void clickBtnGhimRowCto(int pos);
+        void clickBtnGhimRowCto(int pos, List<CongToGuiKDProxy> listCtoKD, List<CongToPBProxy> listCtoPB);
 
         void clickBtnXoa(int pos);
 

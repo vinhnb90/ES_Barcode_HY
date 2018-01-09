@@ -2734,16 +2734,16 @@ public class MainActivity
 
     //region DsCongToAdapter.OnDsCtoAdapterIteraction
     @Override
-    public void clickBtnGhimRowCto(int pos) {
+    public void clickBtnGhimRowCto(int pos, List<CongToGuiKDProxy> listCtoKD, List<CongToPBProxy> listCtoPB) {
         int a = 0;
-        if (pos >= (a = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.size() : mListCtoPB.size()))
+        if (pos >= (a = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? listCtoKD.size() : listCtoPB.size()))
             return;
 
         try {
             //set filterDataReal GhimCto đồng thời đánh dấu cần refersh lại giá trị công tơ đó
-            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getID_TBL_CTO_GUI_KD() : mListCtoPB.get(pos).getID_TBL_CTO_PB();
+            int ID = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? listCtoKD.get(pos).getID_TBL_CTO_GUI_KD() : listCtoPB.get(pos).getID_TBL_CTO_PB();
 
-            int statusGhimCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? mListCtoKD.get(pos).getTRANG_THAI_GHIM() : mListCtoPB.get(pos).getTRANG_THAI_GHIM();
+            int statusGhimCto = (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) ? listCtoKD.get(pos).getTRANG_THAI_GHIM() : listCtoPB.get(pos).getTRANG_THAI_GHIM();
 
             if (statusGhimCto == Common.TRANG_THAI_GHIM.CHUA_GHIM.getCode())
                 statusGhimCto = Common.TRANG_THAI_GHIM.DA_GHIM.getCode();
@@ -2757,41 +2757,39 @@ public class MainActivity
             if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO)
                 mSqlDAO.updateGhimCtoPB(ID, statusGhimCto);
 
-            mListCtoKD.clear();
+            this.mListCtoKD.clear();
+            this.mListCtoPB.clear();
+
             String dateSQL = Common.convertDateUIToDateSQL(mDate);
 
             if (menuBottom == Common.MENU_BOTTOM_KD.ALL) {
                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
-                    mListCtoKD.clear();
                     if (isClickFilterOkDsAll)
-                        mListCtoKD = mSqlDAO.getByDateAllCongToKDNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+                        this.mListCtoKD = mSqlDAO.getByDateAllCongToKDNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
                     else
-                        mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
-
+                        this.mListCtoKD = mSqlDAO.getByDateAllCongToKD(dateSQL);
                 }
                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
-                    mListCtoPB.clear();
                     if (isClickFilterOkDsAll)
-                        mListCtoPB = mSqlDAO.getByDateAllCongToPBNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+                        this.mListCtoPB = mSqlDAO.getByDateAllCongToPBNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
                     else
-                        mListCtoPB = mSqlDAO.getByDateAllCongToPB(dateSQL);
+                        this.mListCtoPB = mSqlDAO.getByDateAllCongToPB(dateSQL);
                 }
             }
 
             if (menuBottom == Common.MENU_BOTTOM_KD.DS_GHIM) {
                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.KIEM_DINH) {
-                    mListCtoKD.clear();
+                    listCtoKD.clear();
                     if (isClickFilterOkDsChon)
-                        mListCtoKD = mSqlDAO.getByDateAllCongToGhimKDNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+                        this.mListCtoKD = mSqlDAO.getByDateAllCongToGhimKDNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
                     else
-                        mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
+                        this.mListCtoKD = mSqlDAO.getByDateAllCongToGhimKD(dateSQL);
                 }
                 if (mKieuChuongTrinh == Common.KIEU_CHUONG_TRINH.PHAN_BO) {
-                    mListCtoPB.clear();
                     if (isClickFilterOkDsChon)
-                        mListCtoPB = mSqlDAO.getByDateAllCongToGhimPBNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
+                        this.mListCtoPB = mSqlDAO.getByDateAllCongToGhimPBNoSuccess(Common.convertDateUIToDateSQL(mTvDate.getText().toString()));
                     else
-                        mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(dateSQL);
+                        this.mListCtoPB = mSqlDAO.getByDateAllCongToGhimPB(dateSQL);
                 }
 
                 prepareDataUpload();

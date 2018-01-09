@@ -599,7 +599,7 @@ public class DangNhapActivity extends BaseActivity implements
         //show spin dien luc
         setSpinDienLuc();
 
-        ((TextView)findViewById(R.id.tv_version)).setText("Phiên bản phần mềm : " + Common.getVersionApp(DangNhapActivity.this));
+        ((TextView) findViewById(R.id.tv_version)).setText("Phiên bản phần mềm : " + Common.getVersionApp(DangNhapActivity.this));
 
         mEtURL.setOnTouchListener(new View.OnTouchListener() {
             @Override
